@@ -12,6 +12,7 @@
     <module>core</module>
     <module>dao</module>
     <module>web</module>
+    <module>service</module>
   </modules>
 
   <name>Library</name>
