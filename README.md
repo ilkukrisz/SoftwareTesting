@@ -7,14 +7,14 @@ Members:
 
 - Murányi Sándor
 
--Hegedűs Attila
+- Hegedűs Attila
 
--Tankó Tamás
+- Tankó Tamás
 
--Simon Tamás
+- Simon Tamás
 
--Kiss Áron
+- Kiss Áron
 
--Mészárics Martin Péter
+- Mészárics Martin Péter
 
--Ilku Krisztián
+- Ilku Krisztián
