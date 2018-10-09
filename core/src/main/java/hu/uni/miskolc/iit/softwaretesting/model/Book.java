@@ -3,13 +3,17 @@ package hu.uni.miskolc.iit.softwaretesting.model;
 public class Book
 {
 
+    // data tags wwich defines a Book object properly
+
     private int id;
     private String author;
     private String title;
-    private Long isbn;
+    private Long isbn;   // international standard book number, some kind of id but it's long (13 numbers)
     private int publishDate;
-    private String genre;
-    private boolean isLoaned;
+    private String genre;  // defines the type of the book i.e: scifi, thriller, crimi etc.
+    private boolean isLoaned;   // shows if the book is loaned by somebody at this time
+
+    // the constructor gets the data tags as arguments
 
     public Book(int id, String author, String title, Long isbn, int publishDate, String genre, boolean isLoaned)
     {
@@ -21,6 +25,8 @@ public class Book
         this.genre = genre;
         this.isLoaned = isLoaned;
     }
+
+    // getters and setters to reach and modify the data tags if it's necessary
 
     public int getId() {
         return id;
@@ -90,6 +96,8 @@ public class Book
     {
         isLoaned = loaned;
     }
+
+    // overrided the default toString function
 
     @Override
     public String toString()

@@ -1,6 +1,25 @@
 package hu.uni.miskolc.iit.softwaretesting.exceptions;
 
+ //if the searched book does not found, this exception will appear
+
 public class BookNotFoundException extends Exception{
 
-    public BookNotFoundException(String s) { super("The referred book does not exists: "+s);}
+    public BookNotFoundException() {
+    }
+
+    public BookNotFoundException(String message) {
+        super(message);
+    }
+
+    public BookNotFoundException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public BookNotFoundException(Throwable cause) {
+        super(cause);
+    }
+
+    public BookNotFoundException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
+    }
 }
