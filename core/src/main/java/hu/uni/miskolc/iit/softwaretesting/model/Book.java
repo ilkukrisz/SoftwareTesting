@@ -3,19 +3,48 @@ package hu.uni.miskolc.iit.softwaretesting.model;
 public class Book
 {
 
-    // data tags wwich defines a Book object properly
 
+    /**
+     * This object represents a book.
+     */
+    /**
+     * @param id - A unique value to distinguish the books from each other in our database.
+     */
     private int id;
+
+
+    /**
+     * @param author - The author of the book.
+     */
     private String author;
+
+    /**
+     * @param title - The title of the book.
+     */
     private String title;
-    private Long isbn;   // international standard book number, some kind of id but it's long (13 numbers)
+
+    /**
+     * @param isbn - The international standard book number of the book.
+     */
+    private Long isbn;
+
+    /**
+     * @param publishDate - The publish date of the book defined by year.
+     */
     private int publishDate;
-    private String genre;  // defines the type of the book i.e: scifi, thriller, crimi etc.
-    private boolean isLoaned;   // shows if the book is loaned by somebody at this time
 
-    // the constructor gets the data tags as arguments
+    /**
+     * @param genre - The genre of the book.
+     */
+    private Genre genre;
 
-    public Book(int id, String author, String title, Long isbn, int publishDate, String genre, boolean isLoaned)
+    /**
+     * @param isLoaned - The status of the book, it can be loaned or not.
+     */
+    private boolean isLoaned;
+
+
+    public Book(int id, String author, String title, Long isbn, int publishDate, Genre genre, boolean isLoaned)
     {
         this.id = id;
         this.author = author;
@@ -26,7 +55,6 @@ public class Book
         this.isLoaned = isLoaned;
     }
 
-    // getters and setters to reach and modify the data tags if it's necessary
 
     public int getId() {
         return id;
@@ -77,12 +105,12 @@ public class Book
         this.publishDate = publishDate;
     }
 
-    public String getGenre()
+    public Genre getGenre()
     {
         return genre;
     }
 
-    public void setGenre(String genre)
+    public void setGenre(Genre genre)
     {
         this.genre = genre;
     }
@@ -96,8 +124,6 @@ public class Book
     {
         isLoaned = loaned;
     }
-
-    // overrided the default toString function
 
     @Override
     public String toString()
