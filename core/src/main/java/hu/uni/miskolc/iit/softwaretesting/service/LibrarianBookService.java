@@ -2,6 +2,8 @@ package hu.uni.miskolc.iit.softwaretesting.service;
 
 import hu.uni.miskolc.iit.softwaretesting.exceptions.*;
 import hu.uni.miskolc.iit.softwaretesting.model.Book;
+import hu.uni.miskolc.iit.softwaretesting.model.BookInstance;
+import hu.uni.miskolc.iit.softwaretesting.model.Borrowing;
 
 import java.util.Collection;
 
@@ -30,10 +32,10 @@ public interface LibrarianBookService extends BookService {
 
     /**
      *
-     * @param id the id of the book, which should be deleted.
+     * @param isbn the ISBN of the book, which should be deleted.
      * @throws BookNotFoundException
      */
-    void deleteBook(int id) throws BookNotFoundException;
+    void deleteBook(int isbn) throws BookNotFoundException;
 
     /**
      *
