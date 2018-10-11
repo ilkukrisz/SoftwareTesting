@@ -30,10 +30,10 @@ public interface LibrarianBookService extends BookService {
 
     /**
      *
-     * @param id the id of the book, which should be deleted.
+     * @param isbn the ISBN of the book, which should be deleted.
      * @throws BookNotFoundException
      */
-    void deleteBook(int id) throws BookNotFoundException;
+    void deleteBook(int isbn) throws BookNotFoundException;
 
     /**
      *

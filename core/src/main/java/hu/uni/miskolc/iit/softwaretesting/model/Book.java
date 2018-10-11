@@ -3,15 +3,10 @@ package hu.uni.miskolc.iit.softwaretesting.model;
 public class Book
 {
 
-
     /**
-     * This object represents a book.
+     * @param isbn - The international standard book number of the book.
      */
-    /**
-     * @param id - A unique value to distinguish the books from each other in our database.
-     */
-    private int id;
-
+    private Long isbn;
 
     /**
      * @param author - The author of the book.
@@ -22,11 +17,6 @@ public class Book
      * @param title - The title of the book.
      */
     private String title;
-
-    /**
-     * @param isbn - The international standard book number of the book.
-     */
-    private Long isbn;
 
     /**
      * @param publishDate - The publish date of the book defined by year.
@@ -44,25 +34,14 @@ public class Book
     private boolean isLoaned;
 
 
-    public Book(int id, String author, String title, Long isbn, int publishDate, Genre genre, boolean isLoaned)
+    public Book(String author, String title, Long isbn, int publishDate, Genre genre, boolean isLoaned)
     {
-        this.id = id;
         this.author = author;
         this.title = title;
         this.isbn = isbn;
         this.publishDate = publishDate;
         this.genre = genre;
         this.isLoaned = isLoaned;
-    }
-
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id)
-    {
-        this.id = id;
     }
 
     public String getAuthor()
@@ -129,7 +108,6 @@ public class Book
     public String toString()
     {
         return "Details of the book are the following: " +
-                "identifier = " + id +
                 ", author='" + author + '\'' +
                 ", title='" + title + '\'' +
                 ", isbn=" + isbn +
@@ -138,5 +116,4 @@ public class Book
                 ", is the book loaned? " + isLoaned +
                 '.';
     }
-
 }
