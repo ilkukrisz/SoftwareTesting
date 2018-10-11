@@ -2,6 +2,7 @@ package hu.uni.miskolc.iit.softwaretesting.service;
 
 import hu.uni.miskolc.iit.softwaretesting.exceptions.*;
 import hu.uni.miskolc.iit.softwaretesting.model.Book;
+import hu.uni.miskolc.iit.softwaretesting.model.Borrowing;
 import hu.uni.miskolc.iit.softwaretesting.model.Genre;
 
 import java.util.Collection;
