@@ -9,33 +9,33 @@ public class Borrowing {
     /**
      * The ID of the borrowing.
      */
-    long borrowID;
+    private long borrowID;
 
     /**
      * The reader, who borrows.
      */
-    Reader reader;
+    private Reader reader;
 
     /**
      * The creation date of the borrowing.
      */
-    Date creationDate;
+    private Date creationDate;
 
     /**
      * The expiration of the borrowing.
      */
-    Date expirationDate;
+    private Date expirationDate;
 
     /**
      * The status of the Borrowing.
      * @see BorrowStatus
      */
-    BorrowStatus status;
+    private BorrowStatus status;
 
     /**
      * The borrowed book instance.
      */
-    BookInstance bookInstance;
+    private BookInstance bookInstance;
 
     public Borrowing(long borrowID, Reader reader, Date creationDate, Date expirationDate, BorrowStatus status, BookInstance bookInstance) {
         this.borrowID = borrowID;

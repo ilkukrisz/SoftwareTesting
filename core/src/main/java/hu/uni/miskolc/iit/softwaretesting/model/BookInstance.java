@@ -7,13 +7,13 @@ public class BookInstance {
     /**
      * The inventory number of the book instance.
      */
-    long inventoryNumber;
+    private long inventoryNumber;
 
     /**
      * The reference to the data container of the book instance.
      * @see Book
      */
-    Book book;
+    private Book book;
 
     public BookInstance(long inventoryNumber, Book book) {
         this.inventoryNumber = inventoryNumber;
