@@ -1,17 +1,31 @@
 package hu.uni.miskolc.iit.softwaretesting.model;
 
-abstract class User {
-    @java.lang.Override
-    public java.lang.String toString() {
-        return "User{" +
-                "username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", mobileNumber='" + mobileNumber + '\'' +
-                '}';
-    }
+public class User {
+
+    /**
+     * @param username - The users name
+     **/
+    private String username;
+    /**
+     * @param password - The users password
+     **/
+    private String password;
+    /**
+     * @param firstName - The users firstname.
+     **/
+    private String firstName;
+    /**
+     * @param lastName - The users lastname.
+     **/
+    private String lastName;
+    /**
+     * @param email - The users e-mail address.
+     **/
+    private String email;
+    /**
+     * @param mobileNumber - The users mobile phone number.
+     **/
+    private String mobileNumber;
 
     public User(String username, String password, String firstName, String lastName, String email, String mobileNumber) {
         this.username = username;
@@ -21,7 +35,6 @@ abstract class User {
         this.email = email;
         this.mobileNumber = mobileNumber;
     }
-
     /**
      * This object represents user data.
      * **/
@@ -73,30 +86,23 @@ abstract class User {
         this.mobileNumber = mobileNumber;
     }
 
-    /**
-     * @param username - The users name
-     **/
-    private String username;
-    /**
-     * @param password - The users password
-     **/
-    private String password;
-    /**
-     * @param firstName - The users firstname.
-     **/
-    private String firstName;
-    /**
-     * @param lastName - The users lastname.
-     **/
-    private String lastName;
-    /**
-     * @param email - The users e-mail address.
-     **/
-    private String email;
-    /**
-     * @param mobileNumber - The users mobile phone number.
-     **/
-    private String mobileNumber;
+    @java.lang.Override
+    public java.lang.String toString() {
+        return "User{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", mobileNumber='" + mobileNumber + '\'' +
+                '}';
+    }
+
+
+
+
+
+
 
 
 
