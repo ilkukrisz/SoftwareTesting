@@ -9,7 +9,7 @@ public class User {
     /**
      * @param password - The users password
      **/
-    private String password;
+    private Password password;
     /**
      * @param firstName - The users firstname.
      **/
