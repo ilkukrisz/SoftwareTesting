@@ -15,9 +15,15 @@ public class BookInstance {
      */
     private Book book;
 
-    public BookInstance(long inventoryNumber, Book book) {
+    /**
+     * Contains whether the book instance is loaned or nor.
+     */
+    private boolean isLoaned;
+
+    public BookInstance(long inventoryNumber, Book book, boolean isLoaned) {
         this.inventoryNumber = inventoryNumber;
         this.book = book;
+        this.isLoaned = isLoaned;
     }
 
     public long getInventoryNumber() {
@@ -34,5 +40,23 @@ public class BookInstance {
 
     public void setBook(Book book) {
         this.book = book;
+    }
+
+    public boolean isLoaned() {
+        return isLoaned;
+    }
+
+    public void setLoaned(boolean loaned) {
+        isLoaned = loaned;
+    }
+
+
+    @Override
+    public String toString() {
+        return "BookInstance{" +
+                "inventoryNumber=" + inventoryNumber +
+                ", book=" + book +
+                ", isLoaned=" + isLoaned +
+                '}';
     }
 }
