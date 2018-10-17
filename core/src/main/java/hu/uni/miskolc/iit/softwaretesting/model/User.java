@@ -27,7 +27,7 @@ public class User {
      **/
     private String mobileNumber;
 
-    public User(String username, String password, String firstName, String lastName, String email, String mobileNumber) {
+    public User(String username, Password password, String firstName, String lastName, String email, String mobileNumber) {
         this.username = username;
         this.password = password;
         this.firstName = firstName;
@@ -46,11 +46,11 @@ public class User {
         this.username = username;
     }
 
-    public String getPassword() {
+    public Password getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(Password password) {
         this.password = password;
     }
 
