@@ -28,20 +28,14 @@ public class Book
      */
     private Genre genre;
 
-    /**
-     * @param isLoaned - The status of the book, it can be loaned or not.
-     */
-    private boolean isLoaned;
 
-
-    public Book(String author, String title, Long isbn, int publishDate, Genre genre, boolean isLoaned)
+    public Book(String author, String title, Long isbn, int publishDate, Genre genre)
     {
         this.author = author;
         this.title = title;
         this.isbn = isbn;
         this.publishDate = publishDate;
         this.genre = genre;
-        this.isLoaned = isLoaned;
     }
 
     public String getAuthor()
@@ -94,15 +88,6 @@ public class Book
         this.genre = genre;
     }
 
-    public boolean isLoaned()
-    {
-        return isLoaned;
-    }
-
-    public void setLoaned(boolean loaned)
-    {
-        isLoaned = loaned;
-    }
 
     @Override
     public String toString()
@@ -112,8 +97,6 @@ public class Book
                 ", title='" + title + '\'' +
                 ", isbn=" + isbn +
                 ", date of publish =" + publishDate +
-                ", genre ='" + genre + '\'' +
-                ", is the book loaned? " + isLoaned +
-                '.';
+                ", genre ='" + genre + '\'';
     }
 }
