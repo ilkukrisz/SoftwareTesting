@@ -4,6 +4,8 @@ import hu.uni.miskolc.iit.softwaretesting.model.Password;
 import org.junit.Test;
 import org.mindrot.jbcrypt.BCrypt;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 public class PasswordTest {
@@ -11,90 +13,53 @@ public class PasswordTest {
     String plainPassword = "passwd123!#";
 
     @Test
-    public void testConstructorWithLegalValues () {
+    public void testConstructorWithLegalValue () {
         try {
-            new Password(this.plainPassword, false);
-            new Password(this.plainPassword, true);
-            new Password("", true);
+            new Password(this.plainPassword);
         } catch (Exception e) {
             fail(e.getMessage());
         }
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void testConstructorWithNullValue () {
-        try {
-            new Password(null, true);
-            fail("Exception is expected for null value as password");
-        } catch (IllegalArgumentException e) {
-            //test succeeded
-        }
+        new Password(null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testConstructorWithEmptyValue () {
+        new Password("");
     }
 
     @Test
-    public void testPasswordCheckingWithHashedPassword () {
+    public void testPasswordChecking () {
         try {
-            Password hashedPassword = new Password(this.plainPassword, true);
-            hashedPassword.checkPassword(this.plainPassword);
+            Password password = new Password(this.plainPassword);
+            assertTrue("Password checking fails.", password.checkPassword(this.plainPassword));
         } catch (Exception e) {
             fail(e.getMessage());
         }
     }
 
-    @Test
-    public void testPassWordCheckingWithPlainPassword () {
-        try {
-            Password plainPassword = new Password(this.plainPassword, false);
-            plainPassword.checkPassword(this.plainPassword);
-        } catch (Exception e) {
-            fail(e.getMessage());
-        }
-    }
-
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void testPasswordCheckingWithIllegalValues () {
-        try {
-            Password password = new Password(this.plainPassword, true);
-            password.checkPassword(null);
-            fail("Exception is expected when the plain password param is null in checkPassword method.");
-        } catch (IllegalArgumentException e) {
-            //test succeeded
-        }
-
-        try {
-            Password password = new Password(this.plainPassword, false);
-            password.checkPassword(null);
-            fail("Exception is expected when the plain password param is null in checkPassword method.");
-        } catch (IllegalArgumentException e) {
-            //test succeeded
-        }
+        Password password = new Password(this.plainPassword);
+        password.checkPassword(null);
     }
 
     @Test
     public void testHashedPasswordGetter () {
-        Password password1 = new Password(this.plainPassword, false);
-        if (!password1.getHashedPassword().equals(this.plainPassword)) {
-            fail("Password getter returns incorrect plain password.");
-        }
+        Password password = new Password(this.plainPassword);
+        String hashed = password.getHashedPassword();
 
-        Password password2 = new Password(plainPassword, true);
-        String hashed = password2.getHashedPassword();
-        if (!BCrypt.checkpw(plainPassword, hashed)) {
-            fail("Hashed password getter returns incorrect hash.");
-        }
+        assertTrue("getHashedPassword returns incorrect password hash.", BCrypt.checkpw(plainPassword, hashed));
     }
 
     @Test
     public void testToString () {
-        Password password1 = new Password(this.plainPassword, false);
-        if (!password1.toString().equals(this.plainPassword)) {
-            fail("toString method is expected to return plain password.");
-        }
+        Password password = new Password(this.plainPassword);
+        String hashed = password.getHashedPassword();
 
-        Password password2 = new Password(this.plainPassword, true);
-        String hashed = password2.getHashedPassword();
-        if (!password2.toString().equals(hashed)) {
-            fail("toString method is expected to return password hash.");
-        }
+        assertEquals("toString method is expected to return password hash.", hashed, password.toString());
     }
 }
