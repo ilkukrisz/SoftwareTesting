@@ -1,5 +1,9 @@
 package hu.uni.miskolc.iit.softwaretesting.model;
 
+import hu.uni.miskolc.iit.softwaretesting.exceptions.InvalidPublishDateException;
+
+import java.util.Calendar;
+
 public class Book
 {
 
@@ -29,8 +33,15 @@ public class Book
     private Genre genre;
 
 
-    public Book(String author, String title, Long isbn, int publishDate, Genre genre)
-    {
+    public Book(String author, String title, Long isbn, int publishDate, Genre genre) {
+
+        if (Calendar.getInstance().get(Calendar.YEAR)< publishDate)
+            throw new InvalidPublishDateException("Publish date shouldn't be after today!");
+
+        if (publishDate < 0)
+            throw new InvalidPublishDateException("Publish date shouldn't be below zero!");
+
+
         this.author = author;
         this.title = title;
         this.isbn = isbn;
@@ -75,6 +86,12 @@ public class Book
 
     public void setPublishDate(int publishDate)
     {
+        if (Calendar.getInstance().get(Calendar.YEAR)< publishDate)
+            throw new InvalidPublishDateException("Publish date shouldn't be after today!");
+
+        if (publishDate < 0)
+            throw new InvalidPublishDateException("Publish date shouldn't be below zero!");
+
         this.publishDate = publishDate;
     }
 
