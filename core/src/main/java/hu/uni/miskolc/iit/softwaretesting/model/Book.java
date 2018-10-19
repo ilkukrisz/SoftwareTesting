@@ -33,7 +33,7 @@ public class Book
     private Genre genre;
 
 
-    public Book(String author, String title, Long isbn, int publishDate, Genre genre) {
+    public Book(String author, String title, Long isbn, int publishDate, Genre genre) throws InvalidPublishDateException {
 
         if (Calendar.getInstance().get(Calendar.YEAR)< publishDate)
             throw new InvalidPublishDateException("Publish date shouldn't be after today!");
@@ -84,8 +84,7 @@ public class Book
         return publishDate;
     }
 
-    public void setPublishDate(int publishDate)
-    {
+    public void setPublishDate(int publishDate) throws InvalidPublishDateException {
         if (Calendar.getInstance().get(Calendar.YEAR)< publishDate)
             throw new InvalidPublishDateException("Publish date shouldn't be after today!");
 
