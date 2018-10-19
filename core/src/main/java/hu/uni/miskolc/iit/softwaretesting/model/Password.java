@@ -1,37 +1,40 @@
 package hu.uni.miskolc.iit.softwaretesting.model;
 
-
 import org.mindrot.jbcrypt.BCrypt;
-
 
 public class Password {
 
     private static int saltStrength = 4;
     private String hashedPassword;
 
-    public Password(String password, boolean toHash)
+    public Password(String password)
     {
-        if (toHash)
-        {
-            String salt = BCrypt.gensalt(saltStrength);
-            hashedPassword = BCrypt.hashpw(password, salt);
+        if (password == null) {
+            throw new IllegalArgumentException("Password should not be null value");
         }
-        else
-        {
-            hashedPassword = password;
+
+        if (password.equals("")) {
+            throw new IllegalArgumentException("Password should not be empty");
         }
+
+        String salt = BCrypt.gensalt(saltStrength);
+        hashedPassword = BCrypt.hashpw(password, salt);
     }
 
-    public boolean checkPassword(String password_plaintext)
+    public boolean checkPassword(String passwordPlaintext)
     {
-        boolean password_verified = false;
+        if (passwordPlaintext == null) {
+            throw new IllegalArgumentException("Password should not be null value");
+        }
 
-        if (null == hashedPassword || !hashedPassword.startsWith("$2a$"))
-            throw new java.lang.IllegalArgumentException("The hashed password is invalid");
+        if (hashedPassword == null || !hashedPassword.startsWith("$2a$")) {
+            throw new IllegalArgumentException("The hashed password is invalid");
+        }
 
-        password_verified = BCrypt.checkpw(password_plaintext, hashedPassword);
+        boolean passwordVerified = false;
+        passwordVerified = BCrypt.checkpw(passwordPlaintext, hashedPassword);
 
-        return password_verified;
+        return passwordVerified;
     }
 
     public String getHashedPassword()
