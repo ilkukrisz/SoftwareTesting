@@ -61,9 +61,9 @@ public interface LibrarianBookService extends BookService {
     /**
      *
      * @param borrow the borrow which will be examined and completed
-     * @throws NotExistingBorrowing
+     * @throws NotExistingBorrowingException
      */
-    public void lendBook(Borrowing borrow) throws NotExistingBorrowing;
+    public void lendBook(Borrowing borrow) throws NotExistingBorrowingException;
 
     /**
      *

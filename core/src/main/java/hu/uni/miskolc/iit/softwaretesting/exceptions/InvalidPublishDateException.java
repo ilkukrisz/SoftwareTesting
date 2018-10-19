@@ -2,7 +2,7 @@ package hu.uni.miskolc.iit.softwaretesting.exceptions;
 
 //invalid publish data i.e.: negative numbers
 
-public class InvalidPublishDateException  extends Exception{
+public class InvalidPublishDateException extends Exception {
 
     public InvalidPublishDateException() {
     }
