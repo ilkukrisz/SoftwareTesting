@@ -35,12 +35,7 @@ public class Book
 
     public Book(String author, String title, Long isbn, int publishDate, Genre genre) throws InvalidPublishDateException {
 
-        if (Calendar.getInstance().get(Calendar.YEAR)< publishDate)
-            throw new InvalidPublishDateException("Publish date shouldn't be after today!");
-
-        if (publishDate < 0)
-            throw new InvalidPublishDateException("Publish date shouldn't be below zero!");
-
+        testDate(publishDate);
 
         this.author = author;
         this.title = title;
@@ -85,13 +80,17 @@ public class Book
     }
 
     public void setPublishDate(int publishDate) throws InvalidPublishDateException {
+        testDate(publishDate);
+        this.publishDate = publishDate;
+    }
+
+    private void testDate(int publishDate) throws InvalidPublishDateException {
         if (Calendar.getInstance().get(Calendar.YEAR)< publishDate)
             throw new InvalidPublishDateException("Publish date shouldn't be after today!");
 
         if (publishDate < 0)
             throw new InvalidPublishDateException("Publish date shouldn't be below zero!");
 
-        this.publishDate = publishDate;
     }
 
     public Genre getGenre()

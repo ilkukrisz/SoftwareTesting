@@ -1,6 +1,10 @@
 package hu.uni.miskolc.iit.softwaretesting.model;
 
+import hu.uni.miskolc.iit.softwaretesting.exceptions.InvalidArgumentException;
+
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * Represents a book borrowing.
@@ -37,7 +41,12 @@ public class Borrowing {
      */
     private BookInstance bookInstance;
 
-    public Borrowing(long borrowID, Reader reader, Date creationDate, Date expirationDate, BorrowStatus status, BookInstance bookInstance) {
+    public Borrowing(long borrowID, Reader reader, Date expirationDate,
+                     Date creationDate, BorrowStatus status, BookInstance bookInstance) {
+
+        if (creationDate.after(expirationDate))
+            throw new InvalidArgumentException();
+
         this.borrowID = borrowID;
         this.reader = reader;
         this.creationDate = creationDate;
