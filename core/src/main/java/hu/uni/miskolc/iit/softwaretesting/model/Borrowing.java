@@ -45,7 +45,8 @@ public class Borrowing {
 
         if (expirationDate.after(new Date(Calendar.getInstance().getTime().getTime()))
                 || creationDate.after(expirationDate)
-                || creationDate.after(new Date(Calendar.getInstance().getTime().getTime())))
+                || creationDate.after(new Date(Calendar.getInstance().getTime().getTime()))
+                || creationDate.getTime() < 0 || expirationDate.getTime() < 0)
             throw new InvalidArgumentException();
 
         this.borrowID = borrowID;
@@ -121,7 +122,7 @@ public class Borrowing {
     }
 
     private void testCreationDate(Date testCreation) {
-        if (testCreation.after(this.expirationDate))
+        if (testCreation.after(this.expirationDate) || testCreation.getTime() < 0)
             throw new InvalidArgumentException();
 
         if (testCreation.getTime() > Calendar.getInstance().getTime().getTime())
@@ -129,7 +130,7 @@ public class Borrowing {
     }
     private void testExpirationDate(Date testExp) {
         if (testExp.before(this.creationDate) || testExp.getTime() > Calendar.getInstance().getTime().getTime()
-                || testExp.before(this.expirationDate))
+                || testExp.before(this.expirationDate) || testExp.getTime() < 0)
             throw new InvalidArgumentException();
     }
 
