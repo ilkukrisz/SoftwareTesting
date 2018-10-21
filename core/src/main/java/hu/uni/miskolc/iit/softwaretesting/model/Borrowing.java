@@ -4,7 +4,6 @@ import hu.uni.miskolc.iit.softwaretesting.exceptions.InvalidArgumentException;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 /**
  * Represents a book borrowing.
@@ -41,10 +40,13 @@ public class Borrowing {
      */
     private BookInstance bookInstance;
 
-    public Borrowing(long borrowID, Reader reader, Date expirationDate,
-                     Date creationDate, BorrowStatus status, BookInstance bookInstance) {
+    public Borrowing(long borrowID, Reader reader, Date creationDate,
+                     Date expirationDate, BorrowStatus status, BookInstance bookInstance) {
 
-        if (creationDate.after(expirationDate))
+        if (expirationDate.after(new Date(Calendar.getInstance().getTime().getTime()))
+                || creationDate.after(expirationDate)
+                || creationDate.after(new Date(Calendar.getInstance().getTime().getTime()))
+                || creationDate.getTime() < 0 || expirationDate.getTime() < 0)
             throw new InvalidArgumentException();
 
         this.borrowID = borrowID;
@@ -53,7 +55,9 @@ public class Borrowing {
         this.expirationDate = expirationDate;
         this.status = status;
         this.bookInstance = bookInstance;
+
     }
+
 
     public long getBorrowID() {
         return borrowID;
@@ -76,6 +80,7 @@ public class Borrowing {
     }
 
     public void setCreationDate(Date creationDate) {
+        testCreationDate(creationDate);
         this.creationDate = creationDate;
     }
 
@@ -84,6 +89,7 @@ public class Borrowing {
     }
 
     public void setExpirationDate(Date expirationDate) {
+        testExpirationDate(expirationDate);
         this.expirationDate = expirationDate;
     }
 
@@ -114,4 +120,19 @@ public class Borrowing {
                 ", bookInstance=" + bookInstance +
                 '}';
     }
+
+    private void testCreationDate(Date testCreation) {
+        if (testCreation.after(this.expirationDate) || testCreation.getTime() < 0)
+            throw new InvalidArgumentException();
+
+        if (testCreation.getTime() > Calendar.getInstance().getTime().getTime())
+            throw new InvalidArgumentException();
+    }
+    private void testExpirationDate(Date testExp) {
+        if (testExp.before(this.creationDate) || testExp.getTime() > Calendar.getInstance().getTime().getTime()
+                || testExp.before(this.expirationDate) || testExp.getTime() < 0)
+            throw new InvalidArgumentException();
+    }
+
+
 }
