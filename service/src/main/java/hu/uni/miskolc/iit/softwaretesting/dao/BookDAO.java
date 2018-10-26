@@ -35,6 +35,12 @@ public interface BookDAO {
     public Book getBookByISBN(String ISBN) throws BookNotFoundException;
 
     /**
+     * Returns the book with the given ISBN.
+     * @param author The author of the book.
+     */
+    public Collection<Book> getBooksByAuthor(String author) throws BookNotFoundException;
+
+    /**
      * Updates the book with the given information.
      * @param book Data container of the new book data. ISBN field have to contain
      *             the desired book's unique ISBN number.
@@ -136,4 +142,16 @@ public interface BookDAO {
      *                  BorrowID field have to contain the unique id of the borrowing to delete.
      */
     public void deleteBorrowing(Borrowing borrowing) throws NotExistingBorrowingException;
+
+    /**
+     * Deletes the given borrowing from the database.
+     * @param genre The genre of the book.
+     */
+    public Collection<Book> getBooksByGenre(Genre genre) throws BookNotFoundException;
+
+    /**
+     * Deletes the given borrowing from the database.
+     * @param year The publish date of the books.
+     */
+    public Collection<Book> getBooksByYear(int year) throws BookNotFoundException;
 }
