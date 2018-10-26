@@ -10,9 +10,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
-public class ReaderBookServiceImpl implements ReaderBookService {
+public class ReaderBookServiceImpl extends BookServiceImpl implements ReaderBookService {
 
-    private BookDAO bookDAO;
+    private BookDAO dao;
+
+    public ReaderBookServiceImpl(BookDAO dao) {
+        super(dao);
+    }
 
     @Override
     public Collection<Book> getBooksByAuthor(String author) throws EmptyFieldException, BookNotFoundException {
@@ -20,7 +24,7 @@ public class ReaderBookServiceImpl implements ReaderBookService {
         if (isEmptyField(author))
             throw new EmptyFieldException("The field should not be empty!");
 
-        return bookDAO.getBooksByAuthor(author);
+        return dao.getBooksByAuthor(author);
     }
 
     @Override
@@ -32,12 +36,12 @@ public class ReaderBookServiceImpl implements ReaderBookService {
         if (Genre.isContained(String.valueOf(genre)))
             throw new NotExistingGenreException("The given value is not considered as a genre");
 
-        return bookDAO.getBooksByGenre(genre);
+        return dao.getBooksByGenre(genre);
     }
 
     @Override
     public Collection<Book> getBooksByAvailability() throws BookNotFoundException {
-        return bookDAO.getAvailableBooks();
+        return dao.getAvailableBooks();
     }
 
     @Override
@@ -46,8 +50,8 @@ public class ReaderBookServiceImpl implements ReaderBookService {
         if (isEmptyField(title))
             throw new EmptyFieldException("The given value should not be empty!");
 
-        Collection<Book> results = bookDAO.getAvailableBooks();
-        Collection<Book> alma = bookDAO.getBooksByTitle(title);
+        Collection<Book> results = dao.getAvailableBooks();
+        Collection<Book> alma = dao.getBooksByTitle(title);
 
         for (Book i : results) {
             for (Book j : alma) {
@@ -66,19 +70,19 @@ public class ReaderBookServiceImpl implements ReaderBookService {
         if (isEmptyField(String.valueOf(year)))
             throw new EmptyFieldException("The field should not be empty!");
 
-        return bookDAO.getBooksByYear(year);
+        return dao.getBooksByYear(year);
     }
 
     @Override
     public void requestBook(Book book, Reader reader) throws NoAvailableInstanceException {
         try {
-            Collection<BookInstance> bookInstances = bookDAO.getAvailableInstancesOfBook(book);
+            Collection<BookInstance> bookInstances = dao.getAvailableInstancesOfBook(book);
             Calendar creationDate = Calendar.getInstance();
             Calendar expirationDate = Calendar.getInstance();
             expirationDate.setTime(creationDate.getTime());
             expirationDate.add(Calendar.DATE, 30);
             Borrowing borrowing = new Borrowing(createBorrowID(), reader, creationDate.getTime(), expirationDate.getTime(), BorrowStatus.REQUESTED, ((List<BookInstance>)bookInstances).get(0));
-            bookDAO.createBorrowing(borrowing);
+            dao.createBorrowing(borrowing);
         } catch (BookInstanceNotFound bookInstanceNotFound) {
             bookInstanceNotFound.printStackTrace();
             throw new NoAvailableInstanceException("There is no book to be borrowed.");
@@ -95,15 +99,15 @@ public class ReaderBookServiceImpl implements ReaderBookService {
         if (reader.equals(null))
             throw new NotExistingReaderException("The given reader is null!");
 
-        if (bookDAO.getBorrowingsOfReader(reader) == null || bookDAO.getBorrowingsOfReader(reader).size() == 0)
+        if (dao.getBorrowingsOfReader(reader) == null || dao.getBorrowingsOfReader(reader).size() == 0)
             throw new NotExistingBorrowingException("There is no borrowings for this user!");
 
-        return bookDAO.getBorrowingsOfReader(reader);
+        return dao.getBorrowingsOfReader(reader);
     }
 
     @Override
     public Collection<Book> getAllBooks() throws BookNotFoundException {
-        return bookDAO.getAllBooks();
+        return dao.getAllBooks();
     }
 
 
