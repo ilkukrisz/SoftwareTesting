@@ -27,15 +27,16 @@ public interface LibrarianBookService extends BookService {
      * @throws EmptyFieldException
      * @throws InvalidPublishDateException
      * @throws NotExistingGenreException
+     * @throws BookNotFoundException
      */
-    void updateBook(Book book) throws WrongISBNException, EmptyFieldException, InvalidPublishDateException, NotExistingGenreException;
+    void updateBook(Book book) throws BookNotFoundException, WrongISBNException, EmptyFieldException, InvalidPublishDateException, NotExistingGenreException;
 
     /**
      *
-     * @param isbn the ISBN of the book, which should be deleted.
+     * @param book the book, which should be deleted.
      * @throws BookNotFoundException
      */
-    void deleteBook(int isbn) throws BookNotFoundException;
+    void deleteBook(Book book) throws BookNotFoundException;
 
     /**
      *
@@ -54,9 +55,10 @@ public interface LibrarianBookService extends BookService {
 
     /**
      *
-     * @param inventoryNumber the book instance that should be deleted from the databse.
+     * @param bookInstance the book instance that should be deleted from the database.
+     * @throws BookInstanceNotFound
      */
-    public void deleteBookInstances(long inventoryNumber);
+    public void deleteBookInstances(BookInstance bookInstance) throws BookInstanceNotFound;
 
     /**
      *
@@ -68,14 +70,16 @@ public interface LibrarianBookService extends BookService {
     /**
      *
      * @return the list of borrowings
+     * @throws NoBorrowingsFoundException
      */
-    public Collection<Borrowing> listBorrowings();
+    public Collection<Borrowing> listBorrowings() throws NoBorrowingsFoundException;
 
     /**
      *
      * @return the list of requests
+     * @throws NotExistingBorrowingException
      */
-    public Collection<Borrowing> listRequests();
+    public Collection<Borrowing> listRequests() throws NotExistingBorrowingException;
 
 
 

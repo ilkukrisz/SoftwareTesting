@@ -12,7 +12,7 @@ public interface BookService {
      *
      * @return With the books stored in the database.
      */
-    public Collection<Book> getAllBooks();
+    public Collection<Book> getAllBooks() throws BookNotFoundException;
 
 
 
