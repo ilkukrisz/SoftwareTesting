@@ -1,4 +1,4 @@
-package hu.uni.miskolc.iit.softwaretesting;
+package hu.uni.miskolc.iit.softwaretesting.dao;
 
 /**
  * Hello world!
