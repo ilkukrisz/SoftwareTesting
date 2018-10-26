@@ -105,6 +105,11 @@ public interface BookDAO {
     public void createBorrowing(Borrowing borrowing) throws AlreadyExistingBorrowingException;
 
     /**
+     * Returns all of the borrowings from the database.
+     */
+    public Collection<Borrowing> getAllBorrowings() throws NoBorrowingsFoundException;
+
+    /**
      * Returns all borrowings with the given status.
      * @param status The searched borrowing status.
      */
