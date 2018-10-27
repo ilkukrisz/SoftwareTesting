@@ -144,14 +144,21 @@ public interface BookDAO {
     public void deleteBorrowing(Borrowing borrowing) throws NotExistingBorrowingException;
 
     /**
-     * Deletes the given borrowing from the database.
+     * Returnes the books with the given genre.
      * @param genre The genre of the book.
      */
     public Collection<Book> getBooksByGenre(Genre genre) throws BookNotFoundException;
 
     /**
-     * Deletes the given borrowing from the database.
+     * Returnes the books with the given publish date.
      * @param year The publish date of the books.
      */
     public Collection<Book> getBooksByYear(int year) throws BookNotFoundException;
+
+    /**
+     * Returnes an id which is not used yet.
+     */
+    public long getNewID();
+
+
 }

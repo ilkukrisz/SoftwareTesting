@@ -60,7 +60,7 @@ public interface ReaderBookService extends BookService {
      * @param book the book which is required by the reader
      * @throws NoAvailableInstanceException
      */
-    public void requestBook(Book book, Reader reader) throws NoAvailableInstanceException;
+    public void requestBook(Book book, Reader reader) throws NoAvailableInstanceException, BookNotFoundException;
 
 
     /**

@@ -1,4 +1,4 @@
-package hu.uni.miskolc.iit.softwaretesting.serviceImpl;
+package hu.uni.miskolc.iit.softwaretesting.service.impl;
 
 import hu.uni.miskolc.iit.softwaretesting.dao.BookDAO;
 import hu.uni.miskolc.iit.softwaretesting.exceptions.*;
@@ -51,10 +51,10 @@ public class ReaderBookServiceImpl extends BookServiceImpl implements ReaderBook
             throw new EmptyFieldException("The given value should not be empty!");
 
         Collection<Book> results = dao.getAvailableBooks();
-        Collection<Book> alma = dao.getBooksByTitle(title);
+        Collection<Book> booksByTitle = dao.getBooksByTitle(title);
 
         for (Book i : results) {
-            for (Book j : alma) {
+            for (Book j : booksByTitle) {
                 if (i.getIsbn() != j.getIsbn()) {
                     results.remove(j);
                 }
@@ -74,22 +74,22 @@ public class ReaderBookServiceImpl extends BookServiceImpl implements ReaderBook
     }
 
     @Override
-    public void requestBook(Book book, Reader reader) throws NoAvailableInstanceException {
+    public void requestBook(Book book, Reader reader) throws NoAvailableInstanceException, BookNotFoundException {
         try {
             Collection<BookInstance> bookInstances = dao.getAvailableInstancesOfBook(book);
             Calendar creationDate = Calendar.getInstance();
             Calendar expirationDate = Calendar.getInstance();
             expirationDate.setTime(creationDate.getTime());
             expirationDate.add(Calendar.DATE, 30);
-            Borrowing borrowing = new Borrowing(createBorrowID(), reader, creationDate.getTime(), expirationDate.getTime(), BorrowStatus.REQUESTED, ((List<BookInstance>)bookInstances).get(0));
+            Borrowing borrowing = new Borrowing(dao.getNewID(), reader, creationDate.getTime(), expirationDate.getTime(), BorrowStatus.REQUESTED, ((List<BookInstance>)bookInstances).get(0));
             dao.createBorrowing(borrowing);
         } catch (BookInstanceNotFound bookInstanceNotFound) {
             bookInstanceNotFound.printStackTrace();
             throw new NoAvailableInstanceException("There is no book to be borrowed.");
 
-        } catch (AlreadyExistingBorrowingException e) {
-            e.printStackTrace();
         } catch (BookNotFoundException e) {
+            throw new BookNotFoundException("There is no book that requested.");
+        } catch (AlreadyExistingBorrowingException e) {
             e.printStackTrace();
         }
     }
@@ -118,9 +118,5 @@ public class ReaderBookServiceImpl extends BookServiceImpl implements ReaderBook
         return false;
     }
 
-
-    private Long createBorrowID() {
-        return (new Random()).nextLong();
-    }
 
 }
