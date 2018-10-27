@@ -4,6 +4,7 @@ import hu.uni.miskolc.iit.softwaretesting.exceptions.*;
 import hu.uni.miskolc.iit.softwaretesting.model.Book;
 import hu.uni.miskolc.iit.softwaretesting.model.Borrowing;
 import hu.uni.miskolc.iit.softwaretesting.model.Genre;
+import hu.uni.miskolc.iit.softwaretesting.model.Reader;
 
 import java.util.Collection;
 
@@ -59,11 +60,12 @@ public interface ReaderBookService extends BookService {
      * @param book the book which is required by the reader
      * @throws NoAvailableInstanceException
      */
-    public void requestBook(Book book) throws NoAvailableInstanceException;
+    public void requestBook(Book book, Reader reader) throws NoAvailableInstanceException, BookNotFoundException;
+
 
     /**
      *
      * @return the borrowings that are currently at the user
      */
-    public Collection<Borrowing> showBorrowings();
+    public Collection<Borrowing> showBorrowings(Reader reader) throws NotExistingReaderException, NotExistingBorrowingException;
 }
