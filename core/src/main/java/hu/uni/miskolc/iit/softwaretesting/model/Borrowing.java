@@ -43,7 +43,10 @@ public class Borrowing {
     public Borrowing(long borrowID, Reader reader, Date creationDate,
                      Date expirationDate, BorrowStatus status, BookInstance bookInstance) {
 
-        if (expirationDate.after(new Date(Calendar.getInstance().getTime().getTime()))
+        Calendar maxDaysForBorrowing = Calendar.getInstance();
+        maxDaysForBorrowing.add(Calendar.DATE, 40);
+
+        if (expirationDate.after(new Date(maxDaysForBorrowing.getTime().getTime()))
                 || creationDate.after(expirationDate)
                 || creationDate.after(new Date(Calendar.getInstance().getTime().getTime()))
                 || creationDate.getTime() < 0 || expirationDate.getTime() < 0)
@@ -132,6 +135,28 @@ public class Borrowing {
         if (testExp.before(this.creationDate) || testExp.getTime() > Calendar.getInstance().getTime().getTime()
                 || testExp.before(this.expirationDate) || testExp.getTime() < 0)
             throw new InvalidArgumentException();
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if(obj instanceof Borrowing) {
+            Borrowing that = (Borrowing) obj;
+            return (this.getReader().equals(that.getReader()) &&
+                    this.getBookInstance().equals(that.getBookInstance()) &&
+                    this.getBorrowID() == that.getBorrowID() &&
+                    isOnTheSameDay(this.getCreationDate(),that.getCreationDate()) &&
+                    isOnTheSameDay(this.getExpirationDate(), that.getExpirationDate()) &&
+                    this.getStatus().equals(that.getStatus()));
+        }
+        else
+            return false;
+
+    }
+
+    private boolean isOnTheSameDay(Date one, Date other) {
+        return (one.getDay() == other.getDay() &&
+                one.getMonth() == other.getMonth() &&
+                one.getYear() == other.getYear());
     }
 
 

@@ -59,4 +59,17 @@ public class BookInstance {
                 ", isLoaned=" + isLoaned +
                 '}';
     }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if(obj instanceof BookInstance) {
+            BookInstance that = (BookInstance) obj;
+            return (this.getBook().equals(that.getBook()) &&
+                    this.getInventoryNumber() == that.getInventoryNumber());
+
+        }
+        else
+            return false;
+
+    }
 }

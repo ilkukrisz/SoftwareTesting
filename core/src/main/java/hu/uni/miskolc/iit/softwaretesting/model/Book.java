@@ -114,4 +114,20 @@ public class Book
                 ", date of publish =" + publishDate +
                 ", genre ='" + genre + '\'';
     }
+
+    @Override
+    public boolean equals(final Object obj) {
+        if(obj instanceof Book) {
+            Book that = (Book) obj;
+            return (this.getIsbn().equals(that.getIsbn()) &&
+                    this.getPublishDate() == that.getPublishDate() &&
+                    this.getAuthor().equalsIgnoreCase(that.getAuthor()) &&
+                    this.getGenre().equals(that.getGenre()) &&
+                    this.getTitle().equalsIgnoreCase(that.getTitle()));
+            }else
+                return false;
+
+    }
+
+
 }

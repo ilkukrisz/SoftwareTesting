@@ -53,7 +53,7 @@ public interface ReaderBookService extends BookService {
      * @throws NotExistingGenreException
      * @throws EmptyFieldException
      */
-    public Collection<Book> getBooksByYear(int year) throws BookNotFoundException, NotExistingGenreException, EmptyFieldException;
+    public Collection<Book> getBooksByYear(int year) throws BookNotFoundException, NotExistingGenreException, EmptyFieldException, InvalidPublishDateException;
 
     /**
      *
