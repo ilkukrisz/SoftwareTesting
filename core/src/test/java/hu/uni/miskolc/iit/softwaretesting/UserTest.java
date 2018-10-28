@@ -43,7 +43,7 @@ public class UserTest {
     public void testConstructorWithIllegalValues () {
         exceptionRule.expect(IllegalArgumentException.class);
         new User(null, this.password, this.firstName, this.lastName, this.email, this.mobileNumber);
-
+        
         exceptionRule.expect(IllegalArgumentException.class);
         new User("", this.password, this.firstName, this.lastName, this.email, this.mobileNumber);
 

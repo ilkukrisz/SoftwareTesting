@@ -10,7 +10,7 @@ public class Book
     /**
      * @param isbn - The international standard book number of the book.
      */
-    private Long isbn;
+    private long isbn;
 
     /**
      * @param author - The author of the book.
@@ -33,7 +33,7 @@ public class Book
     private Genre genre;
 
 
-    public Book(String author, String title, Long isbn, int publishDate, Genre genre) throws InvalidPublishDateException {
+    public Book(String author, String title, long isbn, int publishDate, Genre genre) throws InvalidPublishDateException {
 
         testDate(publishDate);
 
