@@ -54,15 +54,17 @@ public class BookInstanceTest{
             fail(e.getMessage());
         }
     }
+
+
     @Test
     public void testConstructorWithIllegalValues()
     {
-        exceptionRule.expect(IllegalArgumentException.class);
+        exceptionRule.expect(InvalidArgumentException.class);
         new BookInstance(0,this.book,this.isLoaned);
+
         exceptionRule.expect(IllegalArgumentException.class);
         new BookInstance(this.inventoryNumber,null,this.isLoaned);
-        exceptionRule.expect(IllegalArgumentException.class);
-        new BookInstance(this.inventoryNumber, this.book, false);
+
     }
 
     @Test
@@ -70,11 +72,13 @@ public class BookInstanceTest{
     {
         assertEquals(this.inventoryNumber, this.bookInstance.getInventoryNumber());
     }
+
+
     @Test(expected = InvalidArgumentException.class)
     public void testSetNegativeInventoryNumber()
     {
         long inventoryNumber = -1000;
-        this.bookInstance.setInventoryNumber((inventoryNumber));
+        this.bookInstance.setInventoryNumber(inventoryNumber);
     }
 
     @Test
@@ -82,13 +86,17 @@ public class BookInstanceTest{
     {
         long inventoryNumber = 12345;
         this.bookInstance.setInventoryNumber(inventoryNumber);
-        assertEquals(this.inventoryNumber, this.bookInstance.getInventoryNumber());
+        assertEquals(inventoryNumber, this.bookInstance.getInventoryNumber());
     }
+
+
     @Test
     public void testGetBook()
     {
         assertEquals(this.book, this.bookInstance.getBook());
     }
+
+
     @Test
     public void testSetBook() throws InvalidPublishDateException
     {
@@ -96,11 +104,15 @@ public class BookInstanceTest{
         this.bookInstance.setBook(book);
         assertEquals(book, this.bookInstance.getBook());
     }
-    @Test(expected = IllegalArgumentException.class)
-    public void testSetBookInstanceWithNoBook()
+
+
+    @Test(expected = InvalidArgumentException.class)
+    public void testSetBookInstanceWithNullBook()
     {
        this.bookInstance.setBook(null);
     }
+
+
     @Test
     public void testSetLoaned()
     {
@@ -108,6 +120,8 @@ public class BookInstanceTest{
         this.bookInstance.setLoaned(loaned);
         assertEquals(this.isLoaned, this.bookInstance.isLoaned());
     }
+
+
     @Test
     public void isLoaned()
     {

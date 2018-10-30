@@ -1,5 +1,7 @@
 package hu.uni.miskolc.iit.softwaretesting.model;
 
+import hu.uni.miskolc.iit.softwaretesting.exceptions.InvalidArgumentException;
+
 /**
  * Represents a real instance of a book.
  */
@@ -21,6 +23,9 @@ public class BookInstance {
     private boolean isLoaned;
 
     public BookInstance(long inventoryNumber, Book book, boolean isLoaned) {
+        if (inventoryNumber <= 0) {
+            throw new InvalidArgumentException();
+        }
         this.inventoryNumber = inventoryNumber;
         this.book = book;
         this.isLoaned = isLoaned;
@@ -31,6 +36,9 @@ public class BookInstance {
     }
 
     public void setInventoryNumber(long inventoryNumber) {
+        if (inventoryNumber <= 0 || book == null) {
+            throw new InvalidArgumentException();
+        }
         this.inventoryNumber = inventoryNumber;
     }
 
@@ -39,6 +47,8 @@ public class BookInstance {
     }
 
     public void setBook(Book book) {
+        if (book == null)
+            throw new InvalidArgumentException();
         this.book = book;
     }
 
