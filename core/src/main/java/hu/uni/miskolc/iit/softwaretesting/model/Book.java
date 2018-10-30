@@ -64,12 +64,12 @@ public class Book
         this.title = title;
     }
 
-    public Long getIsbn()
+    public long getIsbn()
     {
         return isbn;
     }
 
-    public void setIsbn(Long isbn)
+    public void setIsbn(long isbn)
     {
         this.isbn = isbn;
     }
@@ -119,7 +119,7 @@ public class Book
     public boolean equals(final Object obj) {
         if(obj instanceof Book) {
             Book that = (Book) obj;
-            return (this.getIsbn().equals(that.getIsbn()) &&
+            return (this.getIsbn() == that.getIsbn() &&
                     this.getPublishDate() == that.getPublishDate() &&
                     this.getAuthor().equalsIgnoreCase(that.getAuthor()) &&
                     this.getGenre().equals(that.getGenre()) &&

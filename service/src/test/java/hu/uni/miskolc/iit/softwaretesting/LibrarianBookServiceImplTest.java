@@ -25,7 +25,7 @@ public class LibrarianBookServiceImplTest  {
     @InjectMocks
     private LibrarianBookServiceImpl service;
 
-    private Book nullISBNBook = new Book("Bill Gates", "50 shades of fatal errors", null, 2000, Genre.Guide);
+    private Book nullISBNBook = new Book("Bill Gates", "50 shades of fatal errors", 35472, 2000, Genre.Guide);
 
     public LibrarianBookServiceImplTest() throws InvalidPublishDateException {
         super();
