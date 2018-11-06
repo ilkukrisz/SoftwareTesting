@@ -74,7 +74,7 @@ public class ReaderBookServiceImpl extends BookServiceImpl implements ReaderBook
     }
 
     @Override
-    public void requestBook(Book book, Reader reader) throws NoAvailableInstanceException, BookNotFoundException {
+    public void requestBook(Book book, Reader reader) throws NoAvailableInstanceException, BookNotFoundException, PersistenceException {
 
         if (book == null || reader == null)
             throw new InvalidArgumentException("The given value is null!");

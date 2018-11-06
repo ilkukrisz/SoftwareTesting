@@ -37,19 +37,19 @@ public class LibrarianBookServiceImplTest  {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testAddBookWithNullValue () throws AlreadyExistingBookException {
+    public void testAddBookWithNullValue () throws AlreadyExistingBookException, PersistenceException {
         doThrow(IllegalArgumentException.class).when(daoMock).createBook(null);
         service.addBook(null);
     }
 
     @Test(expected = BookNotFoundException.class)
-    public void testUpdateBookWithNullISBN () throws BookNotFoundException {
+    public void testUpdateBookWithNullISBN () throws BookNotFoundException, PersistenceException {
         doThrow(BookNotFoundException.class).when(daoMock).updateBook(this.nullISBNBook);
         service.updateBook(this.nullISBNBook);
     }
 
     @Test(expected = BookNotFoundException.class)
-    public void testDeleteBookWithNullISBN () throws BookNotFoundException {
+    public void testDeleteBookWithNullISBN () throws BookNotFoundException, PersistenceException {
         doThrow(BookNotFoundException.class).when(daoMock).deleteBook(this.nullISBNBook);
         service.deleteBook(this.nullISBNBook);
     }
@@ -72,7 +72,7 @@ public class LibrarianBookServiceImplTest  {
     }
 
     @Test(expected = AlreadyExistingBookInstance.class)
-    public void testAddAlreadyExistingBookInstance () throws InvalidPublishDateException, AlreadyExistingBookInstance {
+    public void testAddAlreadyExistingBookInstance () throws InvalidPublishDateException, AlreadyExistingBookInstance, PersistenceException {
         Book book = new Book ( "Elon Musk", "The first human on Mars", (long)111222, 2017, Genre.Scifi);
         BookInstance bookInstance = new BookInstance(262626, book, false);
 
@@ -88,14 +88,14 @@ public class LibrarianBookServiceImplTest  {
     }
 
     @Test
-    public void testLendBook () throws InvalidPublishDateException, NotExistingBorrowingException {
+    public void testLendBook () throws InvalidPublishDateException, NotExistingBorrowingException, PersistenceException {
         Borrowing borrowing = getExampleBorrowing(BorrowStatus.REQUESTED);
         service.lendBook(borrowing);
         assertEquals(BorrowStatus.BORROWED, borrowing.getStatus());
     }
 
     @Test(expected = NotExistingBorrowingException.class)
-    public void testLendBookWithNotExistingRequest () throws InvalidPublishDateException, NotExistingBorrowingException {
+    public void testLendBookWithNotExistingRequest () throws InvalidPublishDateException, NotExistingBorrowingException, PersistenceException {
         Borrowing borrowing = getExampleBorrowing(BorrowStatus.REQUESTED);
         doThrow(NotExistingBorrowingException.class).when(daoMock).updateBorrowing(borrowing);
         service.lendBook(borrowing);

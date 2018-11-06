@@ -10,7 +10,7 @@ public interface BookDAO {
      * Creates a new book record in database.
      * @param book Data container of the new book.
      */
-    public void createBook(Book book) throws AlreadyExistingBookException;
+    public void createBook(Book book) throws AlreadyExistingBookException, PersistenceException;
 
     /**
      * Returns all books from database.
@@ -32,7 +32,7 @@ public interface BookDAO {
      * Returns the book with the given ISBN.
      * @param ISBN ISBN number of the searched book.
      */
-    public Book getBookByISBN(String ISBN) throws BookNotFoundException;
+    public Book getBookByISBN(long ISBN) throws BookNotFoundException;
 
     /**
      * Returns the book with the given ISBN.
@@ -45,30 +45,25 @@ public interface BookDAO {
      * @param book Data container of the new book data. ISBN field have to contain
      *             the desired book's unique ISBN number.
      */
-    public void updateBook(Book book) throws BookNotFoundException;
+    public void updateBook(Book book) throws BookNotFoundException, PersistenceException;
 
     /**
      * Deletes the book.
      * @param book The book object. ISBN field have to contain the erasable book's unique ISBN number.
      */
-    public void deleteBook(Book book) throws BookNotFoundException;
+    public void deleteBook(Book book) throws BookNotFoundException, PersistenceException;
 
 
     /**
      * Creates a new book instance in database.
      * @param bookInstance Data container of the new book instance.
      */
-    public void createBookInstance(BookInstance bookInstance) throws AlreadyExistingBookInstance;
+    public void createBookInstance(BookInstance bookInstance) throws AlreadyExistingBookInstance, PersistenceException;
 
     /**
      * Returns all book instances from the database.
      */
     public Collection<BookInstance> getAllBookInstances() throws BookInstanceNotFound;
-
-    /**
-     * Returns all borrowable book instances from the database.
-     */
-    public Collection<BookInstance> getAllAvailableBookInstances() throws BookInstanceNotFound;
 
     /**
      * Returns all instances of the given book.
@@ -88,14 +83,14 @@ public interface BookDAO {
      * Returns the book instance with the given inventoryNumber.
      * @param inventoryNumber Inventory number of the book instance.
      */
-    public BookInstance getBookInstanceByInventoryNumber(long inventoryNumber) throws BookInstanceNotFound;
+    public BookInstance getBookInstanceByInventoryNumber(long inventoryNumber) throws BookInstanceNotFound, BookNotFoundException;
 
     /**
      * Updates the book instance in the database.
      * @param bookInstance Data container of the new book instance.
      *                     InventoryNumber field must be set to the desired book instance's to update.
      */
-    public void updateBookInstance(BookInstance bookInstance) throws BookInstanceNotFound;
+    public void updateBookInstance(BookInstance bookInstance) throws BookInstanceNotFound, PersistenceException;
 
     /**
      * Deletes the book instance from the database.
@@ -108,7 +103,7 @@ public interface BookDAO {
      * Creates a new borrowing in the database.
      * @param borrowing Data container of the new borrowing.
      */
-    public void createBorrowing(Borrowing borrowing) throws AlreadyExistingBorrowingException;
+    public void createBorrowing(Borrowing borrowing) throws AlreadyExistingBorrowingException, PersistenceException;
 
     /**
      * Returns all of the borrowings from the database.
@@ -129,17 +124,11 @@ public interface BookDAO {
                                                                                 NotExistingReaderException;
 
     /**
-     * Returns all borrowings of the given book.
-     * @param book The searched book.
-     */
-    public Collection<Borrowing> getBorrowingsOfBook(Book book) throws BookNotFoundException, NotExistingBorrowingException;
-
-    /**
      * Updates borrowing in the database.
      * @param borrowing The borrowing object to update.
      *                  BorrowID field have to contain the unique id of the borrowing to update.
      */
-    public void updateBorrowing(Borrowing borrowing) throws NotExistingBorrowingException;
+    public void updateBorrowing(Borrowing borrowing) throws NotExistingBorrowingException, PersistenceException;
 
     /**
      * Deletes the given borrowing from the database.
@@ -149,19 +138,19 @@ public interface BookDAO {
     public void deleteBorrowing(Borrowing borrowing) throws NotExistingBorrowingException;
 
     /**
-     * Returnes the books with the given genre.
+     * Returns the books with the given genre.
      * @param genre The genre of the book.
      */
     public Collection<Book> getBooksByGenre(Genre genre) throws BookNotFoundException;
 
     /**
-     * Returnes the books with the given publish date.
+     * Returns the books with the given publish date.
      * @param year The publish date of the books.
      */
     public Collection<Book> getBooksByYear(int year) throws BookNotFoundException;
 
     /**
-     * Returnes an id which is not used yet.
+     * Returns an id which is not used yet.
      */
     public long getNewID();
 

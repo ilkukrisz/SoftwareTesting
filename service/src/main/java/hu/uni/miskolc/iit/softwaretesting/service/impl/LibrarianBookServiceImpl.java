@@ -16,27 +16,33 @@ public class LibrarianBookServiceImpl extends BookServiceImpl implements Librari
         super(dao);
     }
 
-    public void addBook(Book book) throws AlreadyExistingBookException {
+    public void addBook(Book book) throws AlreadyExistingBookException, PersistenceException {
         try {
             dao.createBook(book);
         } catch (AlreadyExistingBookException e) {
             throw new AlreadyExistingBookException(e);
+        } catch (PersistenceException e) {
+            throw new PersistenceException(e);
         }
     }
 
-    public void updateBook(Book book) throws BookNotFoundException {
+    public void updateBook(Book book) throws BookNotFoundException, PersistenceException {
         try {
             dao.updateBook(book);
         } catch (BookNotFoundException e) {
             throw new BookNotFoundException(e);
+        } catch (PersistenceException e) {
+            throw new PersistenceException(e);
         }
     }
 
-    public void deleteBook(Book book) throws BookNotFoundException {
+    public void deleteBook(Book book) throws BookNotFoundException, PersistenceException {
         try {
             dao.deleteBook(book);
         } catch (BookNotFoundException e) {
             throw new BookNotFoundException(e);
+        } catch (PersistenceException e) {
+            throw new PersistenceException(e);
         }
     }
 
@@ -52,11 +58,13 @@ public class LibrarianBookServiceImpl extends BookServiceImpl implements Librari
         }
     }
 
-    public void addBookInstances(BookInstance bookInstance) throws AlreadyExistingBookInstance {
+    public void addBookInstances(BookInstance bookInstance) throws AlreadyExistingBookInstance, PersistenceException {
         try {
             dao.createBookInstance(bookInstance);
         } catch (AlreadyExistingBookInstance e) {
             throw new AlreadyExistingBookInstance(e);
+        } catch (PersistenceException e) {
+            throw new PersistenceException(e);
         }
     }
 
@@ -68,7 +76,7 @@ public class LibrarianBookServiceImpl extends BookServiceImpl implements Librari
         }
     }
 
-    public void lendBook(Borrowing borrow) throws NotExistingBorrowingException {
+    public void lendBook(Borrowing borrow) throws NotExistingBorrowingException, PersistenceException {
         BorrowStatus originalStatus = borrow.getStatus();
 
         try {
