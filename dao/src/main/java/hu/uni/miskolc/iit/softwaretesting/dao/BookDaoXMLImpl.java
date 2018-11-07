@@ -25,7 +25,7 @@ import java.util.Collection;
 /**
  * XML DOM implementation of BookDAO interface.
  */
-public class BookDAOImpl implements BookDAO {
+public class BookDaoXMLImpl implements BookDAO {
 
     /**
      * The document to manipulate.
@@ -37,7 +37,7 @@ public class BookDAOImpl implements BookDAO {
      */
     private File outputFile;
 
-    public BookDAOImpl(Document document, File outputFile) {
+    public BookDaoXMLImpl(Document document, File outputFile) {
         document.getDocumentElement().normalize();
         this.document = document;
         this.outputFile = outputFile;
@@ -49,6 +49,10 @@ public class BookDAOImpl implements BookDAO {
      * @param book Data container of the new book.
      */
     public void createBook(Book book) throws AlreadyExistingBookException, PersistenceException {
+        if (this.isBookExists(book.getIsbn())) {
+            throw new AlreadyExistingBookException();
+        }
+
         try {
             Element newBook = document.createElement("book");
 
@@ -101,6 +105,10 @@ public class BookDAOImpl implements BookDAO {
             }
         } catch (InvalidPublishDateException e) {
             System.err.println("Invalid publish date in database, Book ISBN:" + String.valueOf(ISBN));
+        }
+
+        if (results.isEmpty()) {
+            throw new BookNotFoundException();
         }
 
         return results;
@@ -297,6 +305,10 @@ public class BookDAOImpl implements BookDAO {
      * @param bookInstance Data container of the new book instance.
      */
     public void createBookInstance(BookInstance bookInstance) throws AlreadyExistingBookInstance, PersistenceException {
+        if (this.isBookInstanceExists(bookInstance.getInventoryNumber())) {
+            throw new AlreadyExistingBookInstance();
+        }
+
         try {
             Element newBookInstance = document.createElement("bookInstance");
 
@@ -475,6 +487,10 @@ public class BookDAOImpl implements BookDAO {
      * @param borrowing Data container of the new borrowing.
      */
     public void createBorrowing(Borrowing borrowing) throws AlreadyExistingBorrowingException, PersistenceException {
+        if (this.isBorrowingExists(borrowing.getBorrowID())) {
+            throw new AlreadyExistingBorrowingException();
+        }
+
         try {
             Element newBorrowing = document.createElement("borrowing");
 
@@ -608,6 +624,38 @@ public class BookDAOImpl implements BookDAO {
         }
 
         return results;
+    }
+
+    /**
+     * Returns the borrowing with the given id.
+     * @param id ID to search.
+     * @return Borrowing with the given id.
+     * @throws NotExistingBorrowingException
+     */
+    public Borrowing getBorrowingById(long id) throws NotExistingBorrowingException {
+        NodeList borrowings = document.getElementsByTagName("borrowing");
+        try {
+            for (int i=0; i < borrowings.getLength(); i++) {
+                Element current = (Element) borrowings.item(i);
+                if (this.getNodeValue(current, "borrowID").equals(id)) {
+                    DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                    return new Borrowing(
+                            Long.valueOf(this.getNodeValue(current, "borrowID")),
+                            this.getReaderByUsername(this.getNodeValue(current, "readerUsername")),
+                            format.parse(this.getNodeValue(current, "creationDate")),
+                            format.parse(this.getNodeValue(current, "expirationDate")),
+                            BorrowStatus.valueOf(this.getNodeValue(current, "status")),
+                            this.getBookInstanceByInventoryNumber(
+                                    Long.valueOf(this.getNodeValue(current, "bookInstanceInventoryNumber"))
+                            )
+                    );
+                }
+            }
+        } catch (ParseException|BookInstanceNotFound|BookNotFoundException|NotExistingReaderException e) {
+            throw new NotExistingBorrowingException(e);
+        }
+
+        throw new NotExistingBorrowingException();
     }
 
     /**
@@ -795,6 +843,42 @@ public class BookDAOImpl implements BookDAO {
      */
     private String getNodeValue (Node node, String nodeName) {
         return getNode(node, nodeName).getTextContent();
+    }
+
+    /**
+     * Checks if book exists with the given ISBN number.
+     * @param isbn ISBN to search for.
+     */
+    private boolean isBookExists (long isbn) {
+        try {
+            return this.getBookByISBN(isbn) != null;
+        } catch (BookNotFoundException e) {
+            return false;
+        }
+    }
+
+    /**
+     * Checks if book instance exists with the given ISBN number.
+     * @param inventoryNo Inventory no. to search for.
+     */
+    private boolean isBookInstanceExists (long inventoryNo) {
+        try {
+            return this.getBookInstanceByInventoryNumber(inventoryNo) != null;
+        } catch (BookNotFoundException|BookInstanceNotFound e) {
+            return false;
+        }
+    }
+
+    /**
+     * Checks if borrowing exists with the given ISBN number.
+     * @param borrowID ID to search for.
+     */
+    private boolean isBorrowingExists (long borrowID) {
+        try {
+            return this.getBorrowingById(borrowID) != null;
+        } catch (NotExistingBorrowingException e) {
+            return false;
+        }
     }
 
     /**

@@ -1,6 +1,6 @@
 package hu.uni.miskolc.iit.softwaretesting;
 
-import hu.uni.miskolc.iit.softwaretesting.dao.BookDAOImpl;
+import hu.uni.miskolc.iit.softwaretesting.dao.BookDaoXMLImpl;
 
 import org.xml.sax.SAXException;
 
@@ -12,14 +12,14 @@ import java.io.IOException;
 
 public class BookDAOTest {
 
-    private BookDAOImpl dao;
+    private BookDaoXMLImpl dao;
 
     public BookDAOTest () throws IOException, SAXException, ParserConfigurationException {
         File inputFile = new File("resources/database.xml");
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder = dbFactory.newDocumentBuilder();
 
-        this.dao = new BookDAOImpl(docBuilder.parse(inputFile), inputFile);
+        this.dao = new BookDaoXMLImpl(docBuilder.parse(inputFile), inputFile);
     }
 
     //TODO
