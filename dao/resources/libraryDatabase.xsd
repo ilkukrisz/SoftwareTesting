@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+    <xs:element name="database">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="users">
+                    <xs:complexType>
+                        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                            <xs:element name="user" type="userType" ></xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                
+                <xs:element name="books">
+                    <xs:complexType>
+                        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                            <xs:element name="book" type="bookType"></xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                
+                <xs:element name="bookInstances">
+                    <xs:complexType>
+                        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                            <xs:element name="bookInstance" type="bookInstanceType"></xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                
+                <xs:element name="borrowings">
+                    <xs:complexType>
+                        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                            <xs:element name="borrowing" type="borrowingType"></xs:element>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+        <xs:key name="userKey">
+            <xs:selector xpath="UserType/username"></xs:selector>
+            <xs:field xpath="."></xs:field>
+        </xs:key>
+        <xs:key name="bookKey">
+            <xs:selector xpath="bookType/ISBN"></xs:selector>
+            <xs:field xpath="."></xs:field>
+        </xs:key>
+        <xs:key name="bookInstanceKey">
+            <xs:selector xpath="bookInstanceType/inventoryNumber"></xs:selector>
+            <xs:field xpath="."></xs:field>
+        </xs:key>
+        <xs:key name="borrowingKey">
+            <xs:selector xpath="borrowingType/borrowID"></xs:selector>
+            <xs:field xpath="."></xs:field>
+        </xs:key>
+        <xs:keyref refer="bookKey" name="instanceToBookRef">
+            <xs:selector xpath="bookInstanceType/bookISBN"></xs:selector>
+            <xs:field xpath="."></xs:field>
+        </xs:keyref>
+        <xs:keyref refer="bookInstanceKey" name="borrowingToInstanceRef">
+            <xs:selector xpath="borrowingType/bookInstanceInventoryNumber"></xs:selector>
+            <xs:field xpath="."></xs:field>
+        </xs:keyref>
+    </xs:element>
+    
+    
+    <xs:complexType name="passwordType">
+        <xs:sequence>
+            <xs:element name="hashedPassword" type="xs:string"></xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="nameType">
+        <xs:sequence>
+            <xs:element name="firstname"></xs:element>
+            <xs:element name="lastname"></xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:simpleType name="userRole">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="READER"></xs:enumeration>
+            <xs:enumeration value="LIBRARIAN"></xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:complexType name="userType" id="username">
+        <xs:sequence>
+            <xs:element name="username" type="xs:string"></xs:element>
+            <xs:element name="password" type="passwordType"></xs:element>
+            <xs:element name="name" type="nameType"></xs:element>
+            <xs:element name="email" type="xs:string"></xs:element>
+            <xs:element name="mobileNumber" type="xs:string"></xs:element>
+            <xs:element name="role" type="userRole"></xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:simpleType name="genreType" final="restriction">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="Scifi"></xs:enumeration>
+            <xs:enumeration value="Crimi"></xs:enumeration>
+            <xs:enumeration value="Natural"></xs:enumeration>
+            <xs:enumeration value="Fiction"></xs:enumeration>
+            <xs:enumeration value="Horror"></xs:enumeration>
+            <xs:enumeration value="Mystery"></xs:enumeration>
+            <xs:enumeration value="Romance"></xs:enumeration>
+            <xs:enumeration value="Science"></xs:enumeration>
+            <xs:enumeration value="History"></xs:enumeration>
+            <xs:enumeration value="Comics"></xs:enumeration>
+            <xs:enumeration value="Guide"></xs:enumeration>
+            <xs:enumeration value="Travel"></xs:enumeration>
+            <xs:enumeration value="Other"></xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:complexType name="bookType">
+        <xs:sequence>
+            <xs:element name="ISBN" type="xs:long"></xs:element>
+            <xs:element name="author" type="xs:string"></xs:element>
+            <xs:element name="title" type="xs:string"></xs:element>
+            <xs:element name="publishDate" type="xs:int"></xs:element>
+            <xs:element name="genre" type="genreType"></xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="bookInstanceType">
+        <xs:sequence>
+            <xs:element name="inventoryNumber" type="xs:long"></xs:element>
+            <xs:element name="bookISBN" type="xs:long"></xs:element>
+            <xs:element name="isLoaned" type="xs:boolean"></xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:simpleType name="borrowStatusType" final="restriction">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="REQUESTED"></xs:enumeration>
+            <xs:enumeration value="BORROWED"></xs:enumeration>
+            <xs:enumeration value="RETURNED"></xs:enumeration>
+            <xs:enumeration value="EXPIRED"></xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:complexType name="borrowingType">
+        <xs:sequence>
+            <xs:element name="borrowID" type="xs:long"></xs:element>
+            <xs:element name="readerUsername" type="xs:string"></xs:element>
+            <xs:element name="creationDate" type="xs:date"></xs:element>
+            <xs:element name="expirationDate" type="xs:date"></xs:element>
+            <xs:element name="status" type="borrowStatusType"></xs:element>
+            <xs:element name="bookInstanceInventoryNumber" type="xs:long"></xs:element>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

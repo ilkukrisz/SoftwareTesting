@@ -18,7 +18,7 @@ public interface LibrarianBookService extends BookService {
      * @throws InvalidPublishDateException
      * @throws NotExistingGenreException
      */
-    public void addBook(Book book) throws AlreadyExistingBookException, WrongISBNException, EmptyFieldException, InvalidPublishDateException, NotExistingGenreException;
+    public void addBook(Book book) throws AlreadyExistingBookException, WrongISBNException, EmptyFieldException, InvalidPublishDateException, NotExistingGenreException, PersistenceException;
 
     /**
      *
@@ -29,14 +29,14 @@ public interface LibrarianBookService extends BookService {
      * @throws NotExistingGenreException
      * @throws BookNotFoundException
      */
-    void updateBook(Book book) throws BookNotFoundException, WrongISBNException, EmptyFieldException, InvalidPublishDateException, NotExistingGenreException;
+    void updateBook(Book book) throws BookNotFoundException, WrongISBNException, EmptyFieldException, InvalidPublishDateException, NotExistingGenreException, PersistenceException;
 
     /**
      *
      * @param book the book, which should be deleted.
      * @throws BookNotFoundException
      */
-    void deleteBook(Book book) throws BookNotFoundException;
+    void deleteBook(Book book) throws BookNotFoundException, PersistenceException;
 
     /**
      *
@@ -51,7 +51,7 @@ public interface LibrarianBookService extends BookService {
      * @throws AlreadyExistingBookInstance
      * @throws EmptyFieldException
      */
-    public void addBookInstances(BookInstance bookInstance) throws AlreadyExistingBookInstance, EmptyFieldException;
+    public void addBookInstances(BookInstance bookInstance) throws AlreadyExistingBookInstance, EmptyFieldException, PersistenceException;
 
     /**
      *
@@ -65,7 +65,7 @@ public interface LibrarianBookService extends BookService {
      * @param borrow the borrow which will be examined and completed
      * @throws NotExistingBorrowingException
      */
-    public void lendBook(Borrowing borrow) throws NotExistingBorrowingException;
+    public void lendBook(Borrowing borrow) throws NotExistingBorrowingException, PersistenceException;
 
     /**
      *
