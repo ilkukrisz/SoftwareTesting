@@ -13,10 +13,9 @@ import org.mockito.MockitoAnnotations;
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
-import static org.testng.Assert.fail;
 
 public class LibrarianBookServiceImplTest  {
     @Mock

@@ -23,14 +23,14 @@ public class ReaderBookServiceImpl extends BookServiceImpl implements ReaderBook
     }
 
     @Override
-    public Collection<Book> getBooksByCategory(Genre genre) throws BookNotFoundException, EmptyFieldException {
+    public Collection<Book> getBooksByCategory(Genre genre) throws BookNotFoundException, EmptyFieldException, NotExistingGenreException {
 
         if (isEmptyField(String.valueOf(genre)))
             throw new EmptyFieldException("The field should not be empty!");
 
-       /* if (Genre.isContained(String.valueOf(genre)))
+        if (!Genre.isContained(String.valueOf(genre)))
             throw new NotExistingGenreException("The given value is not considered as a genre");
-*/
+
         return dao.getBooksByGenre(genre);
     }
 
