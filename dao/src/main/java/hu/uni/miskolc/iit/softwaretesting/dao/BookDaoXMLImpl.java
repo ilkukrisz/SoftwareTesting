@@ -48,8 +48,6 @@ public class BookDaoXMLImpl implements BookDAO {
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
         this.document = dBuilder.parse(inputFile);
         document.getDocumentElement().normalize();
-
-        this.document = null;
         this.outputFile = outputFile;
     }
 
