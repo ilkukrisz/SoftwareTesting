@@ -2,6 +2,7 @@ package hu.uni.miskolc.iit.softwaretesting.dao;
 
 import hu.uni.miskolc.iit.softwaretesting.exceptions.*;
 import hu.uni.miskolc.iit.softwaretesting.model.*;
+import org.springframework.stereotype.Repository;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -29,6 +30,7 @@ import java.util.Collection;
 /**
  * XML DOM implementation of BookDAO interface.
  */
+@Repository
 public class BookDaoXMLImpl implements BookDAO {
 
     /**

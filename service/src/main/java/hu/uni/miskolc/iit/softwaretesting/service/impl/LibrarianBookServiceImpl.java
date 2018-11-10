@@ -1,20 +1,17 @@
 package hu.uni.miskolc.iit.softwaretesting.service.impl;
 
-import hu.uni.miskolc.iit.softwaretesting.dao.BookDAO;
 import hu.uni.miskolc.iit.softwaretesting.exceptions.*;
 import hu.uni.miskolc.iit.softwaretesting.model.Book;
 import hu.uni.miskolc.iit.softwaretesting.model.BookInstance;
 import hu.uni.miskolc.iit.softwaretesting.model.BorrowStatus;
 import hu.uni.miskolc.iit.softwaretesting.model.Borrowing;
 import hu.uni.miskolc.iit.softwaretesting.service.LibrarianBookService;
-
+import org.springframework.stereotype.Service;
 import java.util.Collection;
 
+@Service
 public class LibrarianBookServiceImpl extends BookServiceImpl implements LibrarianBookService {
 
-    public LibrarianBookServiceImpl(BookDAO dao) {
-        super(dao);
-    }
 
     public void addBook(Book book) throws AlreadyExistingBookException, PersistenceException {
         try {

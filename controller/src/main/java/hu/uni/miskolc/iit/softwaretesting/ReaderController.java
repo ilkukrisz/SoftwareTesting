@@ -5,6 +5,7 @@ import hu.uni.miskolc.iit.softwaretesting.dtoTypes.*;
 import hu.uni.miskolc.iit.softwaretesting.exceptions.*;
 import hu.uni.miskolc.iit.softwaretesting.model.*;
 import hu.uni.miskolc.iit.softwaretesting.service.ReaderBookService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,6 +21,7 @@ public class ReaderController {
 
     private ReaderBookService readerBookService;
 
+    @Autowired
     public ReaderController(ReaderBookService readerBookService) { this.readerBookService = readerBookService; }
 
     @RequestMapping(value = "/booksbyauthor", method = RequestMethod.GET)

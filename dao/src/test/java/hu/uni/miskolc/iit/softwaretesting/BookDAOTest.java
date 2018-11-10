@@ -16,10 +16,7 @@ public class BookDAOTest {
 
     public BookDAOTest () throws IOException, SAXException, ParserConfigurationException {
         File inputFile = new File("resources/database.xml");
-        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder docBuilder = dbFactory.newDocumentBuilder();
-
-        this.dao = new BookDaoXMLImpl(docBuilder.parse(inputFile), inputFile);
+        this.dao = new BookDaoXMLImpl(inputFile, inputFile);
     }
 
     //TODO
