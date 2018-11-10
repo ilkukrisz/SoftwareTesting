@@ -6,7 +6,11 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
@@ -37,9 +41,22 @@ public class BookDaoXMLImpl implements BookDAO {
      */
     private File outputFile;
 
-    public BookDaoXMLImpl(Document document, File outputFile) {
+    public BookDaoXMLImpl(File inputFile, File outputFile) {
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dBuilder = null;
+        try {
+            dBuilder = dbFactory.newDocumentBuilder();
+            this.document = dBuilder.parse(inputFile);
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         document.getDocumentElement().normalize();
-        this.document = document;
+
+        this.document = null;
         this.outputFile = outputFile;
     }
 
