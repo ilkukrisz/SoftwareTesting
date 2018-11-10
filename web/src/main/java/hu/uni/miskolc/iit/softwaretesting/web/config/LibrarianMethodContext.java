@@ -1,4 +1,4 @@
-package web.config;
+package hu.uni.miskolc.iit.softwaretesting.web.config;
 
 import hu.uni.miskolc.iit.softwaretesting.service.LibrarianBookService;
 import hu.uni.miskolc.iit.softwaretesting.service.impl.LibrarianBookServiceImpl;
