@@ -1,17 +1,14 @@
 package hu.uni.miskolc.iit.softwaretesting.service.impl;
 
-import hu.uni.miskolc.iit.softwaretesting.dao.BookDAO;
 import hu.uni.miskolc.iit.softwaretesting.exceptions.*;
 import hu.uni.miskolc.iit.softwaretesting.model.*;
 import hu.uni.miskolc.iit.softwaretesting.service.ReaderBookService;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+@Service
 public class ReaderBookServiceImpl extends BookServiceImpl implements ReaderBookService {
-
-    public ReaderBookServiceImpl(BookDAO dao) {
-        super(dao);
-    }
 
     @Override
     public Collection<Book> getBooksByAuthor(String author) throws EmptyFieldException, BookNotFoundException {

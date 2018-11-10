@@ -2,11 +2,16 @@ package hu.uni.miskolc.iit.softwaretesting.dao;
 
 import hu.uni.miskolc.iit.softwaretesting.exceptions.*;
 import hu.uni.miskolc.iit.softwaretesting.model.*;
+import org.springframework.stereotype.Repository;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
@@ -25,6 +30,7 @@ import java.util.Collection;
 /**
  * XML DOM implementation of BookDAO interface.
  */
+@Repository
 public class BookDaoXMLImpl implements BookDAO {
 
     /**
@@ -37,9 +43,11 @@ public class BookDaoXMLImpl implements BookDAO {
      */
     private File outputFile;
 
-    public BookDaoXMLImpl(Document document, File outputFile) {
+    public BookDaoXMLImpl(File inputFile, File outputFile) throws ParserConfigurationException, IOException, SAXException {
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+        this.document = dBuilder.parse(inputFile);
         document.getDocumentElement().normalize();
-        this.document = document;
         this.outputFile = outputFile;
     }
 
