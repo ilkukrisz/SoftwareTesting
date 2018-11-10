@@ -43,19 +43,10 @@ public class BookDaoXMLImpl implements BookDAO {
      */
     private File outputFile;
 
-    public BookDaoXMLImpl(File inputFile, File outputFile) {
+    public BookDaoXMLImpl(File inputFile, File outputFile) throws ParserConfigurationException, IOException, SAXException {
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder dBuilder = null;
-        try {
-            dBuilder = dbFactory.newDocumentBuilder();
-            this.document = dBuilder.parse(inputFile);
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        } catch (SAXException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+        this.document = dBuilder.parse(inputFile);
         document.getDocumentElement().normalize();
 
         this.document = null;
