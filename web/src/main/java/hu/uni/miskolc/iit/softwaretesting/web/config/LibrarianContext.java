@@ -13,13 +13,13 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @ComponentScan
 public class LibrarianContext {
 
-    private final LibrarianBookService librarianBookService;
+   /* private final LibrarianBookService librarianBookService;
 
     @Autowired
     public LibrarianContext(LibrarianBookService librarianBookService) { this.librarianBookService = librarianBookService; }
 
     @Bean
-    public LibrarianController librariancontroller(LibrarianBookService librarianBookService){ return new LibrarianController(librarianBookService); }
+    public LibrarianController librariancontroller(LibrarianBookService librarianBookService){ return new LibrarianController(librarianBookService); }*/
 
 
 }

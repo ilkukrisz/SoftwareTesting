@@ -13,12 +13,12 @@ import java.util.Collection;
 public class BookServiceImpl implements BookService {
 
     @Autowired
-    BookDAO dao;
+    BookDAO bookDAO;
 
 
     public Collection<Book> getAllBooks() throws BookNotFoundException {
         try {
-            return dao.getAllBooks();
+            return bookDAO.getAllBooks();
         } catch (BookNotFoundException e) {
             throw new BookNotFoundException(e);
         }

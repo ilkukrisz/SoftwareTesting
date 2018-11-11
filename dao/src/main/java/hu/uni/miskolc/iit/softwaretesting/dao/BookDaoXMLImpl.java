@@ -2,13 +2,14 @@ package hu.uni.miskolc.iit.softwaretesting.dao;
 
 import hu.uni.miskolc.iit.softwaretesting.exceptions.*;
 import hu.uni.miskolc.iit.softwaretesting.model.*;
+import hu.uni.miskolc.iit.softwaretesting.service.impl.CommandLine;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -43,12 +44,14 @@ public class BookDaoXMLImpl implements BookDAO {
      */
     private File outputFile;
 
-    public BookDaoXMLImpl(File inputFile, File outputFile) throws ParserConfigurationException, IOException, SAXException {
+    @Autowired
+    public BookDaoXMLImpl(String inputFile, String outputFile) throws ParserConfigurationException, IOException, SAXException {
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-        this.document = dBuilder.parse(inputFile);
+        this.document = dBuilder.parse(new File(inputFile));
         document.getDocumentElement().normalize();
-        this.outputFile = outputFile;
+        this.outputFile = new File(outputFile);
+        //this.resource = resource;
     }
 
     /**

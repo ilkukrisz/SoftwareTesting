@@ -16,7 +16,7 @@ public class ReaderBookServiceImpl extends BookServiceImpl implements ReaderBook
         if (isEmptyField(author))
             throw new EmptyFieldException("The field should not be empty!");
 
-        return dao.getBooksByAuthor(author);
+        return bookDAO.getBooksByAuthor(author);
     }
 
     @Override
@@ -28,12 +28,12 @@ public class ReaderBookServiceImpl extends BookServiceImpl implements ReaderBook
         if (!Genre.isContained(String.valueOf(genre)))
             throw new NotExistingGenreException("The given value is not considered as a genre");
 
-        return dao.getBooksByGenre(genre);
+        return bookDAO.getBooksByGenre(genre);
     }
 
     @Override
     public Collection<Book> getBooksByAvailability() throws BookNotFoundException {
-        return dao.getAvailableBooks();
+        return bookDAO.getAvailableBooks();
     }
 
     @Override
@@ -43,8 +43,8 @@ public class ReaderBookServiceImpl extends BookServiceImpl implements ReaderBook
             throw new EmptyFieldException("The given value should not be empty!");
 
         Collection<Book> results = new ArrayList<>();
-        Collection<Book> availableBooks = dao.getAvailableBooks();
-        Collection<Book> booksByTitle = dao.getBooksByTitle(title);
+        Collection<Book> availableBooks = bookDAO.getAvailableBooks();
+        Collection<Book> booksByTitle = bookDAO.getBooksByTitle(title);
 
         for (Book i : availableBooks) {
             for (Book j : booksByTitle) {
@@ -67,7 +67,7 @@ public class ReaderBookServiceImpl extends BookServiceImpl implements ReaderBook
 
         if (year < 0)
             throw new InvalidPublishDateException("Publish date shouldn't be below zero!");
-        return dao.getBooksByYear(year);
+        return bookDAO.getBooksByYear(year);
     }
 
     @Override
@@ -77,7 +77,7 @@ public class ReaderBookServiceImpl extends BookServiceImpl implements ReaderBook
             throw new InvalidArgumentException("The given value is null!");
 
         try {
-            Collection<BookInstance> bookInstances = dao.getAvailableInstancesOfBook(book);
+            Collection<BookInstance> bookInstances = bookDAO.getAvailableInstancesOfBook(book);
             if (!bookInstances.isEmpty()) {
                 Calendar creationDate = Calendar.getInstance();
                 Calendar expirationDate = Calendar.getInstance();
@@ -85,8 +85,8 @@ public class ReaderBookServiceImpl extends BookServiceImpl implements ReaderBook
                 expirationDate.add(Calendar.DATE, 30);
                 System.out.println("creationDate: \t" + creationDate.getTime());
                 System.out.println("creationDate: \t" + expirationDate.getTime());
-                Borrowing borrowing = new Borrowing(dao.getNewID(), reader, creationDate.getTime(), expirationDate.getTime(), BorrowStatus.REQUESTED, ((List<BookInstance>) bookInstances).get(0));
-                dao.createBorrowing(borrowing);
+                Borrowing borrowing = new Borrowing(bookDAO.getNewID(), reader, creationDate.getTime(), expirationDate.getTime(), BorrowStatus.REQUESTED, ((List<BookInstance>) bookInstances).get(0));
+                bookDAO.createBorrowing(borrowing);
             }
             else
                 throw new NoAvailableInstanceException();
@@ -102,15 +102,15 @@ public class ReaderBookServiceImpl extends BookServiceImpl implements ReaderBook
     @Override
     public Collection<Borrowing> showBorrowings(Reader reader) throws NotExistingBorrowingException, NotExistingReaderException {
 
-        if (dao.getBorrowingsOfReader(reader) == null || dao.getBorrowingsOfReader(reader).size() == 0)
+        if (bookDAO.getBorrowingsOfReader(reader) == null || bookDAO.getBorrowingsOfReader(reader).size() == 0)
             throw new NotExistingBorrowingException("There is no borrowings for this user!");
 
-        return dao.getBorrowingsOfReader(reader);
+        return bookDAO.getBorrowingsOfReader(reader);
     }
 
     @Override
     public Collection<Book> getAllBooks() throws BookNotFoundException {
-        return dao.getAllBooks();
+        return bookDAO.getAllBooks();
     }
 
 
