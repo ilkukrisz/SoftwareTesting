@@ -1,4 +1,4 @@
-package web.config;
+package hu.uni.miskolc.iit.softwaretesting.web.config;
 
 import hu.uni.miskolc.iit.softwaretesting.ReaderController;
 import hu.uni.miskolc.iit.softwaretesting.service.ReaderBookService;
