@@ -10,7 +10,14 @@ public class CommandLine {
         File file = null;
 
         if (SystemUtils.IS_OS_WINDOWS) {
-            //TODO Create the windows equivalent to linux's method.
+            String filename = "findMyFile.bat";
+            file = new File(filename);
+            PrintWriter writer = new PrintWriter(filename);
+            for (File root : File.listRoots()) {
+                String rootPath = root.getAbsolutePath();
+                writer.println("WHERE \"dao/resources/database.xml\" /r \"" + rootPath + "\\\"");
+            }
+            writer.close();
         }
         else{
             file = new File("findMyFile.sh");
@@ -21,7 +28,7 @@ public class CommandLine {
 
         String result = null;
         try {
-            Runtime.getRuntime().exec("chmod +x findMyFile.sh");
+            Runtime.getRuntime().exec("chmod +x " + file.getAbsoluteFile());
             Process p = Runtime.getRuntime().exec(file.getAbsolutePath());
 
             BufferedReader in =
