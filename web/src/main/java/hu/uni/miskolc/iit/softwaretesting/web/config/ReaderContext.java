@@ -3,7 +3,6 @@ package hu.uni.miskolc.iit.softwaretesting.web.config;
 import hu.uni.miskolc.iit.softwaretesting.ReaderController;
 import hu.uni.miskolc.iit.softwaretesting.service.ReaderBookService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;

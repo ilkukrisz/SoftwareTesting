@@ -8,8 +8,8 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class LibrarianMethodContext {
-
+/*
     @Bean
-    public LibrarianBookService librarianBookService() { return new LibrarianBookServiceImpl(); }
+    public LibrarianBookService librarianBookService() { return new LibrarianBookServiceImpl(); }*/
 
 }
