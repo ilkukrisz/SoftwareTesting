@@ -20,7 +20,6 @@ public class ReaderMethodContext {
 
     @Bean
     public BookDAO bookDAO() throws IOException, SAXException, ParserConfigurationException {
-        //TODO: define universally working path to database 
         String path = CommandLine.findMyDatabaseFile();
         return new BookDaoXMLImpl(path, path);
     }

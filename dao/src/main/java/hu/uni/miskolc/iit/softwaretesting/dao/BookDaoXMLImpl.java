@@ -27,6 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 
 /**
  * XML DOM implementation of BookDAO interface.
@@ -594,6 +595,12 @@ public class BookDaoXMLImpl implements BookDAO {
                 }
             }
         } catch (ParseException|BookInstanceNotFound|BookNotFoundException|NotExistingReaderException e) {
+            try {
+                results.add(new Borrowing(1111111, new Reader("asd", new Password(""), "asd", "asdddd", "asd@ddd.hu", "06506354253"),
+                        new Date(), new Date(), BorrowStatus.REQUESTED, new BookInstance(222222, new Book("alma", "almagyozedelmeskedik", 22223123, 2009, Genre.Crimi), false)));
+            } catch (InvalidPublishDateException e1) {
+                e1.printStackTrace();
+            }
             throw new NotExistingBorrowingException(e);
         }
 
@@ -811,16 +818,16 @@ public class BookDaoXMLImpl implements BookDAO {
      * @throws NotExistingReaderException
      */
     private Reader getReaderByUsername (String username) throws NotExistingReaderException {
-        NodeList users = document.getElementsByTagName("users");
+        NodeList users = document.getElementsByTagName("user");
 
         for (int i=0; i < users.getLength(); i++) {
             Element current = (Element) users.item(i);
             if (this.getNodeValue(current, "username").equals(username)) {
                 return new Reader (
                         this.getNodeValue(current, "username"),
-                        new Password(""),
-                        this.getNodeValue(current, "firstName"),
-                        this.getNodeValue(current, "lastName"),
+                        new Password("_"),
+                        this.getNodeValue(current, "firstname"),
+                        this.getNodeValue(current, "lastname"),
                         this.getNodeValue(current, "email"),
                         this.getNodeValue(current, "mobileNumber")
                 );

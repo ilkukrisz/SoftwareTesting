@@ -6,10 +6,8 @@
             <password>
                 <hashedPassword>$2a$04$uXb8rTLKZFpEB4NIgb7pa.EcfYMDrF/srpoKzmKofDCNJsTIi5/ri</hashedPassword>
             </password>
-            <name>
-                <firstname>Bela</firstname>
-                <lastname>Toth</lastname>
-            </name>
+            <firstname>Bela</firstname>
+            <lastname>Toth</lastname>
             <email>bela.toth@example.com</email>
             <mobileNumber>06201234567</mobileNumber>
             <role>LIBRARIAN</role>
@@ -19,10 +17,8 @@
             <password>
                 <hashedPassword>$2a$04$uXb8rTLKZFpEB4NIgb7pa.EcfYMDrF/srpoKzmKofDCNJsTIi5/ri</hashedPassword>
             </password>
-            <name>
-                <firstname>Ferenc</firstname>
-                <lastname>Kovacs</lastname>
-            </name>
+            <firstname>Ferenc</firstname>
+            <lastname>Kovacs</lastname>
             <email>kovfer@example.com</email>
             <mobileNumber>0680123456</mobileNumber>
             <role>READER</role>
@@ -77,9 +73,19 @@
             <borrowID>12345678</borrowID>
             <readerUsername>feri</readerUsername>
             <creationDate>2018-11-06</creationDate>
-            <expirationDate>2019-01-01</expirationDate>
+            <expirationDate>2018-11-12</expirationDate>
             <status>BORROWED</status>
             <bookInstanceInventoryNumber>123456790</bookInstanceInventoryNumber>
         </borrowing>
+        <borrowing>
+            <borrowID>2222345678</borrowID>
+            <readerUsername>feri</readerUsername>
+            <creationDate>2018-11-06</creationDate>
+            <expirationDate>2018-11-10</expirationDate>
+            <status>REQUESTED</status>
+            <bookInstanceInventoryNumber>123456791</bookInstanceInventoryNumber>
+        </borrowing>
     </borrowings>
+
+
 </database>

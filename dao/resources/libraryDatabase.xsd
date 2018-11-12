@@ -69,13 +69,6 @@
         </xs:sequence>
     </xs:complexType>
     
-    <xs:complexType name="nameType">
-        <xs:sequence>
-            <xs:element name="firstname"></xs:element>
-            <xs:element name="lastname"></xs:element>
-        </xs:sequence>
-    </xs:complexType>
-    
     <xs:simpleType name="userRole">
         <xs:restriction base="xs:string">
             <xs:enumeration value="READER"></xs:enumeration>
@@ -87,7 +80,8 @@
         <xs:sequence>
             <xs:element name="username" type="xs:string"></xs:element>
             <xs:element name="password" type="passwordType"></xs:element>
-            <xs:element name="name" type="nameType"></xs:element>
+            <xs:element name="firstname"></xs:element>
+            <xs:element name="lastname"></xs:element>
             <xs:element name="email" type="xs:string"></xs:element>
             <xs:element name="mobileNumber" type="xs:string"></xs:element>
             <xs:element name="role" type="userRole"></xs:element>
