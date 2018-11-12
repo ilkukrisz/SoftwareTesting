@@ -33,8 +33,12 @@ public class ConverterMethods {
             borrowingType.setBorrowStatus(String.valueOf(i.getStatus()));
             borrowingType.setReader(convertReaderToUserType(i.getReader()));
             XMLGregorianCalendar ass = new XMLGregorianCalendarImpl();
+            // TODO: setTime(int hour, int minute, int second)
+            // use setYear, setMonth, setDay instead
             ass.setTime(i.getCreationDate().getYear(), i.getCreationDate().getMonth(), i.getCreationDate().getDate());
             borrowingType.setCreationDate(ass);
+            //TODO: setTime(int hour, int minute, int second)
+            // use setYear, setMonth, setDay instead
             ass.setTime(i.getExpirationDate().getYear(), i.getExpirationDate().getMonth(), i.getExpirationDate().getDate());
             borrowingType.setExpirationDate(ass);
             bookTypeCollection.add(borrowingType);

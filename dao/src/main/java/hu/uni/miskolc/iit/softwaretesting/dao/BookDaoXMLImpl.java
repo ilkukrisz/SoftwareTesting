@@ -818,16 +818,16 @@ public class BookDaoXMLImpl implements BookDAO {
      * @throws NotExistingReaderException
      */
     private Reader getReaderByUsername (String username) throws NotExistingReaderException {
-        NodeList users = document.getElementsByTagName("users");
+        NodeList users = document.getElementsByTagName("user");
 
         for (int i=0; i < users.getLength(); i++) {
             Element current = (Element) users.item(i);
             if (this.getNodeValue(current, "username").equals(username)) {
                 return new Reader (
                         this.getNodeValue(current, "username"),
-                        new Password(""),
-                        this.getNodeValue(current, "firstName"),
-                        this.getNodeValue(current, "lastName"),
+                        new Password("_"),
+                        this.getNodeValue(current, "firstname"),
+                        this.getNodeValue(current, "lastname"),
                         this.getNodeValue(current, "email"),
                         this.getNodeValue(current, "mobileNumber")
                 );
