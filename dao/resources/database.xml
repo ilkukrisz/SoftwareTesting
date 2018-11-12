@@ -81,5 +81,15 @@
             <status>BORROWED</status>
             <bookInstanceInventoryNumber>123456790</bookInstanceInventoryNumber>
         </borrowing>
+        <borrowing>
+            <borrowID>2222345678</borrowID>
+            <readerUsername>feri</readerUsername>
+            <creationDate>2018-11-06</creationDate>
+            <expirationDate>2019-01-01</expirationDate>
+            <status>REQUESTED</status>
+            <bookInstanceInventoryNumber>123456791</bookInstanceInventoryNumber>
+        </borrowing>
     </borrowings>
+
+
 </database>

@@ -27,6 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 
 /**
  * XML DOM implementation of BookDAO interface.
@@ -594,6 +595,12 @@ public class BookDaoXMLImpl implements BookDAO {
                 }
             }
         } catch (ParseException|BookInstanceNotFound|BookNotFoundException|NotExistingReaderException e) {
+            try {
+                results.add(new Borrowing(1111111, new Reader("asd", new Password(""), "asd", "asdddd", "asd@ddd.hu", "06506354253"),
+                        new Date(), new Date(), BorrowStatus.REQUESTED, new BookInstance(222222, new Book("alma", "almagyozedelmeskedik", 22223123, 2009, Genre.Crimi), false)));
+            } catch (InvalidPublishDateException e1) {
+                e1.printStackTrace();
+            }
             throw new NotExistingBorrowingException(e);
         }
 
