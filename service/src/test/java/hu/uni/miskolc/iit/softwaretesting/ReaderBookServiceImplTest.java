@@ -20,10 +20,7 @@ import java.util.Collection;
 import java.util.Date;
 
 
-
-//TODO Rewrite the tests to work like the LibrarianBookServiceImplTest.java!!!!!
 public class ReaderBookServiceImplTest {
-/*
 
     @Mock
     private BookDAO daoMock;
@@ -43,7 +40,6 @@ public class ReaderBookServiceImplTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        service = new ReaderBookServiceImpl();
     }
 
     @Test(expected = EmptyFieldException.class)
@@ -397,6 +393,5 @@ public class ReaderBookServiceImplTest {
     }
 
 
-*/
 
 }
