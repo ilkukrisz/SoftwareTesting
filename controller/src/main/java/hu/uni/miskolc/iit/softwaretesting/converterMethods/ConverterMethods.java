@@ -32,14 +32,23 @@ public class ConverterMethods {
             borrowingType.setBorrowID(i.getBorrowID());
             borrowingType.setBorrowStatus(String.valueOf(i.getStatus()));
             borrowingType.setReader(convertReaderToUserType(i.getReader()));
+
             XMLGregorianCalendar ass = new XMLGregorianCalendarImpl();
-            // TODO: setTime(int hour, int minute, int second)
-            // use setYear, setMonth, setDay instead
-            ass.setTime(i.getCreationDate().getYear(), i.getCreationDate().getMonth(), i.getCreationDate().getDate());
+            Calendar gregorianCalendar = new GregorianCalendar();
+            gregorianCalendar.setTime(i.getCreationDate());
+
+            ass.setYear(gregorianCalendar.get(Calendar.YEAR));
+            ass.setMonth(gregorianCalendar.get(Calendar.MONTH) + 1);
+            ass.setDay(gregorianCalendar.get(Calendar.DAY_OF_MONTH));
+            System.out.println("creation " + ass.toString());
             borrowingType.setCreationDate(ass);
-            //TODO: setTime(int hour, int minute, int second)
-            // use setYear, setMonth, setDay instead
-            ass.setTime(i.getExpirationDate().getYear(), i.getExpirationDate().getMonth(), i.getExpirationDate().getDate());
+
+            gregorianCalendar.setTime(i.getExpirationDate());
+
+            ass.setYear(gregorianCalendar.get(Calendar.YEAR));
+            ass.setMonth(gregorianCalendar.get(Calendar.MONTH) + 1);
+            ass.setDay(gregorianCalendar.get(Calendar.DAY_OF_MONTH));
+
             borrowingType.setExpirationDate(ass);
             bookTypeCollection.add(borrowingType);
         }
