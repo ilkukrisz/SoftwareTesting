@@ -243,17 +243,17 @@ public class ReaderControllerTest {
                 .andReturn();
     }
 
-    //TODO: Something wrong with borrowings, needs to be fixed. Always throw error on mobile-phone is not correct
-/*
+    //TODO: showBorrowings method works properly, if we can give it a real existing reader
+    //TODO: loginConfig needs to be implemented.
     @Test
     public void testgetBorrowings() throws Exception {
 
         ArrayList<Borrowing> borrowings = new ArrayList<>();
         borrowings.add(this.borrowing);
 
-        when(readerBookServiceMock.showBorrowings(reader)).thenReturn(borrowings);
+        when(readerBookServiceMock.showBorrowings(any(Reader.class))).thenReturn(borrowings);
 
-        MvcResult res = mockMvc.perform(get("/reader/borrowings/?username=ilkukrisz"))
+        MvcResult res = mockMvc.perform(get("/reader/borrowings/?username=bela"))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -263,7 +263,20 @@ public class ReaderControllerTest {
         assertEquals(expectedJSON, actualJSON);
 
     }
-*/
+
+
+    @Test
+    public void testgetBorrowingsWithEmptyValues() throws Exception {
+
+        ArrayList<Borrowing> borrowings = new ArrayList<>();
+        borrowings.add(this.borrowing);
+
+        when(readerBookServiceMock.showBorrowings(any(Reader.class))).thenReturn(borrowings);
+
+        mockMvc.perform(get("/reader/borrowings/?username="))
+                .andExpect(status().is(500));
+
+    }
 
 
 
