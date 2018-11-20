@@ -111,6 +111,9 @@ public class ReaderBookServiceImpl extends BookServiceImpl implements ReaderBook
         return bookDAO.getAllBooks();
     }
 
+    public Map<String, String> getReaderCredentials () {
+        return bookDAO.getReaderCredentials();
+    }
 
     private boolean isEmptyField(String field) {
         return field.equalsIgnoreCase("");
