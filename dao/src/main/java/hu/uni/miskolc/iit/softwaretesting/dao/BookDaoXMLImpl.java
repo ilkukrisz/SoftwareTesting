@@ -24,10 +24,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
+import java.util.*;
 
 /**
  * XML DOM implementation of BookDAO interface.
@@ -824,6 +821,39 @@ public class BookDaoXMLImpl implements BookDAO {
 
         return year + month + day + hour + min + secs + millisecs;
     }
+
+    public Map<String, String> getReaderCredentials () {
+        return this.getCredentialsOfRole("READER");
+    }
+
+    public Map<String, String> getLibrarianCredentials () {
+        return this.getCredentialsOfRole("LIBRARIAN");
+    }
+
+    private Map<String, String> getCredentialsOfRole(String role) {
+        NodeList users = document.getElementsByTagName("user");
+        Map<String, String> results = new HashMap<>();
+
+        for (int i=0; i < users.getLength(); i++) {
+            Element current = (Element) users.item(i);
+
+            String currentRole = this.getNodeValue(current,"role");
+
+            if (currentRole.equals(role)) {
+                String username = this.getNodeValue(current, "username");
+                String passwordHash = this.getNodeValue(
+                        this.getNode(current, "password"),
+                        "hashedPassword"
+                );
+
+                results.put(username, passwordHash);
+            }
+        }
+
+        return results;
+    }
+
+
 
     /**
      * Returns the reader by username

@@ -7,6 +7,7 @@ import hu.uni.miskolc.iit.softwaretesting.model.Genre;
 import hu.uni.miskolc.iit.softwaretesting.model.Reader;
 
 import java.util.Collection;
+import java.util.Map;
 
 public interface ReaderBookService extends BookService {
 
@@ -68,4 +69,6 @@ public interface ReaderBookService extends BookService {
      * @return the borrowings that are currently at the user
      */
     public Collection<Borrowing> showBorrowings(Reader reader) throws NotExistingReaderException, NotExistingBorrowingException;
+
+    Map<String, String> getReaderCredentials();
 }

@@ -242,9 +242,7 @@ public class ReaderControllerTest {
                 .andExpect(status().is(500))
                 .andReturn();
     }
-
-    //TODO: showBorrowings method works properly, if we can give it a real existing reader
-    //TODO: loginConfig needs to be implemented.
+    
     @Test
     public void testgetBorrowings() throws Exception {
 
