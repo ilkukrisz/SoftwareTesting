@@ -411,7 +411,7 @@ public class BookDaoXMLImpl implements BookDAO {
         for (int i=0; i < bookInstances.getLength(); i++) {
             Element current = (Element) bookInstances.item(i);
 
-            if (this.getNodeValue(current, "ISBN").equals(bookISBN) &&
+            if (this.getNodeValue(current, "bookISBN").equals(bookISBN) &&
                     !Boolean.valueOf(this.getNodeValue(current, "isLoaned"))) {
                 results.add(
                         new BookInstance(
@@ -506,6 +506,10 @@ public class BookDaoXMLImpl implements BookDAO {
         try {
             Element newBorrowing = document.createElement("borrowing");
 
+            Element borrowID = document.createElement("borrowID");
+            borrowID.appendChild(document.createTextNode(String.valueOf(borrowing.getBorrowID())));
+            newBorrowing.appendChild(borrowID);
+
             Element readerUsername = document.createElement("readerUsername");
             readerUsername.appendChild(document.createTextNode(borrowing.getReader().getUsername()));
             newBorrowing.appendChild(readerUsername);
@@ -523,6 +527,12 @@ public class BookDaoXMLImpl implements BookDAO {
             Element status = document.createElement("status");
             status.appendChild(document.createTextNode(borrowing.getStatus().toString()));
             newBorrowing.appendChild(status);
+
+            Element bookInstanceInventoryNo = document.createElement("bookInstanceInventoryNumber");
+            bookInstanceInventoryNo.appendChild(document.createTextNode(
+                    String.valueOf(borrowing.getBookInstance().getInventoryNumber())
+            ));
+            newBorrowing.appendChild(bookInstanceInventoryNo);
 
             document.getElementsByTagName("borrowings").item(0).appendChild(newBorrowing);
             this.serializeDOM();
@@ -636,6 +646,10 @@ public class BookDaoXMLImpl implements BookDAO {
                             )
                     );
                 }
+            }
+
+            if (results.isEmpty()) {
+                throw new NotExistingBorrowingException();
             }
         } catch (ParseException|BookInstanceNotFound|BookNotFoundException e) {
             throw new NotExistingBorrowingException(e);

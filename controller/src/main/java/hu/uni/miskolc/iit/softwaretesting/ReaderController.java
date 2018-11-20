@@ -66,7 +66,11 @@ public class ReaderController {
                 requestedBook = i;
         }
 
-        Reader reader = new Reader(username, new Password("asd123"), "asd", "123", "asd@asd.hu", "061234567898");
+        if (requestedBook == null) {
+            throw new BookNotFoundException();
+        }
+
+        Reader reader = new Reader(username, new Password("asd123"), "asd", "123", "asd@asd.hu", "06301234567");
         readerBookService.requestBook(requestedBook, reader);
     }
 
@@ -91,6 +95,4 @@ public class ReaderController {
     NoAvailableInstanceException.class, PersistenceException.class, NotExistingReaderException.class, NotExistingBorrowingException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public void badRequestHandler() {}
-
-
 }
