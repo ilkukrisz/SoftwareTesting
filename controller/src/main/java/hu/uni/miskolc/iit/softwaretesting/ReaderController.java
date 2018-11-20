@@ -74,7 +74,7 @@ public class ReaderController {
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public Collection<BorrowingType> borrowings(@RequestParam(value = "username") String username) throws NotExistingReaderException, NotExistingBorrowingException {
-        Reader reader = new Reader(username, new Password("asd123"), "asd", "123", "asd@asd.hu", "061234567898");
+        Reader reader = new Reader(username, new Password(" "), "Bela", "Toth", "bela.toth@example.com", "06201234567");
         return ConverterMethods.convertBorrowingToBorrowingType(readerBookService.showBorrowings(reader));
     }
 
@@ -85,4 +85,12 @@ public class ReaderController {
     public Collection<BookType> allBook() throws BookNotFoundException {
         return ConverterMethods.convertBookToBookType(readerBookService.getAllBooks());
     }
+
+
+    @ExceptionHandler({EmptyFieldException.class, InvalidPublishDateException.class, NotExistingGenreException.class, BookNotFoundException.class,
+    NoAvailableInstanceException.class, PersistenceException.class, NotExistingReaderException.class, NotExistingBorrowingException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public void badRequestHandler() {}
+
+
 }
