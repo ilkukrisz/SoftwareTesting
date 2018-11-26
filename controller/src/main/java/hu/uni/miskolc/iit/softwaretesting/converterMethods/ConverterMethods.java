@@ -101,9 +101,9 @@ public class ConverterMethods {
         Collection<Borrowing> borrowingArrayList = new ArrayList<>();
         for (BorrowingType i : borrowingTypes) {
             Calendar calendar = Calendar.getInstance();
-            calendar.set(i.getCreationDate().getYear(), i.getCreationDate().getMonth(), i.getCreationDate().getDay());
+            calendar.set(i.getCreationDate().getYear(), i.getCreationDate().getMonth()-1, i.getCreationDate().getDay());
             Date creationDate = calendar.getTime();
-            calendar.set(i.getCreationDate().getYear(), i.getCreationDate().getMonth(), i.getCreationDate().getDay());
+            calendar.set(i.getExpirationDate().getYear(), i.getExpirationDate().getMonth()-1, i.getExpirationDate().getDay());
             Date expirationDate = calendar.getTime();
             Borrowing borrowing = new Borrowing(i.getBorrowID(), convertUserTypeToReader(i.getReader()), creationDate, expirationDate, BorrowStatus.valueOf(i.getBorrowStatus()), convertBookInstanceTypeToBookInstance(i.getBookInstance()));
             borrowingArrayList.add(borrowing);
@@ -122,7 +122,9 @@ public class ConverterMethods {
         Calendar calendar = Calendar.getInstance();
         calendar.set(creationYear, creationMonth, creationDay);
         Date creationDate = calendar.getTime();
-        calendar.set(expirationYear, expirationMonth, expirationDay);
+
+        calendar.set(borrowingTypes.getExpirationDate().getYear(), borrowingTypes.getExpirationDate().getMonth(), borrowingTypes.getExpirationDate().getDay());
+
         Date expirationDate = calendar.getTime();
 
         return new Borrowing(borrowingTypes.getBorrowID(), convertUserTypeToReader(borrowingTypes.getReader()), creationDate, expirationDate, BorrowStatus.valueOf(borrowingTypes.getBorrowStatus()), convertBookInstanceTypeToBookInstance(borrowingTypes.getBookInstance()));

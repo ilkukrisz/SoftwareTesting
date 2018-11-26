@@ -13,7 +13,7 @@ public class Reader extends User {
             Reader that = (Reader) obj;
             return (this.getUsername().equalsIgnoreCase(that.getUsername())
                     && this.getEmail().equalsIgnoreCase(that.getEmail())
-                    && this.getPassword().toString().equalsIgnoreCase(that.getPassword().toString())
+                    // && this.getPassword().toString().equalsIgnoreCase(that.getPassword().toString())
                     && this.getFirstName().equalsIgnoreCase(that.getFirstName())
                     && this.getLastName().equalsIgnoreCase(that.getLastName())
                     && this.getMobileNumber().equalsIgnoreCase(that.getMobileNumber()));
