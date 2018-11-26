@@ -20,11 +20,9 @@ public class ReaderMethodContext {
 
     @Bean
     public BookDAO bookDAO() throws IOException, SAXException, ParserConfigurationException {
-        String path = CommandLine.findMyDatabaseFile();
-        return new BookDaoXMLImpl(path, path);
+        String dbPath = System.getenv("hu.uni.miskolc.iit.softwaretesting.libraryDatabase");
+        return new BookDaoXMLImpl(dbPath, dbPath);
     }
-
-
 }
 
 
