@@ -1,5 +1,6 @@
 package hu.uni.miskolc.iit.softwaretesting;
 
+import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
 import hu.uni.miskolc.iit.softwaretesting.converterMethods.ConverterMethods;
 import hu.uni.miskolc.iit.softwaretesting.dtoTypes.*;
 import hu.uni.miskolc.iit.softwaretesting.exceptions.InvalidPublishDateException;
@@ -7,9 +8,12 @@ import hu.uni.miskolc.iit.softwaretesting.model.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.GregorianCalendar;
 
 import static java.util.Calendar.getInstance;
 import static junit.framework.TestCase.assertEquals;
@@ -31,10 +35,11 @@ public class ConverterMethodsTest {
     private BorrowingType testBorrowingType = new BorrowingType();
     private Collection<Book> testBookCollection = new ArrayList<>();
     private Collection<Borrowing> testBorrowingCollection = new ArrayList<>();
+    private Collection<BorrowingType> testBorrowingTypeCollection = new ArrayList<>();
 
 
     @Before
-    public void setUp() throws InvalidPublishDateException {
+    public void setUp() throws InvalidPublishDateException, DatatypeConfigurationException {
         testBook = new Book("Bela", "Test of Bela",123456789, 2015, Genre.Science);
         testBookInstance = new BookInstance(1234567, testBook,false);
         testPassword = new Password("asd");
@@ -43,6 +48,10 @@ public class ConverterMethodsTest {
         Calendar calendar = getInstance();
         calendar.add(Calendar.DATE,20);
         testBorrowing = new Borrowing(321654987, testReader, getInstance().getTime(), calendar.getTime(), BorrowStatus.REQUESTED, testBookInstance);
+        System.out.println("Borrowing creation date\t" + Calendar.getInstance().getTime().toString());
+        System.out.println("Borrowing expiration date\t" + calendar.getTime().toString());
+
+
         testBookCollection.add(testBook);
         testBorrowingCollection.add(testBorrowing);
         testBookType.setAuthor("Bela");
@@ -71,6 +80,25 @@ public class ConverterMethodsTest {
         testBorrowingType.setBorrowID(321654987);
         testBorrowingType.setBorrowStatus(BorrowStatus.REQUESTED.toString());
         testBorrowingType.setReader(testUserTypeReader);
+        XMLGregorianCalendar xmlgregcal = new XMLGregorianCalendarImpl();
+        Calendar gregorianCalendar = new GregorianCalendar();
+        gregorianCalendar.setTime(getInstance().getTime());
+
+        xmlgregcal.setYear(gregorianCalendar.get(Calendar.YEAR));
+        xmlgregcal.setMonth(gregorianCalendar.get(Calendar.MONTH) + 1);
+        xmlgregcal.setDay(gregorianCalendar.get(Calendar.DAY_OF_MONTH));
+        System.out.println("Creation date\t" + xmlgregcal.toString());
+        testBorrowingType.setCreationDate(xmlgregcal);
+
+        gregorianCalendar.setTime(calendar.getTime());
+
+        xmlgregcal.setYear(gregorianCalendar.get(Calendar.YEAR));
+        xmlgregcal.setMonth(gregorianCalendar.get(Calendar.MONTH) + 1);
+        xmlgregcal.setDay(gregorianCalendar.get(Calendar.DAY_OF_MONTH));
+        System.out.println("Expiration date\t" + xmlgregcal.toString());
+        testBorrowingType.setExpirationDate(xmlgregcal);
+        testBorrowingTypeCollection.add(testBorrowingType);
+
     }
 
     @Test
@@ -123,28 +151,24 @@ public class ConverterMethodsTest {
         assertTrue(testUserTypeReader.getMobileNumber().equals(ConverterMethods.convertUserTypeToReader(testUserTypeReader).getMobileNumber()));
         assertTrue(testUserTypeReader.getUsername().equals(ConverterMethods.convertUserTypeToReader(testUserTypeReader).getUsername()));
     }
+
     @Test
-    public void testConvertBorrowingTypeToBorrowing() {
+    public void testConvertBookTypeToBook() throws InvalidPublishDateException {
+        assertEquals(testBook,ConverterMethods.convertBookTypeToBook(testBookType));
     }
 
     @Test
-    public void testConvertBookTypeToBook() {
-        assertEquals(testReader,ConverterMethods.convertUserTypeToReader(testUserTypeReader));
-    }
-
-    @Test
-    public void testConvertBorrowingTypeToBorrowing() {
-    }
-
-    @Test
-    public void testConvertBookInstanceTypeToBookInstance() {
+    public void testConvertBookInstanceTypeToBookInstance() throws InvalidPublishDateException {
+        assertEquals(testBookInstance,ConverterMethods.convertBookInstanceTypeToBookInstance(testBookInstanceType));
     }
 
     @Test
     public void testConvertUserTypeToLibrarian() {
+        assertEquals(testLibrarian,ConverterMethods.convertUserTypeToLibrarian(testUserTypeLibrarian));
     }
 
     @Test
     public void testConvertUserTypeToReader() {
+        assertEquals(testReader,ConverterMethods.convertUserTypeToReader(testUserTypeReader));
     }
 }

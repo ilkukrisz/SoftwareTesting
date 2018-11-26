@@ -102,9 +102,9 @@ public class ConverterMethods {
         Collection<Borrowing> borrowingArrayList = new ArrayList<>();
         for (BorrowingType i : borrowingTypes) {
             Calendar calendar = Calendar.getInstance();
-            calendar.set(i.getCreationDate().getYear(), i.getCreationDate().getMonth(), i.getCreationDate().getDay());
+            calendar.set(i.getCreationDate().getYear(), i.getCreationDate().getMonth()-1, i.getCreationDate().getDay());
             Date creationDate = calendar.getTime();
-            calendar.set(i.getCreationDate().getYear(), i.getCreationDate().getMonth(), i.getCreationDate().getDay());
+            calendar.set(i.getExpirationDate().getYear(), i.getExpirationDate().getMonth()-1, i.getExpirationDate().getDay());
             Date expirationDate = calendar.getTime();
             Borrowing borrowing = new Borrowing(i.getBorrowID(), convertUserTypeToReader(i.getReader()), creationDate, expirationDate, BorrowStatus.valueOf(i.getBorrowStatus()), convertBookInstanceTypeToBookInstance(i.getBookInstance()));
             borrowingArrayList.add(borrowing);
@@ -116,13 +116,16 @@ public class ConverterMethods {
         Calendar calendar = Calendar.getInstance();
         calendar.set(borrowingTypes.getCreationDate().getYear(), borrowingTypes.getCreationDate().getMonth(), borrowingTypes.getCreationDate().getDay());
         Date creationDate = calendar.getTime();
-        calendar.set(borrowingTypes.getCreationDate().getYear(), borrowingTypes.getCreationDate().getMonth(), borrowingTypes.getCreationDate().getDay());
+        calendar.set(borrowingTypes.getExpirationDate().getYear(), borrowingTypes.getExpirationDate().getMonth(), borrowingTypes.getExpirationDate().getDay());
         Date expirationDate = calendar.getTime();
         return new Borrowing(borrowingTypes.getBorrowID(), convertUserTypeToReader(borrowingTypes.getReader()), creationDate, expirationDate, BorrowStatus.valueOf(borrowingTypes.getBorrowStatus()), convertBookInstanceTypeToBookInstance(borrowingTypes.getBookInstance()));
     }
 
     public static BookInstance convertBookInstanceTypeToBookInstance(BookInstanceType bookInstanceType) throws InvalidPublishDateException {
-        return new BookInstance(bookInstanceType.getInventoryNumber(), (Book) convertBookTypeToBook((Collection<BookType>) bookInstanceType.getBook()), bookInstanceType.isIsLoaned());
+        ArrayList<BookType> bookType = new ArrayList<>();
+        bookType.add(bookInstanceType.getBook());
+
+        return new BookInstance(bookInstanceType.getInventoryNumber(), (Book) convertBookTypeToBook(bookType).toArray()[0], bookInstanceType.isIsLoaned());
     }
 
     public static Librarian convertUserTypeToLibrarian(UserType userType) {
