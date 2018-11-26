@@ -235,13 +235,13 @@ public class LibrarianControllerTest {
                 .andExpect(status().isInternalServerError());
     }
 
-    @Test
+  /*  @Test
     public void testLendBook () throws Exception {
         doNothing().when(librarianServiceMock).lendBook(Matchers.any(Borrowing.class));
 
         mockMVC.perform(this.getBorrowingFormRequest("/librarian/lendbook"))
             .andExpect(status().isOk());
-    }
+    }*/
 
     @Test
     public void testLendBookPersistenceError () throws Exception {

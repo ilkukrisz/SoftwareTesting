@@ -2,7 +2,6 @@ package hu.uni.miskolc.iit.softwaretesting.dao;
 
 import hu.uni.miskolc.iit.softwaretesting.exceptions.*;
 import hu.uni.miskolc.iit.softwaretesting.model.*;
-import hu.uni.miskolc.iit.softwaretesting.service.impl.CommandLine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.w3c.dom.Document;

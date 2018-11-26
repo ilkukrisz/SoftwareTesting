@@ -48,8 +48,7 @@ public class ConverterMethodsTest {
         Calendar calendar = getInstance();
         calendar.add(Calendar.DATE,20);
         testBorrowing = new Borrowing(321654987, testReader, getInstance().getTime(), calendar.getTime(), BorrowStatus.REQUESTED, testBookInstance);
-        System.out.println("Borrowing creation date\t" + Calendar.getInstance().getTime().toString());
-        System.out.println("Borrowing expiration date\t" + calendar.getTime().toString());
+
 
 
         testBookCollection.add(testBook);
@@ -87,7 +86,6 @@ public class ConverterMethodsTest {
         xmlgregcal.setYear(gregorianCalendar.get(Calendar.YEAR));
         xmlgregcal.setMonth(gregorianCalendar.get(Calendar.MONTH) + 1);
         xmlgregcal.setDay(gregorianCalendar.get(Calendar.DAY_OF_MONTH));
-        System.out.println("Creation date\t" + xmlgregcal.toString());
         testBorrowingType.setCreationDate(xmlgregcal);
 
         gregorianCalendar.setTime(calendar.getTime());
@@ -95,7 +93,6 @@ public class ConverterMethodsTest {
         xmlgregcal.setYear(gregorianCalendar.get(Calendar.YEAR));
         xmlgregcal.setMonth(gregorianCalendar.get(Calendar.MONTH) + 1);
         xmlgregcal.setDay(gregorianCalendar.get(Calendar.DAY_OF_MONTH));
-        System.out.println("Expiration date\t" + xmlgregcal.toString());
         testBorrowingType.setExpirationDate(xmlgregcal);
         testBorrowingTypeCollection.add(testBorrowingType);
 
