@@ -40,7 +40,6 @@ public class ConverterMethods {
             ass.setYear(gregorianCalendar.get(Calendar.YEAR));
             ass.setMonth(gregorianCalendar.get(Calendar.MONTH) + 1);
             ass.setDay(gregorianCalendar.get(Calendar.DAY_OF_MONTH));
-            System.out.println("creation " + ass.toString());
             borrowingType.setCreationDate(ass);
 
             gregorianCalendar.setTime(i.getExpirationDate());
@@ -113,11 +112,21 @@ public class ConverterMethods {
     }
 
     public static Borrowing convertBorrowingTypeToBorrowing(BorrowingType borrowingTypes) throws InvalidPublishDateException {
+        int creationYear = (borrowingTypes.getCreationDate() == null) ? 2010 : borrowingTypes.getCreationDate().getYear();
+        int creationMonth = (borrowingTypes.getCreationDate() == null) ? 1 : borrowingTypes.getCreationDate().getMonth();
+        int creationDay = (borrowingTypes.getCreationDate() == null) ? 1 : borrowingTypes.getCreationDate().getDay();
+        int expirationYear = (borrowingTypes.getCreationDate() == null) ? 2010 : borrowingTypes.getCreationDate().getYear();
+        int expirationMonth = (borrowingTypes.getExpirationDate() == null) ? 1 : borrowingTypes.getExpirationDate().getMonth();
+        int expirationDay = (borrowingTypes.getExpirationDate() == null) ? 2 : borrowingTypes.getExpirationDate().getDay();
+
         Calendar calendar = Calendar.getInstance();
-        calendar.set(borrowingTypes.getCreationDate().getYear(), borrowingTypes.getCreationDate().getMonth(), borrowingTypes.getCreationDate().getDay());
+        calendar.set(creationYear, creationMonth, creationDay);
         Date creationDate = calendar.getTime();
+
         calendar.set(borrowingTypes.getExpirationDate().getYear(), borrowingTypes.getExpirationDate().getMonth(), borrowingTypes.getExpirationDate().getDay());
+
         Date expirationDate = calendar.getTime();
+
         return new Borrowing(borrowingTypes.getBorrowID(), convertUserTypeToReader(borrowingTypes.getReader()), creationDate, expirationDate, BorrowStatus.valueOf(borrowingTypes.getBorrowStatus()), convertBookInstanceTypeToBookInstance(borrowingTypes.getBookInstance()));
     }
 

@@ -24,10 +24,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
+import java.util.*;
 
 /**
  * XML DOM implementation of BookDAO interface.
@@ -411,7 +408,7 @@ public class BookDaoXMLImpl implements BookDAO {
         for (int i=0; i < bookInstances.getLength(); i++) {
             Element current = (Element) bookInstances.item(i);
 
-            if (this.getNodeValue(current, "ISBN").equals(bookISBN) &&
+            if (this.getNodeValue(current, "bookISBN").equals(bookISBN) &&
                     !Boolean.valueOf(this.getNodeValue(current, "isLoaned"))) {
                 results.add(
                         new BookInstance(
@@ -506,6 +503,10 @@ public class BookDaoXMLImpl implements BookDAO {
         try {
             Element newBorrowing = document.createElement("borrowing");
 
+            Element borrowID = document.createElement("borrowID");
+            borrowID.appendChild(document.createTextNode(String.valueOf(borrowing.getBorrowID())));
+            newBorrowing.appendChild(borrowID);
+
             Element readerUsername = document.createElement("readerUsername");
             readerUsername.appendChild(document.createTextNode(borrowing.getReader().getUsername()));
             newBorrowing.appendChild(readerUsername);
@@ -523,6 +524,12 @@ public class BookDaoXMLImpl implements BookDAO {
             Element status = document.createElement("status");
             status.appendChild(document.createTextNode(borrowing.getStatus().toString()));
             newBorrowing.appendChild(status);
+
+            Element bookInstanceInventoryNo = document.createElement("bookInstanceInventoryNumber");
+            bookInstanceInventoryNo.appendChild(document.createTextNode(
+                    String.valueOf(borrowing.getBookInstance().getInventoryNumber())
+            ));
+            newBorrowing.appendChild(bookInstanceInventoryNo);
 
             document.getElementsByTagName("borrowings").item(0).appendChild(newBorrowing);
             this.serializeDOM();
@@ -636,6 +643,10 @@ public class BookDaoXMLImpl implements BookDAO {
                             )
                     );
                 }
+            }
+
+            if (results.isEmpty()) {
+                throw new NotExistingBorrowingException();
             }
         } catch (ParseException|BookInstanceNotFound|BookNotFoundException e) {
             throw new NotExistingBorrowingException(e);
@@ -810,6 +821,39 @@ public class BookDaoXMLImpl implements BookDAO {
 
         return year + month + day + hour + min + secs + millisecs;
     }
+
+    public Map<String, String> getReaderCredentials () {
+        return this.getCredentialsOfRole("READER");
+    }
+
+    public Map<String, String> getLibrarianCredentials () {
+        return this.getCredentialsOfRole("LIBRARIAN");
+    }
+
+    private Map<String, String> getCredentialsOfRole(String role) {
+        NodeList users = document.getElementsByTagName("user");
+        Map<String, String> results = new HashMap<>();
+
+        for (int i=0; i < users.getLength(); i++) {
+            Element current = (Element) users.item(i);
+
+            String currentRole = this.getNodeValue(current,"role");
+
+            if (currentRole.equals(role)) {
+                String username = this.getNodeValue(current, "username");
+                String passwordHash = this.getNodeValue(
+                        this.getNode(current, "password"),
+                        "hashedPassword"
+                );
+
+                results.put(username, passwordHash);
+            }
+        }
+
+        return results;
+    }
+
+
 
     /**
      * Returns the reader by username

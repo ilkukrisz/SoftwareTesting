@@ -4,6 +4,7 @@ import hu.uni.miskolc.iit.softwaretesting.exceptions.*;
 import hu.uni.miskolc.iit.softwaretesting.model.*;
 
 import java.util.Collection;
+import java.util.Map;
 
 public interface BookDAO {
     /**
@@ -154,5 +155,8 @@ public interface BookDAO {
      */
     public long getNewID();
 
+    public Map<String, String> getReaderCredentials ();
+
+    public Map<String, String> getLibrarianCredentials ();
 
 }

@@ -83,8 +83,6 @@ public class ReaderBookServiceImpl extends BookServiceImpl implements ReaderBook
                 Calendar expirationDate = Calendar.getInstance();
                 expirationDate.setTime(creationDate.getTime());
                 expirationDate.add(Calendar.DATE, 30);
-                System.out.println("creationDate: \t" + creationDate.getTime());
-                System.out.println("creationDate: \t" + expirationDate.getTime());
                 Borrowing borrowing = new Borrowing(bookDAO.getNewID(), reader, creationDate.getTime(), expirationDate.getTime(), BorrowStatus.REQUESTED, ((List<BookInstance>) bookInstances).get(0));
                 bookDAO.createBorrowing(borrowing);
             }
@@ -113,12 +111,11 @@ public class ReaderBookServiceImpl extends BookServiceImpl implements ReaderBook
         return bookDAO.getAllBooks();
     }
 
-
-    private boolean isEmptyField(String field) {
-        if (field.equalsIgnoreCase(""))
-            return true;
-
-        return false;
+    public Map<String, String> getReaderCredentials () {
+        return bookDAO.getReaderCredentials();
     }
 
+    private boolean isEmptyField(String field) {
+        return field.equalsIgnoreCase("");
+    }
 }

@@ -9,6 +9,7 @@ import hu.uni.miskolc.iit.softwaretesting.model.Borrowing;
 import hu.uni.miskolc.iit.softwaretesting.service.LibrarianBookService;
 import org.springframework.stereotype.Service;
 import java.util.Collection;
+import java.util.Map;
 
 @Service
 public class LibrarianBookServiceImpl extends BookServiceImpl implements LibrarianBookService {
@@ -102,4 +103,7 @@ public class LibrarianBookServiceImpl extends BookServiceImpl implements Librari
         }
     }
 
+    public Map<String, String> getLibrarianCredentials() {
+        return bookDAO.getLibrarianCredentials();
+    }
 }

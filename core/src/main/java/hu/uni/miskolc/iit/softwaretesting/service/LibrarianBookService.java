@@ -6,6 +6,7 @@ import hu.uni.miskolc.iit.softwaretesting.model.BookInstance;
 import hu.uni.miskolc.iit.softwaretesting.model.Borrowing;
 
 import java.util.Collection;
+import java.util.Map;
 
 public interface LibrarianBookService extends BookService {
 
@@ -81,7 +82,5 @@ public interface LibrarianBookService extends BookService {
      */
     public Collection<Borrowing> listRequests() throws NotExistingBorrowingException;
 
-
-
-
+    public Map<String, String> getLibrarianCredentials();
 }

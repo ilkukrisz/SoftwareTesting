@@ -4,7 +4,8 @@
         <user>
             <username>bela</username>
             <password>
-                <hashedPassword>$2a$04$uXb8rTLKZFpEB4NIgb7pa.EcfYMDrF/srpoKzmKofDCNJsTIi5/ri</hashedPassword>
+                <!-- plain: bela -->
+                <hashedPassword>$2a$04$rnqoEIklzLs6D0rB6mUnDeTaNHedPt/UldpRfRYI2n99TR2YzVKMG</hashedPassword>
             </password>
             <firstname>Bela</firstname>
             <lastname>Toth</lastname>
@@ -15,7 +16,8 @@
         <user>
             <username>feri</username>
             <password>
-                <hashedPassword>$2a$04$uXb8rTLKZFpEB4NIgb7pa.EcfYMDrF/srpoKzmKofDCNJsTIi5/ri</hashedPassword>
+                <!-- plain: feri -->
+                <hashedPassword>$2a$04$LVmBf685sJLBQwmPd2HjdeosjEgrVlQfSJHkIOFNoiTD8N/iF6t9O</hashedPassword>
             </password>
             <firstname>Ferenc</firstname>
             <lastname>Kovacs</lastname>
@@ -86,6 +88,4 @@
             <bookInstanceInventoryNumber>123456791</bookInstanceInventoryNumber>
         </borrowing>
     </borrowings>
-
-
 </database>
