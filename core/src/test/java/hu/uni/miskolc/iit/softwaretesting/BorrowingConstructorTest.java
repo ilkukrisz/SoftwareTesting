@@ -9,7 +9,7 @@ import org.junit.Test;
 import java.util.Calendar;
 import java.util.Date;
 
-public class BorrowingTestConstructor {
+public class BorrowingConstructorTest {
 
     private Borrowing borrowing;
     private Reader reader;

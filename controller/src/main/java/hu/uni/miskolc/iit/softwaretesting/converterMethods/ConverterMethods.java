@@ -33,22 +33,24 @@ public class ConverterMethods {
             borrowingType.setBorrowStatus(String.valueOf(i.getStatus()));
             borrowingType.setReader(convertReaderToUserType(i.getReader()));
 
-            XMLGregorianCalendar ass = new XMLGregorianCalendarImpl();
-            Calendar gregorianCalendar = new GregorianCalendar();
-            gregorianCalendar.setTime(i.getCreationDate());
+            XMLGregorianCalendar xmlCreationCalendar = new XMLGregorianCalendarImpl();
+            Calendar gregorianCreationCalendar = new GregorianCalendar();
+            gregorianCreationCalendar.setTime(i.getCreationDate());
 
-            ass.setYear(gregorianCalendar.get(Calendar.YEAR));
-            ass.setMonth(gregorianCalendar.get(Calendar.MONTH) + 1);
-            ass.setDay(gregorianCalendar.get(Calendar.DAY_OF_MONTH));
-            borrowingType.setCreationDate(ass);
+            xmlCreationCalendar.setYear(gregorianCreationCalendar.get(Calendar.YEAR));
+            xmlCreationCalendar.setMonth(gregorianCreationCalendar.get(Calendar.MONTH) + 1);
+            xmlCreationCalendar.setDay(gregorianCreationCalendar.get(Calendar.DAY_OF_MONTH));
+            borrowingType.setCreationDate(xmlCreationCalendar);
 
-            gregorianCalendar.setTime(i.getExpirationDate());
+            XMLGregorianCalendar xmlExpirationCalendar = new XMLGregorianCalendarImpl();
+            Calendar gregorianExpirationCalendar = new GregorianCalendar();
+            gregorianExpirationCalendar.setTime(i.getExpirationDate());
 
-            ass.setYear(gregorianCalendar.get(Calendar.YEAR));
-            ass.setMonth(gregorianCalendar.get(Calendar.MONTH) + 1);
-            ass.setDay(gregorianCalendar.get(Calendar.DAY_OF_MONTH));
+            xmlExpirationCalendar.setYear(gregorianExpirationCalendar.get(Calendar.YEAR));
+            xmlExpirationCalendar.setMonth(gregorianExpirationCalendar.get(Calendar.MONTH) + 1);
+            xmlExpirationCalendar.setDay(gregorianExpirationCalendar.get(Calendar.DAY_OF_MONTH));
+            borrowingType.setExpirationDate(xmlExpirationCalendar);
 
-            borrowingType.setExpirationDate(ass);
             bookTypeCollection.add(borrowingType);
         }
         return bookTypeCollection;
@@ -100,34 +102,34 @@ public class ConverterMethods {
     public static Collection<Borrowing> convertBorrowingTypeToBorrowing(Collection<BorrowingType> borrowingTypes) throws InvalidPublishDateException {
         Collection<Borrowing> borrowingArrayList = new ArrayList<>();
         for (BorrowingType i : borrowingTypes) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(i.getCreationDate().getYear(), i.getCreationDate().getMonth()-1, i.getCreationDate().getDay());
-            Date creationDate = calendar.getTime();
-            calendar.set(i.getExpirationDate().getYear(), i.getExpirationDate().getMonth()-1, i.getExpirationDate().getDay());
-            Date expirationDate = calendar.getTime();
-            Borrowing borrowing = new Borrowing(i.getBorrowID(), convertUserTypeToReader(i.getReader()), creationDate, expirationDate, BorrowStatus.valueOf(i.getBorrowStatus()), convertBookInstanceTypeToBookInstance(i.getBookInstance()));
+            Borrowing borrowing = convertBorrowingTypeToBorrowing(i);
             borrowingArrayList.add(borrowing);
         }
+
         return borrowingArrayList;
     }
 
-    public static Borrowing convertBorrowingTypeToBorrowing(BorrowingType borrowingTypes) throws InvalidPublishDateException {
-        int creationYear = (borrowingTypes.getCreationDate() == null) ? 2010 : borrowingTypes.getCreationDate().getYear();
-        int creationMonth = (borrowingTypes.getCreationDate() == null) ? 1 : borrowingTypes.getCreationDate().getMonth();
-        int creationDay = (borrowingTypes.getCreationDate() == null) ? 1 : borrowingTypes.getCreationDate().getDay();
-        int expirationYear = (borrowingTypes.getCreationDate() == null) ? 2010 : borrowingTypes.getCreationDate().getYear();
-        int expirationMonth = (borrowingTypes.getExpirationDate() == null) ? 1 : borrowingTypes.getExpirationDate().getMonth();
-        int expirationDay = (borrowingTypes.getExpirationDate() == null) ? 2 : borrowingTypes.getExpirationDate().getDay();
+    public static Borrowing convertBorrowingTypeToBorrowing(BorrowingType borrowingDTO) throws InvalidPublishDateException {
+        Calendar creationCalendar = Calendar.getInstance();
+        Calendar expirationCalendar = Calendar.getInstance();
+        Date creationDate = creationCalendar.getTime();
+        Date expirationDate = expirationCalendar.getTime();
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(creationYear, creationMonth, creationDay);
-        Date creationDate = calendar.getTime();
+        if (borrowingDTO.getCreationDate() != null) {
+            creationCalendar.set(borrowingDTO.getCreationDate().getYear(),
+                    borrowingDTO.getCreationDate().getMonth() - 1, borrowingDTO.getCreationDate().getDay());
+            creationDate = creationCalendar.getTime();
+        }
 
-        calendar.set(borrowingTypes.getExpirationDate().getYear(), borrowingTypes.getExpirationDate().getMonth(), borrowingTypes.getExpirationDate().getDay());
+        if (borrowingDTO.getExpirationDate() != null) {
+            expirationCalendar.set(borrowingDTO.getExpirationDate().getYear(),
+                    borrowingDTO.getExpirationDate().getMonth() - 1, borrowingDTO.getExpirationDate().getDay());
+            expirationDate = expirationCalendar.getTime();
+        }
 
-        Date expirationDate = calendar.getTime();
-
-        return new Borrowing(borrowingTypes.getBorrowID(), convertUserTypeToReader(borrowingTypes.getReader()), creationDate, expirationDate, BorrowStatus.valueOf(borrowingTypes.getBorrowStatus()), convertBookInstanceTypeToBookInstance(borrowingTypes.getBookInstance()));
+        return new Borrowing(borrowingDTO.getBorrowID(), convertUserTypeToReader(borrowingDTO.getReader()), creationDate,
+                expirationDate, BorrowStatus.valueOf(borrowingDTO.getBorrowStatus()),
+                convertBookInstanceTypeToBookInstance(borrowingDTO.getBookInstance()));
     }
 
     public static BookInstance convertBookInstanceTypeToBookInstance(BookInstanceType bookInstanceType) throws InvalidPublishDateException {

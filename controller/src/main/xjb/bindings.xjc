@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<jaxb:bindings
+        xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/jaxb http://java.sun.com/xml/ns/jaxb/bindingschema_2_1.xsd"
+        version="2.1">
+
+    <jaxb:globalBindings>
+        <jaxb:javaType
+                name="javax.xml.datatype.XMLGregorianCalendar"
+                xmlType="xs:date"
+                parseMethod="hu.uni.miskolc.iit.softwaretesting.converterMethods.DateAdapter.unmarshal"
+                printMethod="hu.uni.miskolc.iit.softwaretesting.converterMethods.DateAdapter.marshal" />
+    </jaxb:globalBindings>
+
+</jaxb:bindings>

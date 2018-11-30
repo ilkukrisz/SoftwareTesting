@@ -15,6 +15,8 @@ import org.mockito.Matchers;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.support.DefaultFormattingConversionService;
+import org.springframework.format.support.FormattingConversionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
@@ -26,15 +28,12 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -53,19 +52,26 @@ public class LibrarianControllerTest {
     @InjectMocks
     private LibrarianController controller;
 
+    @Mock
+    FormattingConversionService conversionService;
+
     private Borrowing exampleBorrowing1;
     private Borrowing exampleBorrowing2;
 
     @Before
     public void setUp () throws InvalidPublishDateException {
+        conversionService = new DefaultFormattingConversionService();
+
         MockitoAnnotations.initMocks(this);
         this.mockMVC = MockMvcBuilders
                 .standaloneSetup(controller)
                 .setHandlerExceptionResolvers(this.getSimpleMappingExceptionResolver())
+                .setConversionService(conversionService)
                 .build();
 
         Book book = new Book("Krisz", "Title", (long)97236589, 2005, Genre.Crimi);
-        Reader reader = new Reader("ilkukrisz", new Password("  "), "Ilku","Krisztian", "apple@apple.com", "06123456789");
+        Reader reader = new Reader("ilkukrisz", new Password("  "), "Ilku","Krisztian",
+                "apple@apple.com", "06123456789");
         BookInstance bookInstance = new BookInstance((long) 2135510, book, false);
 
         Calendar calCreationDate = Calendar.getInstance();
@@ -73,8 +79,10 @@ public class LibrarianControllerTest {
         calCreationDate.set(2017, Calendar.OCTOBER, 10);
         calExpirationDate.set(2017, Calendar.NOVEMBER, 9);
 
-        this.exampleBorrowing1 = new Borrowing((long) 98236, reader, calCreationDate.getTime(), calExpirationDate.getTime(), BorrowStatus.REQUESTED, bookInstance);
-        this.exampleBorrowing2 = new Borrowing(123456, reader, calCreationDate.getTime(), calExpirationDate.getTime(), BorrowStatus.BORROWED, bookInstance);
+        this.exampleBorrowing1 = new Borrowing((long) 98236, reader, calCreationDate.getTime(),
+                calExpirationDate.getTime(), BorrowStatus.REQUESTED, bookInstance);
+        this.exampleBorrowing2 = new Borrowing(123456, reader, calCreationDate.getTime(),
+                calExpirationDate.getTime(), BorrowStatus.BORROWED, bookInstance);
     }
 
     @Test
@@ -235,13 +243,13 @@ public class LibrarianControllerTest {
                 .andExpect(status().isInternalServerError());
     }
 
-  /*  @Test
+    @Test
     public void testLendBook () throws Exception {
         doNothing().when(librarianServiceMock).lendBook(Matchers.any(Borrowing.class));
 
         mockMVC.perform(this.getBorrowingFormRequest("/librarian/lendbook"))
             .andExpect(status().isOk());
-    }*/
+    }
 
     @Test
     public void testLendBookPersistenceError () throws Exception {
@@ -307,15 +315,13 @@ public class LibrarianControllerTest {
 
     private MockHttpServletRequestBuilder getBorrowingFormRequest (String urlTemplate) {
         return this.getFormPostRequest(urlTemplate)
-                .param("book.publishDate", "2010")
-                .param("book.author", "teszt")
-                .param("bookInstance.book.title", "tesztteszt")
-                .param("bookInstance.book.genre", "Scifi")
-                .param("bookInstance.book.title", "tesztteszt")
-                .param("bookInstance.book.title", "tesztteszt")
+                .param("borrowID", "159741852963")
+                .param("borrowStatus", "BORROWED")
                 .param("bookInstance.inventoryNumber", "123405678099")
+                .param("bookInstance.book.author", "teszt")
                 .param("bookInstance.book.title", "tesztteszt")
-                .param("bookInstance.isLoaned", "false")
+                .param("bookInstance.book.publishDate", "2010")
+                .param("bookInstance.book.genre", "Scifi")
                 .param("reader.username", "bela")
                 .param("reader.password.hashedPassword",
                         "$2a$04$UG7M8/jwMYVAkqyyLTT4OOsUN2JZtuHoCSEpYYTYYBAp9ESsKZkmy")
@@ -323,9 +329,7 @@ public class LibrarianControllerTest {
                 .param("reader.lastName", "asdasdasdas")
                 .param("reader.email", "sda@sdasd.com")
                 .param("reader.mobileNumber", "06301234567")
-                .param("reader.password.saltStrength", "7")
-                .param("borrowStatus", "BORROWED")
-                .param("borrowID", "159741852963");
+                .param("reader.password.saltStrength", "7");
     }
 
     private MockHttpServletRequestBuilder getBookInstanceFormRequest (String urlTemplate) {
