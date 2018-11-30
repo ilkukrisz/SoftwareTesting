@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
 
-public class BookTestMethods {
+public class BookMethodsTest {
 
 
     private Book book;

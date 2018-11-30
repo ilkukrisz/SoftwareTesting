@@ -8,7 +8,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 
-public class BookTestConstructor {
+public class BookConstructorTest {
 
     private Book book;
 

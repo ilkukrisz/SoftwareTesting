@@ -11,7 +11,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Calendar;
 
-public class BorrowingTestMethods {
+public class BorrowingMethodsTest {
     private Borrowing borrowing;
     private Reader reader;
     private Book book;
