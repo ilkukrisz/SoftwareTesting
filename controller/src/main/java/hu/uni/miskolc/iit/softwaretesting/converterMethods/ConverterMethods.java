@@ -33,22 +33,24 @@ public class ConverterMethods {
             borrowingType.setBorrowStatus(String.valueOf(i.getStatus()));
             borrowingType.setReader(convertReaderToUserType(i.getReader()));
 
-            XMLGregorianCalendar ass = new XMLGregorianCalendarImpl();
-            Calendar gregorianCalendar = new GregorianCalendar();
-            gregorianCalendar.setTime(i.getCreationDate());
+            XMLGregorianCalendar xmlCreationCalendar = new XMLGregorianCalendarImpl();
+            Calendar gregorianCreationCalendar = new GregorianCalendar();
+            gregorianCreationCalendar.setTime(i.getCreationDate());
 
-            ass.setYear(gregorianCalendar.get(Calendar.YEAR));
-            ass.setMonth(gregorianCalendar.get(Calendar.MONTH) + 1);
-            ass.setDay(gregorianCalendar.get(Calendar.DAY_OF_MONTH));
-            borrowingType.setCreationDate(ass);
+            xmlCreationCalendar.setYear(gregorianCreationCalendar.get(Calendar.YEAR));
+            xmlCreationCalendar.setMonth(gregorianCreationCalendar.get(Calendar.MONTH) + 1);
+            xmlCreationCalendar.setDay(gregorianCreationCalendar.get(Calendar.DAY_OF_MONTH));
+            borrowingType.setCreationDate(xmlCreationCalendar);
 
-            gregorianCalendar.setTime(i.getExpirationDate());
+            XMLGregorianCalendar xmlExpirationCalendar = new XMLGregorianCalendarImpl();
+            Calendar gregorianExpirationCalendar = new GregorianCalendar();
+            gregorianExpirationCalendar.setTime(i.getExpirationDate());
 
-            ass.setYear(gregorianCalendar.get(Calendar.YEAR));
-            ass.setMonth(gregorianCalendar.get(Calendar.MONTH) + 1);
-            ass.setDay(gregorianCalendar.get(Calendar.DAY_OF_MONTH));
+            xmlExpirationCalendar.setYear(gregorianExpirationCalendar.get(Calendar.YEAR));
+            xmlExpirationCalendar.setMonth(gregorianExpirationCalendar.get(Calendar.MONTH) + 1);
+            xmlExpirationCalendar.setDay(gregorianExpirationCalendar.get(Calendar.DAY_OF_MONTH));
+            borrowingType.setExpirationDate(xmlExpirationCalendar);
 
-            borrowingType.setExpirationDate(ass);
             bookTypeCollection.add(borrowingType);
         }
         return bookTypeCollection;
