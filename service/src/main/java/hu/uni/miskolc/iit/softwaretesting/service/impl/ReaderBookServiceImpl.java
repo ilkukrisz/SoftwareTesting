@@ -88,8 +88,8 @@ public class ReaderBookServiceImpl extends BookServiceImpl implements ReaderBook
             }
             else
                 throw new NoAvailableInstanceException();
-        } catch (BookInstanceNotFound bookInstanceNotFound) {
-            bookInstanceNotFound.printStackTrace();
+        } catch (BookInstanceNotFoundException bookInstanceNotFoundException) {
+            bookInstanceNotFoundException.printStackTrace();
             throw new NoAvailableInstanceException("There is no book to be borrowed.");
 
         } catch (AlreadyExistingBorrowingException e) {

@@ -70,19 +70,19 @@ public class LibrarianBookServiceImplTest  {
         assertEquals(2, service.countBooks());
     }
 
-    @Test(expected = AlreadyExistingBookInstance.class)
-    public void testAddAlreadyExistingBookInstance () throws InvalidPublishDateException, AlreadyExistingBookInstance, PersistenceException {
+    @Test(expected = AlreadyExistingBookInstanceException.class)
+    public void testAddAlreadyExistingBookInstance () throws InvalidPublishDateException, AlreadyExistingBookInstanceException, PersistenceException {
         Book book = new Book ( "Elon Musk", "The first human on Mars", (long)111222, 2017, Genre.Scifi);
         BookInstance bookInstance = new BookInstance(262626, book, false);
 
-        doThrow(AlreadyExistingBookInstance.class).when(daoMock).createBookInstance(bookInstance);
+        doThrow(AlreadyExistingBookInstanceException.class).when(daoMock).createBookInstance(bookInstance);
 
         service.addBookInstances(bookInstance);
     }
 
-    @Test(expected = BookInstanceNotFound.class)
-    public void testDeleteBookInstanceWithNullInventoryNumber () throws BookInstanceNotFound {
-        doThrow(BookInstanceNotFound.class).when(daoMock).deleteBookInstance(null);
+    @Test(expected = BookInstanceNotFoundException.class)
+    public void testDeleteBookInstanceWithNullInventoryNumber () throws BookInstanceNotFoundException {
+        doThrow(BookInstanceNotFoundException.class).when(daoMock).deleteBookInstance(null);
         service.deleteBookInstances(null);
     }
 

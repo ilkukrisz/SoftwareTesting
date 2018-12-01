@@ -49,17 +49,17 @@ public interface LibrarianBookService extends BookService {
     /**
      *
      * @param bookInstance the new instance which should be added to the database
-     * @throws AlreadyExistingBookInstance
+     * @throws AlreadyExistingBookInstanceException
      * @throws EmptyFieldException
      */
-    public void addBookInstances(BookInstance bookInstance) throws AlreadyExistingBookInstance, EmptyFieldException, PersistenceException;
+    public void addBookInstances(BookInstance bookInstance) throws AlreadyExistingBookInstanceException, EmptyFieldException, PersistenceException;
 
     /**
      *
      * @param bookInstance the book instance that should be deleted from the database.
-     * @throws BookInstanceNotFound
+     * @throws BookInstanceNotFoundException
      */
-    public void deleteBookInstances(BookInstance bookInstance) throws BookInstanceNotFound;
+    public void deleteBookInstances(BookInstance bookInstance) throws BookInstanceNotFoundException;
 
     /**
      *

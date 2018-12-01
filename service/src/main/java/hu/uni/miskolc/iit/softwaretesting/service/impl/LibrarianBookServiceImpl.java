@@ -1,6 +1,5 @@
 package hu.uni.miskolc.iit.softwaretesting.service.impl;
 
-import hu.uni.miskolc.iit.softwaretesting.dao.BookDAO;
 import hu.uni.miskolc.iit.softwaretesting.exceptions.*;
 import hu.uni.miskolc.iit.softwaretesting.model.Book;
 import hu.uni.miskolc.iit.softwaretesting.model.BookInstance;
@@ -57,21 +56,21 @@ public class LibrarianBookServiceImpl extends BookServiceImpl implements Librari
         }
     }
 
-    public void addBookInstances(BookInstance bookInstance) throws AlreadyExistingBookInstance, PersistenceException {
+    public void addBookInstances(BookInstance bookInstance) throws AlreadyExistingBookInstanceException, PersistenceException {
         try {
             bookDAO.createBookInstance(bookInstance);
-        } catch (AlreadyExistingBookInstance e) {
-            throw new AlreadyExistingBookInstance(e);
+        } catch (AlreadyExistingBookInstanceException e) {
+            throw new AlreadyExistingBookInstanceException(e);
         } catch (PersistenceException e) {
             throw new PersistenceException(e);
         }
     }
 
-    public void deleteBookInstances(BookInstance bookInstance) throws BookInstanceNotFound {
+    public void deleteBookInstances(BookInstance bookInstance) throws BookInstanceNotFoundException {
         try {
             bookDAO.deleteBookInstance(bookInstance);
-        } catch (BookInstanceNotFound e) {
-            throw new BookInstanceNotFound(e);
+        } catch (BookInstanceNotFoundException e) {
+            throw new BookInstanceNotFoundException(e);
         }
     }
 

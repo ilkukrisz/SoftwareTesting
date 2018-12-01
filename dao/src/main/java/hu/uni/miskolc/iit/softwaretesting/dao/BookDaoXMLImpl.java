@@ -312,9 +312,9 @@ public class BookDaoXMLImpl implements BookDAO {
      *
      * @param bookInstance Data container of the new book instance.
      */
-    public void createBookInstance(BookInstance bookInstance) throws AlreadyExistingBookInstance, PersistenceException {
+    public void createBookInstance(BookInstance bookInstance) throws AlreadyExistingBookInstanceException, PersistenceException {
         if (this.isBookInstanceExists(bookInstance.getInventoryNumber())) {
-            throw new AlreadyExistingBookInstance();
+            throw new AlreadyExistingBookInstanceException();
         }
 
         try {
@@ -342,7 +342,7 @@ public class BookDaoXMLImpl implements BookDAO {
     /**
      * Returns all book instances from the database.
      */
-    public ArrayList<BookInstance> getAllBookInstances() throws BookInstanceNotFound {
+    public ArrayList<BookInstance> getAllBookInstances() throws BookInstanceNotFoundException {
         NodeList bookInstances = document.getElementsByTagName("bookInstance");
         ArrayList<BookInstance> results = new ArrayList<>();
 
@@ -358,7 +358,7 @@ public class BookDaoXMLImpl implements BookDAO {
                 );
             }
         } catch (BookNotFoundException e) {
-            throw new BookInstanceNotFound(e);
+            throw new BookInstanceNotFoundException(e);
         }
 
         return results;
@@ -369,7 +369,7 @@ public class BookDaoXMLImpl implements BookDAO {
      *
      * @param book The book object, which we search instances of.
      */
-    public ArrayList<BookInstance> getAllInstancesOfBook(Book book) throws BookNotFoundException, BookInstanceNotFound {
+    public ArrayList<BookInstance> getAllInstancesOfBook(Book book) throws BookNotFoundException, BookInstanceNotFoundException {
         NodeList bookInstances = document.getElementsByTagName("bookInstance");
         String bookISBN = String.valueOf(book.getIsbn());
         ArrayList<BookInstance> results = new ArrayList<>();
@@ -388,7 +388,7 @@ public class BookDaoXMLImpl implements BookDAO {
         }
 
         if (results.isEmpty()) {
-            throw new BookInstanceNotFound();
+            throw new BookInstanceNotFoundException();
         }
 
         return results;
@@ -399,7 +399,7 @@ public class BookDaoXMLImpl implements BookDAO {
      *
      * @param book The book object, which we search instances of.
      */
-    public ArrayList<BookInstance> getAvailableInstancesOfBook(Book book) throws BookNotFoundException, BookInstanceNotFound {
+    public ArrayList<BookInstance> getAvailableInstancesOfBook(Book book) throws BookNotFoundException, BookInstanceNotFoundException {
         NodeList bookInstances = document.getElementsByTagName("bookInstance");
         String bookISBN = String.valueOf(book.getIsbn());
         ArrayList<BookInstance> results = new ArrayList<>();
@@ -420,7 +420,7 @@ public class BookDaoXMLImpl implements BookDAO {
         }
 
         if (results.isEmpty()) {
-            throw new BookInstanceNotFound();
+            throw new BookInstanceNotFoundException();
         }
 
         return results;
@@ -431,7 +431,7 @@ public class BookDaoXMLImpl implements BookDAO {
      *
      * @param inventoryNumber Inventory number of the book instance.
      */
-    public BookInstance getBookInstanceByInventoryNumber(long inventoryNumber) throws BookInstanceNotFound, BookNotFoundException {
+    public BookInstance getBookInstanceByInventoryNumber(long inventoryNumber) throws BookInstanceNotFoundException, BookNotFoundException {
         NodeList bookInstances = document.getElementsByTagName("bookInstance");
 
         for (int i=0; i < bookInstances.getLength(); i++) {
@@ -445,7 +445,7 @@ public class BookDaoXMLImpl implements BookDAO {
             }
         }
 
-        throw new BookInstanceNotFound();
+        throw new BookInstanceNotFoundException();
     }
 
     /**
@@ -454,7 +454,7 @@ public class BookDaoXMLImpl implements BookDAO {
      * @param bookInstance Data container of the new book instance.
      *                     InventoryNumber field must be set to the desired book instance's to update.
      */
-    public void updateBookInstance(BookInstance bookInstance) throws BookInstanceNotFound, PersistenceException {
+    public void updateBookInstance(BookInstance bookInstance) throws BookInstanceNotFoundException, PersistenceException {
         NodeList bookInstances = document.getElementsByTagName("bookInstance");
 
         for (int i=0; i < bookInstances.getLength(); i++) {
@@ -477,7 +477,7 @@ public class BookDaoXMLImpl implements BookDAO {
      *
      * @param bookInstance BookInstance object with the eraseable book instance's inventory number.
      */
-    public void deleteBookInstance(BookInstance bookInstance) throws BookInstanceNotFound {
+    public void deleteBookInstance(BookInstance bookInstance) throws BookInstanceNotFoundException {
         NodeList bookInstances = document.getElementsByTagName("bookInstance");
         String inventoryNo = String.valueOf(bookInstance.getInventoryNumber());
 
@@ -563,7 +563,7 @@ public class BookDaoXMLImpl implements BookDAO {
                         )
                 );
             }
-        } catch (ParseException|BookInstanceNotFound|BookNotFoundException|NotExistingReaderException e) {
+        } catch (ParseException| BookInstanceNotFoundException |BookNotFoundException|NotExistingReaderException e) {
             throw new NoBorrowingsFoundException(e);
         }
 
@@ -600,7 +600,7 @@ public class BookDaoXMLImpl implements BookDAO {
                     );
                 }
             }
-        } catch (ParseException|BookInstanceNotFound|BookNotFoundException|NotExistingReaderException e) {
+        } catch (ParseException| BookInstanceNotFoundException |BookNotFoundException|NotExistingReaderException e) {
             try {
                 results.add(new Borrowing(1111111, new Reader("asd", new Password(""), "asd", "asdddd", "asd@ddd.hu", "06506354253"),
                         new Date(), new Date(), BorrowStatus.REQUESTED, new BookInstance(222222, new Book("alma", "almagyozedelmeskedik", 22223123, 2009, Genre.Crimi), false)));
@@ -647,7 +647,7 @@ public class BookDaoXMLImpl implements BookDAO {
             if (results.isEmpty()) {
                 throw new NotExistingBorrowingException();
             }
-        } catch (ParseException|BookInstanceNotFound|BookNotFoundException e) {
+        } catch (ParseException| BookInstanceNotFoundException |BookNotFoundException e) {
             throw new NotExistingBorrowingException(e);
         }
 
@@ -679,7 +679,7 @@ public class BookDaoXMLImpl implements BookDAO {
                     );
                 }
             }
-        } catch (ParseException|BookInstanceNotFound|BookNotFoundException|NotExistingReaderException e) {
+        } catch (ParseException| BookInstanceNotFoundException |BookNotFoundException|NotExistingReaderException e) {
             throw new NotExistingBorrowingException(e);
         }
 
@@ -925,7 +925,7 @@ public class BookDaoXMLImpl implements BookDAO {
     private boolean isBookInstanceExists (long inventoryNo) {
         try {
             return this.getBookInstanceByInventoryNumber(inventoryNo) != null;
-        } catch (BookNotFoundException|BookInstanceNotFound e) {
+        } catch (BookNotFoundException| BookInstanceNotFoundException e) {
             return false;
         }
     }

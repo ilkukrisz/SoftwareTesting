@@ -248,7 +248,7 @@ public class ReaderBookServiceImplTest {
     }
 
     @Test
-    public void testRequestBookWithLegalValues() throws InvalidPublishDateException, BookNotFoundException, BookInstanceNotFound, NoAvailableInstanceException, PersistenceException {
+    public void testRequestBookWithLegalValues() throws InvalidPublishDateException, BookNotFoundException, BookInstanceNotFoundException, NoAvailableInstanceException, PersistenceException {
         Book book = new Book("Alma", "Barack", (long) 102410,
                 2008, Genre.valueOf("Crimi"));
         Reader reader = new Reader("ilkukrisz", new Password("alma"),
@@ -275,7 +275,7 @@ public class ReaderBookServiceImplTest {
     }
 
     @Test(expected = InvalidArgumentException.class)
-    public void testRequestBookWithNullValueForBook() throws InvalidPublishDateException, BookNotFoundException, BookInstanceNotFound, NoAvailableInstanceException, PersistenceException {
+    public void testRequestBookWithNullValueForBook() throws InvalidPublishDateException, BookNotFoundException, BookInstanceNotFoundException, NoAvailableInstanceException, PersistenceException {
 
         when(daoMock.getAvailableInstancesOfBook(book)).thenAnswer(new Answer<Collection<BookInstance>>() {
             @Override
@@ -292,7 +292,7 @@ public class ReaderBookServiceImplTest {
     }
 
     @Test(expected = InvalidArgumentException.class)
-    public void testRequestBookWithNullValueForReader() throws InvalidPublishDateException, BookNotFoundException, BookInstanceNotFound, NoAvailableInstanceException, PersistenceException {
+    public void testRequestBookWithNullValueForReader() throws InvalidPublishDateException, BookNotFoundException, BookInstanceNotFoundException, NoAvailableInstanceException, PersistenceException {
 
         when(daoMock.getAvailableInstancesOfBook(book)).thenAnswer(new Answer<Collection<BookInstance>>() {
             @Override
@@ -314,7 +314,7 @@ public class ReaderBookServiceImplTest {
     }
 
     @Test(expected = BookNotFoundException.class)
-    public void testRequestBookForBookNotFoundException() throws NoAvailableInstanceException, BookInstanceNotFound, BookNotFoundException, PersistenceException {
+    public void testRequestBookForBookNotFoundException() throws NoAvailableInstanceException, BookInstanceNotFoundException, BookNotFoundException, PersistenceException {
         when(daoMock.getAvailableInstancesOfBook(book)).thenThrow(BookNotFoundException.class);
         service.requestBook(book, reader);
     }
