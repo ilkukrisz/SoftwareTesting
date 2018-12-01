@@ -27,7 +27,13 @@
     </users>
     
     <books>
-        
+        <book>
+            <ISBN>123456</ISBN>
+            <author>Pasztor Lajos</author>
+            <title>Utazas a Fold korul</title>
+            <publishDate>2010</publishDate>
+            <genre>Travel</genre>
+        </book>
         <book>
             <ISBN>1234567</ISBN>
             <author>Nagy Kalman</author>
@@ -40,8 +46,8 @@
     <bookInstances>
         <bookInstance>
             <inventoryNumber>123456789</inventoryNumber>
-            <bookISBN>123456</bookISBN>
-            <isLoaned>false</isLoaned>
+            <bookISBN>1234567</bookISBN>
+            <isLoaned>true</isLoaned>
         </bookInstance>
         <bookInstance>
             <inventoryNumber>123456790</inventoryNumber>
