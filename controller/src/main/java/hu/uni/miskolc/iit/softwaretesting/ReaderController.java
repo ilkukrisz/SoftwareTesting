@@ -91,8 +91,8 @@ public class ReaderController {
     }
 
 
-    @ExceptionHandler({EmptyFieldException.class, InvalidPublishDateException.class, NotExistingGenreException.class, BookNotFoundException.class,
-    NoAvailableInstanceException.class, PersistenceException.class, NotExistingReaderException.class, NotExistingBorrowingException.class})
+    @ExceptionHandler({EmptyFieldException.class, IllegalArgumentException.class, InvalidPublishDateException.class, NotExistingGenreException.class, BookNotFoundException.class,
+    NoAvailableInstanceException.class, PersistenceException.class, NotExistingReaderException.class, NotExistingBorrowingException.class, NoBorrowingsFoundException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public void badRequestHandler() {}
 }

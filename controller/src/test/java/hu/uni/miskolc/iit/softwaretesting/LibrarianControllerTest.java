@@ -213,7 +213,7 @@ public class LibrarianControllerTest {
 
     @Test
     public void testAddAlreadyExistingBookInstance () throws Exception {
-        doThrow(new AlreadyExistingBookInstance()).when(librarianServiceMock).addBookInstances(Matchers.any(BookInstance.class));
+        doThrow(new AlreadyExistingBookInstanceException()).when(librarianServiceMock).addBookInstances(Matchers.any(BookInstance.class));
 
         mockMVC.perform(this.getBookInstanceFormRequest("/librarian/addbi"))
                 .andExpect(status().isInternalServerError());
@@ -237,7 +237,7 @@ public class LibrarianControllerTest {
 
     @Test
     public void testDeleteNotExistingBookInstance () throws Exception {
-        doThrow(new BookInstanceNotFound()).when(librarianServiceMock).deleteBookInstances(Matchers.any(BookInstance.class));
+        doThrow(new BookInstanceNotFoundException()).when(librarianServiceMock).deleteBookInstances(Matchers.any(BookInstance.class));
 
         mockMVC.perform(this.getBookInstanceFormRequest("/librarian/deletebi"))
                 .andExpect(status().isInternalServerError());

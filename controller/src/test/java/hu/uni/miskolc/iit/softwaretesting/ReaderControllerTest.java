@@ -28,9 +28,7 @@ import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Date;
 
-import static java.util.Calendar.getInstance;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;

@@ -8,11 +8,9 @@ import hu.uni.miskolc.iit.softwaretesting.exceptions.*;
 import hu.uni.miskolc.iit.softwaretesting.service.LibrarianBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 
@@ -51,13 +49,13 @@ public class LibrarianController {
 
     @PostMapping("/addbi")
     @ResponseStatus(HttpStatus.OK)
-    public void addBookInstance(@ModelAttribute BookInstanceType bookInstanceType) throws InvalidPublishDateException, AlreadyExistingBookInstance, EmptyFieldException, PersistenceException {
+    public void addBookInstance(@ModelAttribute BookInstanceType bookInstanceType) throws InvalidPublishDateException, AlreadyExistingBookInstanceException, EmptyFieldException, PersistenceException {
         librarianBookService.addBookInstances(ConverterMethods.convertBookInstanceTypeToBookInstance(bookInstanceType));
     }
 
     @PostMapping("/deletebi")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteBookInstance(@ModelAttribute BookInstanceType bookInstanceType) throws InvalidPublishDateException, BookInstanceNotFound {
+    public void deleteBookInstance(@ModelAttribute BookInstanceType bookInstanceType) throws InvalidPublishDateException, BookInstanceNotFoundException {
         librarianBookService.deleteBookInstances(ConverterMethods.convertBookInstanceTypeToBookInstance(bookInstanceType));
     }
 
@@ -83,4 +81,11 @@ public class LibrarianController {
     public Collection<BorrowingType> listRequests() throws NotExistingBorrowingException {
         return ConverterMethods.convertBorrowingToBorrowingType(librarianBookService.listRequests());
     }
+
+
+    @ExceptionHandler({EmptyFieldException.class, InvalidPublishDateException.class, NotExistingGenreException.class, BookNotFoundException.class,
+            NoAvailableInstanceException.class, PersistenceException.class, NotExistingReaderException.class, NotExistingBorrowingException.class, AlreadyExistingBookException.class,
+    AlreadyExistingBookInstanceException.class, AlreadyExistingBorrowingException.class, InvalidArgumentException.class, NoBorrowingsFoundException.class, WrongISBNException.class, IllegalArgumentException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public void badRequestHandler() {}
 }
