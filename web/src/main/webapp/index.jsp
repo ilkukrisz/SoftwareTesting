@@ -6,16 +6,31 @@
     <link type="text/css" href="css/index.css" rel="stylesheet"/>
     <style>
         table {
-            width: 100%;
+            width: 40%;
             border: 2px solid aliceblue;
+            alignment: left;
+        }
+        td {
+            alignment: left;
         }
     </style>
 </head>
 <body>
-<h2>Welcome to the Basic Front End page</h2>
+<h2>Reader's basic page.</h2>
 
 <div id="menuBar">
     <table>
+        <tr>
+            <form action="allbook/">
+                <table>
+                    <tr>
+                        <td width="33%">List all Books</td>
+                        <td></td>
+                        <td width="33%"><input value="Submit" type="submit" formaction="/reader/allbook/"></td>
+                    </tr>
+                </table>
+            </form>
+        </tr>
         <tr>
             <form action="booksbyauthor/">
                 <table>
@@ -44,18 +59,18 @@
                     <tr>
                         <td width="33%">List books by availability</td>
                         <td> </td>
-                        <td width="33%"><input value="Submit" type="submit" formaction="/reader/booksbytitle/"></td>
+                        <td width="33%"><input value="Submit" type="submit" formaction="/reader/booksbyavailability/"></td>
                     </tr>
                 </table>
             </form>
         </tr>
         <tr>
-            <form action="booksbytitle/">
+            <form action="aebooksbytitle/">
                 <table>
                     <tr>
                         <td width="33%">Filter by Title</td>
                         <td width="33%"><input type="String" name="title"></td>
-                        <td width="33%"><input value="Submit" type="submit" formaction="/reader/booksbytitle/?title="></td>
+                        <td width="33%"><input value="Submit" type="submit" formaction="/reader/aebooksbytitle/?title="></td>
                     </tr>
                 </table>
             </form>
@@ -76,23 +91,13 @@
                 <table>
                     <tr>
                         <td width="33%">Filter by Borrowings</td>
-                        <td width="33%"><input type="String" name="borrowings"></td>
+                        <td width="33%"><input type="String" name="username"></td>
                         <td width="33%"><input value="Submit" type="submit" formaction="/reader/borrowings/?username="></td>
                     </tr>
                 </table>
             </form>
         </tr>
-        <tr>
-            <form action="allbook/">
-                <table>
-                    <tr>
-                        <td width="33%">List all Books</td>
-                        <td></td>
-                        <td width="33%"><input value="Submit" type="submit" formaction="/reader/allbook/"></td>
-                    </tr>
-                </table>
-            </form>
-        </tr>
+
 
     </table>
 </div>
