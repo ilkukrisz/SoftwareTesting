@@ -55,6 +55,7 @@ public class BookDaoXMLImpl implements BookDAO {
      * Creates a new book record in database.
      *
      * @param book Data container of the new book.
+     *
      */
     public void createBook(Book book) throws AlreadyExistingBookException, PersistenceException {
         if (this.isBookExists(book.getIsbn())) {
