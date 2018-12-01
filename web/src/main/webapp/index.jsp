@@ -48,7 +48,7 @@
             </form>
         </tr>
         <tr>
-            <form action="aebooksbytitle/">
+            <form action="booksbytitle/">
                 <table>
                     <tr>
                         <td width="33%">Title</td>
@@ -75,7 +75,7 @@
                     <tr>
                         <td width="33%">Borrowings</td>
                         <td width="33%"><input type="String" name="borrowings"></td>
-                        <td width="33%"><input value="username" type="submit" formaction="/reader/borrowings/?borrowings="></td>
+                        <td width="33%"><input value="username" type="submit" formaction="/reader/borrowings/?username="></td>
                     </tr>
                 </table>
             </form>
@@ -86,7 +86,7 @@
                     <tr>
                         <td width="33%">All Book</td>
                         <td width="33%"><input type="" name="allbook"></td>
-                        <td width="33%"><input value="allbook" type="submit" formaction="/reader/allbook/?allbook="></td>
+                        <td width="33%"><input value="allbook" type="submit" formaction="/reader/allbook/"></td>
                     </tr>
                 </table>
             </form>
