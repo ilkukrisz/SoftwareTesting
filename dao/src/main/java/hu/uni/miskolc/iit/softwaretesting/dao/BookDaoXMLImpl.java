@@ -55,7 +55,6 @@ public class BookDaoXMLImpl implements BookDAO {
      * Creates a new book record in database.
      *
      * @param book Data container of the new book.
-     *
      */
     public void createBook(Book book) throws AlreadyExistingBookException, PersistenceException {
         if (this.isBookExists(book.getIsbn())) {
@@ -121,7 +120,7 @@ public class BookDaoXMLImpl implements BookDAO {
         }
 
         return results;
-}
+    }
 
     /**
      * Returns all borrowable books.
@@ -377,7 +376,7 @@ public class BookDaoXMLImpl implements BookDAO {
 
         for (int i=0; i < bookInstances.getLength(); i++) {
             Element current = (Element) bookInstances.item(i);
-            if (this.getNodeValue(current, "ISBN").equals(bookISBN)) {
+            if (this.getNodeValue(current, "bookISBN").equals(bookISBN)) {
                 results.add(
                         new BookInstance(
                                 Long.valueOf(this.getNodeValue(current, "inventoryNumber")),
@@ -623,6 +622,7 @@ public class BookDaoXMLImpl implements BookDAO {
         NodeList borrowings = document.getElementsByTagName("borrowing");
         ArrayList<Borrowing> results = new ArrayList<>();
         String searchedReaderUsername = reader.getUsername();
+        this.getReaderByUsername(searchedReaderUsername);
 
         try {
             for (int i=0; i < borrowings.getLength(); i++) {
@@ -663,12 +663,15 @@ public class BookDaoXMLImpl implements BookDAO {
      */
     public Borrowing getBorrowingById(long id) throws NotExistingBorrowingException {
         NodeList borrowings = document.getElementsByTagName("borrowing");
+        Borrowing result = null;
+
         try {
+
             for (int i=0; i < borrowings.getLength(); i++) {
                 Element current = (Element) borrowings.item(i);
-                if (this.getNodeValue(current, "borrowID").equals(id)) {
+                if (this.getNodeValue(current, "borrowID").equalsIgnoreCase(String.valueOf(id))) {
                     DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                    return new Borrowing(
+                    result = new Borrowing(
                             Long.valueOf(this.getNodeValue(current, "borrowID")),
                             this.getReaderByUsername(this.getNodeValue(current, "readerUsername")),
                             format.parse(this.getNodeValue(current, "creationDate")),
@@ -684,7 +687,10 @@ public class BookDaoXMLImpl implements BookDAO {
             throw new NotExistingBorrowingException(e);
         }
 
-        throw new NotExistingBorrowingException();
+        if (result == null)
+            throw new NotExistingBorrowingException();
+
+        return result;
     }
 
     /**
