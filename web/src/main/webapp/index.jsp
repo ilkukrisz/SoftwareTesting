@@ -42,8 +42,7 @@
             <form action="booksbyavailability/">
                 <table>
                     <tr>
-                        <td width="33%">Availability</td>
-
+                        <td><a href="/reader/booksbyavailability" class="menuButton">List books by availability</a></td>
                     </tr>
                 </table>
             </form>
