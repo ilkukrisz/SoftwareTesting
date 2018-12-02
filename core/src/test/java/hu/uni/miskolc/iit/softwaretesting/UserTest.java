@@ -110,9 +110,10 @@ public class UserTest {
 
     @Test
     public void testGetPassword () {
-        assertEquals(this.username, this.user.getUsername());
+        assertEquals(this.user.getPassword(), this.password);
     }
 
+    @Test
     public void testSetPassword () {
         Password pswd = new Password("alma");
         this.user.setPassword(pswd);

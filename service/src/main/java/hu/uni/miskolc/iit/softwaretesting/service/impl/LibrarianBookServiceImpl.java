@@ -15,33 +15,15 @@ public class LibrarianBookServiceImpl extends BookServiceImpl implements Librari
 
 
     public void addBook(Book book) throws AlreadyExistingBookException, PersistenceException {
-        try {
-            bookDAO.createBook(book);
-        } catch (AlreadyExistingBookException e) {
-            throw new AlreadyExistingBookException(e);
-        } catch (PersistenceException e) {
-            throw new PersistenceException(e);
-        }
+        bookDAO.createBook(book);
     }
 
     public void updateBook(Book book) throws BookNotFoundException, PersistenceException {
-        try {
-            bookDAO.updateBook(book);
-        } catch (BookNotFoundException e) {
-            throw new BookNotFoundException(e);
-        } catch (PersistenceException e) {
-            throw new PersistenceException(e);
-        }
+        bookDAO.updateBook(book);
     }
 
     public void deleteBook(Book book) throws BookNotFoundException, PersistenceException {
-        try {
-            bookDAO.deleteBook(book);
-        } catch (BookNotFoundException e) {
-            throw new BookNotFoundException(e);
-        } catch (PersistenceException e) {
-            throw new PersistenceException(e);
-        }
+        bookDAO.deleteBook(book);
     }
 
     public int countBooks() {
@@ -51,27 +33,17 @@ public class LibrarianBookServiceImpl extends BookServiceImpl implements Librari
             bookCount = bookDAO.getAllBooks().size();
         } catch (BookNotFoundException e) {
             bookCount = 0;
-        } finally {
-            return bookCount;
         }
+
+        return bookCount;
     }
 
     public void addBookInstances(BookInstance bookInstance) throws AlreadyExistingBookInstanceException, PersistenceException {
-        try {
-            bookDAO.createBookInstance(bookInstance);
-        } catch (AlreadyExistingBookInstanceException e) {
-            throw new AlreadyExistingBookInstanceException(e);
-        } catch (PersistenceException e) {
-            throw new PersistenceException(e);
-        }
+        bookDAO.createBookInstance(bookInstance);
     }
 
     public void deleteBookInstances(BookInstance bookInstance) throws BookInstanceNotFoundException {
-        try {
-            bookDAO.deleteBookInstance(bookInstance);
-        } catch (BookInstanceNotFoundException e) {
-            throw new BookInstanceNotFoundException(e);
-        }
+        bookDAO.deleteBookInstance(bookInstance);
     }
 
     public void lendBook(Borrowing borrow) throws NotExistingBorrowingException, PersistenceException {
@@ -87,19 +59,11 @@ public class LibrarianBookServiceImpl extends BookServiceImpl implements Librari
     }
 
     public Collection<Borrowing> listBorrowings() throws NoBorrowingsFoundException {
-        try {
-            return bookDAO.getAllBorrowings();
-        } catch (NoBorrowingsFoundException e) {
-            throw new NoBorrowingsFoundException(e);
-        }
+        return bookDAO.getAllBorrowings();
     }
 
     public Collection<Borrowing> listRequests() throws NotExistingBorrowingException {
-        try {
-            return bookDAO.getBorrowingsByStatus(BorrowStatus.REQUESTED);
-        } catch (NotExistingBorrowingException e) {
-            throw new NotExistingBorrowingException(e);
-        }
+        return bookDAO.getBorrowingsByStatus(BorrowStatus.REQUESTED);
     }
 
     public Map<String, String> getLibrarianCredentials() {
