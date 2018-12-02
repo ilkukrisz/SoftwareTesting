@@ -99,6 +99,11 @@ public class ConverterMethodsTest {
     }
 
     @Test
+    public void testConstructor () {
+        new ConverterMethods();
+    }
+
+    @Test
     public void testConvertBookToBookType() {
         assertTrue(testBookType.getAuthor().equals(((ArrayList<BookType>)ConverterMethods.convertBookToBookType(testBookCollection)).get(0).getAuthor()));
         assertTrue(testBookType.getGenre().equals(((ArrayList<BookType>)ConverterMethods.convertBookToBookType(testBookCollection)).get(0).getGenre()));
