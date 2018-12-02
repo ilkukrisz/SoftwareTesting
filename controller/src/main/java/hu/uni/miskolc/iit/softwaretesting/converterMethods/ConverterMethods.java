@@ -150,19 +150,4 @@ public class ConverterMethods {
     public static Password convertPasswordTypeToPassword(PasswordType passwordType) {
         return new Password(passwordType.getHashedPassword());
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

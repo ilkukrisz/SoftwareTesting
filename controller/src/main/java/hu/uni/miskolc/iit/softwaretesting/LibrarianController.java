@@ -8,6 +8,7 @@ import hu.uni.miskolc.iit.softwaretesting.exceptions.*;
 import hu.uni.miskolc.iit.softwaretesting.service.LibrarianBookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -67,13 +68,8 @@ public class LibrarianController {
 
     @RequestMapping(value = "/listborrowings", method = RequestMethod.GET)
     @ResponseBody
-    public Collection<BorrowingType> listBorrowings() {
-        try {
-            return ConverterMethods.convertBorrowingToBorrowingType(librarianBookService.listBorrowings());
-        } catch (NoBorrowingsFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public Collection<BorrowingType> listBorrowings() throws NoBorrowingsFoundException {
+        return ConverterMethods.convertBorrowingToBorrowingType(librarianBookService.listBorrowings());
     }
 
     @RequestMapping(value = "/listrequests", method = RequestMethod.GET)

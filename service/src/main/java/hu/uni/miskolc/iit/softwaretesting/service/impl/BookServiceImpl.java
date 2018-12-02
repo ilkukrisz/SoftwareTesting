@@ -17,10 +17,6 @@ public class BookServiceImpl implements BookService {
 
 
     public Collection<Book> getAllBooks() throws BookNotFoundException {
-        try {
-            return bookDAO.getAllBooks();
-        } catch (BookNotFoundException e) {
-            throw new BookNotFoundException(e);
-        }
+        return bookDAO.getAllBooks();
     }
 }
