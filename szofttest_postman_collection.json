@@ -1,0 +1,595 @@
+{
+	"info": {
+		"_postman_id": "d6642248-d7e8-415c-8beb-bcb480ff529e",
+		"name": "szofttest",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "getAllBooks",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "bela",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "bela",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8082/reader/allbook",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"reader",
+						"allbook"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "listBorrowings",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "title",
+							"value": "testTitle",
+							"type": "text"
+						},
+						{
+							"key": "isbn",
+							"value": "423375",
+							"type": "text"
+						},
+						{
+							"key": "publishDate",
+							"value": "2015",
+							"type": "text"
+						},
+						{
+							"key": "genre",
+							"value": "Scifi",
+							"type": "text"
+						},
+						{
+							"key": "author",
+							"value": "testAuthor",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8082/librarian/listborrowings",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"librarian",
+						"listborrowings"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addBook",
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "bela",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "bela",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "title",
+							"value": "testTitle",
+							"type": "text"
+						},
+						{
+							"key": "isbn",
+							"value": "423375",
+							"type": "text"
+						},
+						{
+							"key": "publishDate",
+							"value": "2015",
+							"type": "text"
+						},
+						{
+							"key": "genre",
+							"value": "Scifi",
+							"type": "text"
+						},
+						{
+							"key": "author",
+							"value": "testAuthor",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8082/librarian/addbook",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"librarian",
+						"addbook"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateBooks",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "title",
+							"value": "updatedTestTitle",
+							"type": "text"
+						},
+						{
+							"key": "isbn",
+							"value": "423375",
+							"type": "text"
+						},
+						{
+							"key": "publishDate",
+							"value": "2010",
+							"type": "text"
+						},
+						{
+							"key": "genre",
+							"value": "Scifi",
+							"type": "text"
+						},
+						{
+							"key": "author",
+							"value": "updatedTestAuthor",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8082/librarian/updatebook",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"librarian",
+						"updatebook"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteBook",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "title",
+							"value": "updatedTestTitle",
+							"type": "text"
+						},
+						{
+							"key": "isbn",
+							"value": "423375",
+							"type": "text"
+						},
+						{
+							"key": "publishDate",
+							"value": "2010",
+							"type": "text"
+						},
+						{
+							"key": "genre",
+							"value": "Scifi",
+							"type": "text"
+						},
+						{
+							"key": "author",
+							"value": "updatedTestAuthor",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8082/librarian/deletebook",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"librarian",
+						"deletebook"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "countBooks",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8082/librarian/countbooks",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"librarian",
+						"countbooks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addBookInstance",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "inventoryNumber",
+							"value": "322412",
+							"type": "text"
+						},
+						{
+							"key": "book.title",
+							"value": "updatedTestTitle",
+							"type": "text"
+						},
+						{
+							"key": "book.isbn",
+							"value": "423375",
+							"type": "text"
+						},
+						{
+							"key": "book.publishDate",
+							"value": "2010",
+							"type": "text"
+						},
+						{
+							"key": "book.genre",
+							"value": "Scifi",
+							"type": "text"
+						},
+						{
+							"key": "book.author",
+							"value": "updatedTestAuthor",
+							"type": "text"
+						},
+						{
+							"key": "isLoaned",
+							"value": "false",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8082/librarian/addbi",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"librarian",
+						"addbi"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteBookInstance",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "inventoryNumber",
+							"value": "322412",
+							"type": "text"
+						},
+						{
+							"key": "book.title",
+							"value": "updatedTestTitle",
+							"type": "text"
+						},
+						{
+							"key": "book.isbn",
+							"value": "423375",
+							"type": "text"
+						},
+						{
+							"key": "book.publishDate",
+							"value": "2010",
+							"type": "text"
+						},
+						{
+							"key": "book.genre",
+							"value": "Scifi",
+							"type": "text"
+						},
+						{
+							"key": "book.author",
+							"value": "updatedTestAuthor",
+							"type": "text"
+						},
+						{
+							"key": "isLoaned",
+							"value": "false",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8082/librarian/deletebi",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"librarian",
+						"deletebi"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "listRequests",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8082/librarian/listrequests",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"librarian",
+						"listrequests"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "lendBook",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "borrowID",
+							"value": "2222345678",
+							"type": "text"
+						},
+						{
+							"key": "reader.username",
+							"value": "feri",
+							"type": "text"
+						},
+						{
+							"key": "reader.password.saltStrength",
+							"value": "0",
+							"type": "text"
+						},
+						{
+							"key": "reader.password.hashedPassword",
+							"value": "$2a$04$goT1YbL0FimNRXevVY9mEO1Uxa/sSs/9aABS0MbhALN4lcFmX2Yj6",
+							"type": "text"
+						},
+						{
+							"key": "reader.firstName",
+							"value": "Ferenc",
+							"type": "text"
+						},
+						{
+							"key": "reader.lastName",
+							"value": "Kovacs",
+							"type": "text"
+						},
+						{
+							"key": "reader.email",
+							"value": "kovfer@example.com",
+							"type": "text"
+						},
+						{
+							"key": "reader.mobileNumber",
+							"value": "0680123456",
+							"type": "text"
+						},
+						{
+							"key": "creationDate",
+							"value": "2018-11-06",
+							"type": "text"
+						},
+						{
+							"key": "expirationDate",
+							"value": "2018-11-10",
+							"type": "text"
+						},
+						{
+							"key": "borrowStatus",
+							"value": "REQUESTED",
+							"type": "text"
+						},
+						{
+							"key": "bookInstance.inventoryNumber",
+							"value": "123456791",
+							"type": "text"
+						},
+						{
+							"key": "bookInstance.book.author",
+							"value": "Nagy Kalman",
+							"type": "text"
+						},
+						{
+							"key": "bookInstance.book.title",
+							"value": "Analizis III.",
+							"type": "text"
+						},
+						{
+							"key": "bookInstance.book.isbn",
+							"value": "1234567",
+							"type": "text"
+						},
+						{
+							"key": "bookInstance.book.publishDate",
+							"value": "2013",
+							"type": "text"
+						},
+						{
+							"key": "bookInstance.book.genre",
+							"value": "Scifi",
+							"type": "text"
+						},
+						{
+							"key": "bookInstance.isLoaned",
+							"value": "false",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8082/librarian/lendbook",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"librarian",
+						"lendbook"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

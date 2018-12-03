@@ -1,9 +1,7 @@
 package hu.uni.miskolc.iit.softwaretesting;
 
 import hu.uni.miskolc.iit.softwaretesting.dao.BookDaoXMLImpl;
-import hu.uni.miskolc.iit.softwaretesting.service.LibrarianBookService;
 import hu.uni.miskolc.iit.softwaretesting.service.ReaderBookService;
-import hu.uni.miskolc.iit.softwaretesting.service.impl.LibrarianBookServiceImpl;
 import hu.uni.miskolc.iit.softwaretesting.service.impl.ReaderBookServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.xml.sax.SAXException;
@@ -13,7 +11,7 @@ import java.io.IOException;
 
 public class ReaderControllerTestContext {
     @Bean
-    ReaderBookService librarianBookService () {
+    ReaderBookService readerBookService() {
         return new ReaderBookServiceImpl();
     }
 
