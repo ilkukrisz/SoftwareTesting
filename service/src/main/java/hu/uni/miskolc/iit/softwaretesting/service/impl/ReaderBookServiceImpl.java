@@ -100,6 +100,9 @@ public class ReaderBookServiceImpl extends BookServiceImpl implements ReaderBook
     @Override
     public Collection<Borrowing> showBorrowings(Reader reader) throws NotExistingBorrowingException, NotExistingReaderException {
 
+        if (reader == null)
+            throw new NotExistingReaderException();
+
         if (bookDAO.getBorrowingsOfReader(reader) == null || bookDAO.getBorrowingsOfReader(reader).size() == 0)
             throw new NotExistingBorrowingException("There is no borrowings for this user!");
 

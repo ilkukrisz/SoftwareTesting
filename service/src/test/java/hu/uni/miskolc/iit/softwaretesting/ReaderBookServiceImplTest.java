@@ -11,13 +11,9 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
+import static org.hamcrest.Matchers.*;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
+import java.util.*;
 
 
 public class ReaderBookServiceImplTest {
@@ -28,24 +24,52 @@ public class ReaderBookServiceImplTest {
     @InjectMocks
     private ReaderBookServiceImpl service;
 
-    private Book book = new Book("Alma", "Barack", (long) 102410,
-            2008, Genre.valueOf("Crimi"));
-    private Reader reader = new Reader("ilkukrisz", new Password("alma"),
-            "Ilku", "Krisztian", "alma@alma.hu", "06705382835");
+    private Book testBook;
+    private Reader testReader;
+    private BookInstance testBookInstanceAvailable;
+    private Collection<Borrowing> testBorrowingCollection;
+    private Borrowing testBorrowing;
+    private Collection<Book> testBookCollection;
+    private Map<String, String> testUserCredentials;
 
-
-    public ReaderBookServiceImplTest() throws InvalidPublishDateException {
-    }
 
     @Before
-    public void setUp() {
+    public void setUp() throws InvalidPublishDateException {
+        this.testBookCollection = new ArrayList<>();
+        this.testBook = new Book("George R. R. Martin", "Game of Thrones", 102410 ,2008, Genre.Fiction);
+        this.testReader = new Reader("ilkukrisz", new Password(" "),"Ilku", "Krisztian",
+                "noemail@gmail.com", "06205316259");
+
+        testBookCollection.add(this.testBook);
+
+        this.testBookInstanceAvailable = new BookInstance(10000, this.testBook, false);
+
+        Calendar cal = Calendar.getInstance();
+        cal.set(2018, Calendar.FEBRUARY, 10);
+
+        Date creationDate = cal.getTime();
+        cal.set(2018, Calendar.FEBRUARY, 20);
+        Date expirationDate = cal.getTime();
+
+        testBorrowing = new Borrowing(123456, testReader, creationDate, expirationDate, BorrowStatus.REQUESTED,
+                this.testBookInstanceAvailable);
+
+        testBorrowingCollection = new ArrayList<>();
+
+        testBorrowingCollection.add(this.testBorrowing);
+
+        this.testUserCredentials = new HashMap<>();
+        this.testUserCredentials.put("ilkukrisz", " ");
+
         MockitoAnnotations.initMocks(this);
     }
+
 
     @Test(expected = EmptyFieldException.class)
     public void testGetBooksByAuthorForEmptyField() throws BookNotFoundException, EmptyFieldException {
         service.getBooksByAuthor("");
     }
+
 
     @Test(expected = NullPointerException.class)
     public void testGetBooksByAuthorWithNullValue() throws BookNotFoundException, EmptyFieldException {
@@ -54,108 +78,47 @@ public class ReaderBookServiceImplTest {
 
     @Test(expected = BookNotFoundException.class)
     public void testGetBooksByAuthorForBookNotFound() throws BookNotFoundException, EmptyFieldException {
-        when(daoMock.getBooksByAuthor("awehbrha")).thenThrow(BookNotFoundException.class);
-        service.getBooksByAuthor("awehbrha");
+        when(daoMock.getBooksByAuthor("ThereisnoBook")).thenThrow(BookNotFoundException.class);
+        service.getBooksByAuthor("ThereisnoBook");
     }
 
     @Test
-    public void testGetBooksByAuthorForGoodValues() throws BookNotFoundException, EmptyFieldException, InvalidPublishDateException {
-        when(daoMock.getBooksByAuthor("microsoft")).thenAnswer(new Answer<Collection<Book>>() {
-            @Override
-            public Collection<Book> answer(InvocationOnMock invocationOnMock) throws Throwable {
-                Collection books = new ArrayList();
-                Object[] arguments = invocationOnMock.getArguments();
+    public void testGetBooksByAuthorForGoodValues() throws BookNotFoundException, EmptyFieldException {
 
-                if (arguments != null && arguments.length > 0 && arguments[0] != null) {
-                    books.add(new Book(arguments[0].toString(), "asd", (long) 102410,
-                            2008, Genre.Science));
+        doReturn(this.testBookCollection).when(daoMock).getBooksByAuthor("George R. R. Martin");
+        assertThat(service.getBooksByAuthor("George R. R. Martin"), contains(testBook));
 
-                    return books;
-                }
-                return null;
-            }
-        });
-
-        Collection<Book> expected = new ArrayList<>();
-        expected.add(new Book("microsoft", "asd", (long)102410,
-                2008, Genre.Science));
-
-        assertTrue(expected.equals(service.getBooksByAuthor("microsoft")));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testGetBooksByCategoryWithEmptyFieldValue() throws EmptyFieldException, BookNotFoundException, NotExistingGenreException {
-        service.getBooksByCategory(Genre.valueOf("asd"));
+        service.getBooksByCategory(Genre.valueOf("wrongGenre"));
     }
 
     @Test
-    public void testGetBooksByCategoryWithCorrectValue() throws EmptyFieldException, BookNotFoundException, NotExistingGenreException, InvalidPublishDateException {
-        when(daoMock.getBooksByGenre(Genre.Crimi)).thenAnswer(new Answer<Collection<Book>>() {
-            @Override
-            public Collection<Book> answer(InvocationOnMock invocationOnMock) throws Throwable {
-                Collection books = new ArrayList();
-                Object[] arguments = invocationOnMock.getArguments();
-
-                if (arguments != null && arguments.length > 0 && arguments[0] != null) {
-                    books.add(new Book("asd", "asd", (long) 102410,
-                            2008, Genre.valueOf("Crimi")));
-
-                    books.add(new Book("wert", "awhrb", (long) 785432,
-                            2003, Genre.valueOf("Crimi")));
-
-                    return books;
-                }
-                return null;
-            }
-        });
-
-        Collection<Book> excepted = new ArrayList<>();
-        excepted.add(new Book("asd", "asd", (long) 102410,
-                2008, Genre.Crimi));
-        excepted.add(new Book("wert", "awhrb", (long) 785432,
-                2003, Genre.Crimi));
-
-        assertEquals(excepted, service.getBooksByCategory(Genre.Crimi));
+    public void testGetBooksByCategoryWithCorrectValue() throws EmptyFieldException, BookNotFoundException, NotExistingGenreException {
+        doReturn(this.testBookCollection).when(daoMock).getBooksByGenre(Genre.Fiction);
+        assertThat(service.getBooksByCategory(Genre.Fiction), contains(this.testBook));
     }
 
     @Test(expected = BookNotFoundException.class)
     public void testGetBooksByCategoryForBookNotFound() throws BookNotFoundException, EmptyFieldException, NotExistingGenreException {
-        when(service.getBooksByCategory(Genre.Natural)).thenThrow(BookNotFoundException.class);
-        service.getBooksByCategory(Genre.Natural);
+        doThrow(BookNotFoundException.class).when(daoMock).getBooksByGenre(Genre.Other);
+        service.getBooksByCategory(Genre.Other);
     }
 
 
     @Test
-    public void testGetBooksByAvailabilityWithLegalValues() throws BookNotFoundException, InvalidPublishDateException {
-        when(daoMock.getAvailableBooks()).thenAnswer(new Answer<Collection<Book>>() {
-            @Override
-            public Collection<Book> answer(InvocationOnMock invocationOnMock) throws Throwable {
-                Collection books = new ArrayList();
+    public void testGetBooksByAvailabilityWithLegalValues() throws BookNotFoundException {
 
-                books.add(new Book("Alma", "Korte", (long) 102410,
-                        2008, Genre.valueOf("Crimi")));
-
-                books.add(new Book("Alma", "Szilva", (long) 785432,
-                        2003, Genre.valueOf("Fiction")));
-
-                return books;
-            }
-        });
-
-        Collection<Book> excepted = new ArrayList<>();
-        excepted.add(new Book("Alma", "Korte", (long) 102410,
-                2008, Genre.valueOf("Crimi")));
-
-        excepted.add(new Book("Alma", "Szilva", (long) 785432,
-                2003, Genre.valueOf("Fiction")));
-
-        assertEquals(excepted, service.getBooksByAvailability());
+        doReturn(this.testBookCollection).when(daoMock).getAvailableBooks();
+        assertThat(service.getBooksByAvailability(), contains(this.testBook));
 
     }
 
     @Test(expected = BookNotFoundException.class)
     public void testGetBooksByAvailabilityForBookNotFoundException() throws BookNotFoundException {
-        when(daoMock.getAvailableBooks()).thenThrow(BookNotFoundException.class);
+        doThrow(BookNotFoundException.class).when(daoMock).getAvailableBooks();
         service.getBooksByAvailability();
     }
 
@@ -165,76 +128,35 @@ public class ReaderBookServiceImplTest {
     }
 
     @Test
-    public void testGetAvailableBooksByTitleWithLegalValues() throws BookNotFoundException, EmptyFieldException, InvalidPublishDateException {
-        when(daoMock.getAvailableBooks()).thenAnswer(new Answer<Collection<Book>>() {
-            @Override
-            public Collection<Book> answer(InvocationOnMock invocationOnMock) throws Throwable {
-                Collection books = new ArrayList();
-
-                books.add(new Book("Alma", "Barack", (long) 102410,
-                        2008, Genre.valueOf("Crimi")));
-
-                books.add(new Book("Alma", "Szilva", (long) 785432,
-                        2003, Genre.valueOf("Fiction")));
-
-                return books;
-            }
-        });
-
-        when(daoMock.getBooksByTitle("Barack")).thenAnswer(new Answer<Collection<Book>>() {
-            @Override
-            public Collection<Book> answer(InvocationOnMock invocationOnMock) throws Throwable {
-                Collection books = new ArrayList();
-
-                books.add(new Book("Alma", "Barack", (long) 102410,
-                        2008, Genre.valueOf("Crimi")));
-                return books;
-            }
-        });
-
-        Collection<Book> excepted = new ArrayList<>();
-        excepted.add(new Book("Alma", "Barack", (long) 102410,
-                2008, Genre.valueOf("Crimi")));
-
-        assertEquals(excepted, service.getAvailableBooksByTitle("Barack"));
+    public void testGetAvailableBooksByTitleWithLegalValues() throws BookNotFoundException, EmptyFieldException {
+        doReturn(this.testBookCollection).when(daoMock).getBooksByTitle("Game of Thrones");
+        doReturn(this.testBookCollection).when(daoMock).getAvailableBooks();
+        assertThat(service.getAvailableBooksByTitle("Game of Thrones"), contains(this.testBook));
     }
 
     @Test(expected = BookNotFoundException.class)
     public void testGetAvailableBooksByTitleForBookNotFoundExceptionBecauseTitle() throws BookNotFoundException, EmptyFieldException {
-        when(daoMock.getBooksByTitle("Barack")).thenThrow(BookNotFoundException.class);
-        service.getAvailableBooksByTitle("Barack");
+        doThrow(BookNotFoundException.class).when(daoMock).getBooksByTitle("Game of Thrones");
+        doThrow(BookNotFoundException.class).when(daoMock).getAvailableBooks();
+        service.getAvailableBooksByTitle("Game of Thrones");
     }
 
     @Test(expected = BookNotFoundException.class)
     public void testGetAvailableBooksByTitleForBookNotFoundExceptionBecauseAvailability() throws BookNotFoundException, EmptyFieldException {
-        when(daoMock.getAvailableBooks()).thenThrow(BookNotFoundException.class);
-        service.getAvailableBooksByTitle("Barack");
+        doThrow(BookNotFoundException.class).when(daoMock).getAvailableBooks();
+        service.getAvailableBooksByTitle("Game of Thrones");
     }
 
     @Test
     public void testGetBooksByYearWithLegalValues() throws BookNotFoundException, InvalidPublishDateException, EmptyFieldException {
-        when(daoMock.getBooksByYear(2000)).thenAnswer(new Answer<Collection<Book>>() {
-            @Override
-            public Collection<Book> answer(InvocationOnMock invocationOnMock) throws Throwable {
-                Collection books = new ArrayList();
-
-                books.add(new Book("Alma", "Barack", (long) 102410,
-                        2000, Genre.valueOf("Crimi")));
-                return books;
-            }
-        });
-
-        Collection<Book> excepted = new ArrayList<>();
-        excepted.add(new Book("Alma", "Barack", (long) 102410,
-                2000, Genre.valueOf("Crimi")));
-
-        assertEquals(excepted, service.getBooksByYear(2000));
+        doReturn(this.testBookCollection).when(daoMock).getBooksByYear(2008);
+        assertThat(service.getBooksByYear(2008), contains(this.testBook));
     }
 
     @Test(expected = BookNotFoundException.class)
     public void testGetBooksByYearBookNotFoundException() throws BookNotFoundException, InvalidPublishDateException, EmptyFieldException {
-        when(daoMock.getBooksByYear(2017)).thenThrow(new BookNotFoundException());
-        service.getBooksByYear(2017);
+        doThrow(BookNotFoundException.class).when(daoMock).getBooksByYear(2008);
+        service.getBooksByYear(2008);
     }
 
     @Test(expected = InvalidPublishDateException.class)
@@ -248,150 +170,77 @@ public class ReaderBookServiceImplTest {
     }
 
     @Test
-    public void testRequestBookWithLegalValues() throws InvalidPublishDateException, BookNotFoundException, BookInstanceNotFoundException, NoAvailableInstanceException, PersistenceException {
-        Book book = new Book("Alma", "Barack", (long) 102410,
-                2008, Genre.valueOf("Crimi"));
-        Reader reader = new Reader("ilkukrisz", new Password("alma"),
-                "Ilku", "Krisztian", "alma@alma.hu", "06705382835");
+    public void testRequestBookWithLegalValues() throws BookNotFoundException, BookInstanceNotFoundException, NoAvailableInstanceException, PersistenceException, NotExistingReaderException, NotExistingBorrowingException {
+        ArrayList<BookInstance> availableInstance = new ArrayList<>();
+        availableInstance.add(this.testBookInstanceAvailable);
+        long newID = 20181203;
 
-        when(daoMock.getAvailableInstancesOfBook(book)).thenAnswer(new Answer<Collection<BookInstance>>() {
-            @Override
-            public Collection<BookInstance> answer(InvocationOnMock invocationOnMock) throws Throwable {
-                Collection<BookInstance> bookInstances = new ArrayList<>();
-                bookInstances.add(new BookInstance(6778654, new Book("Alma", "Barack", (long) 102410,
-                        2008, Genre.valueOf("Crimi")), false));
-                bookInstances.add(new BookInstance(111111, new Book("Alma", "Barack", (long) 102410,
-                        2008, Genre.valueOf("Crimi")), false));
+        doReturn(availableInstance).when(daoMock).getAvailableInstancesOfBook(this.testBook);
+        doReturn(newID).when(daoMock).getNewID();
 
-                bookInstances.add(new BookInstance(222222, new Book("Alma", "Barack", (long) 102410,
-                        2008, Genre.valueOf("Crimi")), true));
-
-                return bookInstances;
-            }
-
-        });
-
-        service.requestBook(book, reader);
+        service.requestBook(this.testBook, this.testReader);
     }
 
     @Test(expected = InvalidArgumentException.class)
-    public void testRequestBookWithNullValueForBook() throws InvalidPublishDateException, BookNotFoundException, BookInstanceNotFoundException, NoAvailableInstanceException, PersistenceException {
-
-        when(daoMock.getAvailableInstancesOfBook(book)).thenAnswer(new Answer<Collection<BookInstance>>() {
-            @Override
-            public Collection<BookInstance> answer(InvocationOnMock invocationOnMock) throws Throwable {
-                Collection<BookInstance> bookInstances = new ArrayList<>();
-                bookInstances.add(new BookInstance(6778654, new Book("Alma", "Barack", (long) 102410,
-                        2008, Genre.valueOf("Crimi")), false));
-                return bookInstances;
-            }
-
-        });
-
-        service.requestBook(null, reader);
+    public void testRequestBookWithNullValueForBook() throws BookNotFoundException, NoAvailableInstanceException, PersistenceException {
+        service.requestBook(null, testReader);
     }
 
     @Test(expected = InvalidArgumentException.class)
-    public void testRequestBookWithNullValueForReader() throws InvalidPublishDateException, BookNotFoundException, BookInstanceNotFoundException, NoAvailableInstanceException, PersistenceException {
-
-        when(daoMock.getAvailableInstancesOfBook(book)).thenAnswer(new Answer<Collection<BookInstance>>() {
-            @Override
-            public Collection<BookInstance> answer(InvocationOnMock invocationOnMock) throws Throwable {
-                Collection<BookInstance> bookInstances = new ArrayList<>();
-                bookInstances.add(new BookInstance(6778654, new Book("Alma", "Barack", (long) 102410,
-                        2008, Genre.valueOf("Crimi")), false));
-                return bookInstances;
-            }
-
-        });
-
-        service.requestBook(book, null);
+    public void testRequestBookWithNullValueForReader() throws BookNotFoundException, NoAvailableInstanceException, PersistenceException {
+        service.requestBook(testBook, null);
     }
 
     @Test(expected = NoAvailableInstanceException.class)
-    public void testRequestBookForNoAvailableInstancesException() throws NoAvailableInstanceException, BookNotFoundException, PersistenceException {
-        service.requestBook(book, reader);
+    public void testRequestBookForNoAvailableInstancesException() throws NoAvailableInstanceException, BookNotFoundException, PersistenceException, BookInstanceNotFoundException {
+        doReturn(new ArrayList<>()).when(daoMock).getAvailableInstancesOfBook(testBook);
+        service.requestBook(testBook, testReader);
     }
 
     @Test(expected = BookNotFoundException.class)
     public void testRequestBookForBookNotFoundException() throws NoAvailableInstanceException, BookInstanceNotFoundException, BookNotFoundException, PersistenceException {
-        when(daoMock.getAvailableInstancesOfBook(book)).thenThrow(BookNotFoundException.class);
-        service.requestBook(book, reader);
+        doThrow(BookNotFoundException.class).when(daoMock).getAvailableInstancesOfBook(this.testBook);
+
+        service.requestBook(testBook, testReader);
     }
 
 
     @Test
     public void testShowBorrowingsWithLegalValues() throws NotExistingReaderException, NotExistingBorrowingException {
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, 10);
-        Date expirationDate = new Date(cal.getTime().getTime());
-        when(daoMock.getBorrowingsOfReader(reader)).thenAnswer(new Answer<Collection<Borrowing>>() {
-            @Override
-            public Collection<Borrowing> answer(InvocationOnMock invocationOnMock) throws Throwable {
-                Collection<Borrowing> result = new ArrayList<>();
-                Calendar cal = Calendar.getInstance();
-                cal.add(Calendar.DATE, 10);
-                Date expirationDate = new Date(cal.getTime().getTime());
-
-                result.add(new Borrowing(7123, reader, new Date(Calendar.getInstance().getTime().getTime()),
-                        expirationDate, BorrowStatus.BORROWED, new BookInstance(2346, book, true)));
-
-                result.add(new Borrowing(6785, reader, new Date(Calendar.getInstance().getTime().getTime()),
-                        expirationDate, BorrowStatus.BORROWED, new BookInstance(324, book, true)));
-
-                return result;
-            }
-        });
-
-        Collection<Borrowing> expected = new ArrayList<>();
-        expected.add(new Borrowing(7123, reader, new Date(Calendar.getInstance().getTime().getTime()),
-                expirationDate, BorrowStatus.BORROWED, new BookInstance(2346, book, true)));
-
-        expected.add(new Borrowing(6785, reader, new Date(Calendar.getInstance().getTime().getTime()),
-                expirationDate, BorrowStatus.BORROWED, new BookInstance(324, book, true)));
-
-        assertTrue(expected.equals(service.showBorrowings(reader)));
+        doReturn(this.testBorrowingCollection).when(daoMock).getBorrowingsOfReader(this.testReader);
+        assertThat(service.showBorrowings(this.testReader), contains(this.testBorrowing));
     }
+
+    @Test(expected = NotExistingReaderException.class)
+    public void testShowBorrowingsWithNullReader() throws NotExistingReaderException, NotExistingBorrowingException {
+        service.showBorrowings(null);
+    }
+
 
     @Test(expected = NotExistingBorrowingException.class)
-    public void testShowBorrowingsWithNullForEmptyBorrowing() throws NotExistingReaderException, NotExistingBorrowingException {
-        service.showBorrowings(reader);
+    public void testShowBorrowingsWithEmptyBorrowing() throws NotExistingReaderException, NotExistingBorrowingException {
+        doReturn(new ArrayList<Borrowing>()).when(daoMock).getBorrowingsOfReader(this.testReader);
+        service.showBorrowings(testReader);
     }
 
+
     @Test
-    public void testGetAllBooksWithLegalValues() throws BookNotFoundException, InvalidPublishDateException {
-        when(daoMock.getAllBooks()).thenAnswer(new Answer<Collection<Book>>() {
-            @Override
-            public Collection<Book> answer(InvocationOnMock invocationOnMock) throws Throwable {
-                Collection<Book> books = new ArrayList<>();
-                books.add(new Book("Alma", "Barack", (long) 102410,
-                        2008, Genre.valueOf("Crimi")));
-
-                books.add(new Book("Alma", "Szilva", (long) 785432,
-                        2003, Genre.valueOf("Fiction")));
-
-                return books;
-            }
-
-        });
-
-        Collection<Book> expected = new ArrayList<>();
-        expected.add(new Book("Alma", "Barack", (long) 102410,
-                2008, Genre.valueOf("Crimi")));
-
-        expected.add(new Book("Alma", "Szilva", (long) 785432,
-                2003, Genre.valueOf("Fiction")));
-
-        assertEquals(expected, service.getAllBooks());
+    public void testGetAllBooksWithLegalValues() throws BookNotFoundException {
+        doReturn(this.testBookCollection).when(daoMock).getAllBooks();
+        assertThat(service.getAllBooks(), not(empty()));
     }
 
 
     @Test(expected = BookNotFoundException.class)
     public void testGetAllBooksForBookNotFoundException() throws BookNotFoundException {
-        when(daoMock.getAllBooks()).thenThrow(BookNotFoundException.class);
+        doThrow(BookNotFoundException.class).when(daoMock).getAllBooks();
         service.getAllBooks();
     }
 
-
+    @Test
+    public void testGetReaderCredentials() {
+        doReturn(this.testUserCredentials).when(daoMock).getReaderCredentials();
+        assertEquals(service.getReaderCredentials().get("ilkukrisz"), " ");
+    }
 
 }
