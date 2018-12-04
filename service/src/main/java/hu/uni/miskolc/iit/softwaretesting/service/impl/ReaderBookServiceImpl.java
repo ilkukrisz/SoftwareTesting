@@ -42,6 +42,10 @@ public class ReaderBookServiceImpl extends BookServiceImpl implements ReaderBook
     @Override
     public Collection<Book> getAvailableBooksByTitle(String title) throws EmptyFieldException, BookNotFoundException {
 
+        if (title == null)
+            throw new BookNotFoundException();
+
+
         if (isEmptyField(title))
             throw new EmptyFieldException("The given value should not be empty!");
 

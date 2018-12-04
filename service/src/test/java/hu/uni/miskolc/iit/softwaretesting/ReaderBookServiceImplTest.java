@@ -127,6 +127,11 @@ public class ReaderBookServiceImplTest {
         service.getAvailableBooksByTitle("");
     }
 
+    @Test(expected = BookNotFoundException.class)
+    public void testGetAvailableBooksByTitleWithNullValue() throws BookNotFoundException, EmptyFieldException {
+        service.getAvailableBooksByTitle(null);
+    }
+
     @Test
     public void testGetAvailableBooksByTitleWithLegalValues() throws BookNotFoundException, EmptyFieldException {
         doReturn(this.testBookCollection).when(daoMock).getBooksByTitle("Game of Thrones");
