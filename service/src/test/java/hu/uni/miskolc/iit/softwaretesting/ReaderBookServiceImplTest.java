@@ -137,7 +137,7 @@ public class ReaderBookServiceImplTest {
     @Test(expected = BookNotFoundException.class)
     public void testGetAvailableBooksByTitleForBookNotFoundExceptionBecauseTitle() throws BookNotFoundException, EmptyFieldException {
         doThrow(BookNotFoundException.class).when(daoMock).getBooksByTitle("Game of Thrones");
-        doThrow(BookNotFoundException.class).when(daoMock).getAvailableBooks();
+        doReturn(this.testBookCollection).when(daoMock).getAvailableBooks();
         service.getAvailableBooksByTitle("Game of Thrones");
     }
 
