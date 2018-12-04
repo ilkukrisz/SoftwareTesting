@@ -71,7 +71,7 @@ public class ReaderBookServiceImplTest {
     }
 
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = BookNotFoundException.class)
     public void testGetBooksByAuthorWithNullValue() throws BookNotFoundException, EmptyFieldException {
         service.getBooksByAuthor(null);
     }

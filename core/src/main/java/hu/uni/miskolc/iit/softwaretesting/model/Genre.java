@@ -6,10 +6,10 @@ public enum Genre {
 
     public static boolean isContained(String value) {
 
-        for (Genre i : Genre.values())
+        for (Genre i : Genre.values()) {
             if (String.valueOf(i).equalsIgnoreCase(value))
                 return true;
-
+        }
         return false;
     }
 }

@@ -13,6 +13,9 @@ public class ReaderBookServiceImpl extends BookServiceImpl implements ReaderBook
     @Override
     public Collection<Book> getBooksByAuthor(String author) throws EmptyFieldException, BookNotFoundException {
 
+        if(author == null)
+            throw new BookNotFoundException();
+
         if (isEmptyField(author))
             throw new EmptyFieldException("The field should not be empty!");
 
