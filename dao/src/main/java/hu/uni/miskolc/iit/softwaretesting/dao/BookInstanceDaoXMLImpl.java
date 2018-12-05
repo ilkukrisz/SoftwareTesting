@@ -70,6 +70,29 @@ public class BookInstanceDaoXMLImpl implements BookInstanceDAO {
     }
 
     /**
+     * Deletes the book.
+     *
+     * @param book The book object. ISBN field have to contain the erasable book's unique ISBN number.
+     */
+    public void deleteBook(Book book) throws BookNotFoundException, PersistenceException {
+        NodeList books = document.getElementsByTagName("book");
+        String bookID = String.valueOf(book.getIsbn());
+
+        for (int i=0; i < books.getLength(); i++) {
+            Element current = (Element) books.item(i);
+            if (this.getNodeValue(current, "ISBN").equals(bookID)) {
+                current.getParentNode().removeChild(current);
+            }
+        }
+
+        try {
+            this.serializeDOM();
+        } catch (TransformerException|IOException e) {
+            throw new PersistenceException("Unable to save DOM", e);
+        }
+    }
+
+    /**
      * Creates a new book instance in database.
      *
      * @param bookInstance Data container of the new book instance.
