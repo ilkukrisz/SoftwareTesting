@@ -3,6 +3,8 @@ package hu.uni.miskolc.iit.softwaretesting;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 import hu.uni.miskolc.iit.softwaretesting.dao.BookDAO;
+import hu.uni.miskolc.iit.softwaretesting.dao.BookInstanceDAO;
+import hu.uni.miskolc.iit.softwaretesting.dao.BorrowingDAO;
 import hu.uni.miskolc.iit.softwaretesting.exceptions.*;
 import hu.uni.miskolc.iit.softwaretesting.model.*;
 import hu.uni.miskolc.iit.softwaretesting.service.impl.ReaderBookServiceImpl;
@@ -24,6 +26,8 @@ public class ReaderBookServiceImplTest {
 
     @Mock
     private BookDAO daoMock;
+    private BookInstanceDAO IdaoMock;
+    private BorrowingDAO BdaoMock;
 
     @InjectMocks
     private ReaderBookServiceImpl service;
@@ -254,7 +258,7 @@ public class ReaderBookServiceImplTest {
         Reader reader = new Reader("ilkukrisz", new Password("alma"),
                 "Ilku", "Krisztian", "alma@alma.hu", "06705382835");
 
-        when(daoMock.getAvailableInstancesOfBook(book)).thenAnswer(new Answer<Collection<BookInstance>>() {
+        when(IdaoMock.getAvailableInstancesOfBook(book)).thenAnswer(new Answer<Collection<BookInstance>>() {
             @Override
             public Collection<BookInstance> answer(InvocationOnMock invocationOnMock) throws Throwable {
                 Collection<BookInstance> bookInstances = new ArrayList<>();
@@ -277,7 +281,7 @@ public class ReaderBookServiceImplTest {
     @Test(expected = InvalidArgumentException.class)
     public void testRequestBookWithNullValueForBook() throws InvalidPublishDateException, BookNotFoundException, BookInstanceNotFoundException, NoAvailableInstanceException, PersistenceException {
 
-        when(daoMock.getAvailableInstancesOfBook(book)).thenAnswer(new Answer<Collection<BookInstance>>() {
+        when(IdaoMock.getAvailableInstancesOfBook(book)).thenAnswer(new Answer<Collection<BookInstance>>() {
             @Override
             public Collection<BookInstance> answer(InvocationOnMock invocationOnMock) throws Throwable {
                 Collection<BookInstance> bookInstances = new ArrayList<>();
@@ -294,7 +298,7 @@ public class ReaderBookServiceImplTest {
     @Test(expected = InvalidArgumentException.class)
     public void testRequestBookWithNullValueForReader() throws InvalidPublishDateException, BookNotFoundException, BookInstanceNotFoundException, NoAvailableInstanceException, PersistenceException {
 
-        when(daoMock.getAvailableInstancesOfBook(book)).thenAnswer(new Answer<Collection<BookInstance>>() {
+        when(IdaoMock.getAvailableInstancesOfBook(book)).thenAnswer(new Answer<Collection<BookInstance>>() {
             @Override
             public Collection<BookInstance> answer(InvocationOnMock invocationOnMock) throws Throwable {
                 Collection<BookInstance> bookInstances = new ArrayList<>();
@@ -315,7 +319,7 @@ public class ReaderBookServiceImplTest {
 
     @Test(expected = BookNotFoundException.class)
     public void testRequestBookForBookNotFoundException() throws NoAvailableInstanceException, BookInstanceNotFoundException, BookNotFoundException, PersistenceException {
-        when(daoMock.getAvailableInstancesOfBook(book)).thenThrow(BookNotFoundException.class);
+        when(IdaoMock.getAvailableInstancesOfBook(book)).thenThrow(BookNotFoundException.class);
         service.requestBook(book, reader);
     }
 
@@ -325,7 +329,7 @@ public class ReaderBookServiceImplTest {
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, 10);
         Date expirationDate = new Date(cal.getTime().getTime());
-        when(daoMock.getBorrowingsOfReader(reader)).thenAnswer(new Answer<Collection<Borrowing>>() {
+        when(BdaoMock.getBorrowingsOfReader(reader)).thenAnswer(new Answer<Collection<Borrowing>>() {
             @Override
             public Collection<Borrowing> answer(InvocationOnMock invocationOnMock) throws Throwable {
                 Collection<Borrowing> result = new ArrayList<>();
