@@ -199,7 +199,6 @@ public class BookDAOTest {
         assertEquals(book1.getGenre(), testBook.getGenre());
     }
 
-
     @Test
     public void testDeleteBook() throws BookNotFoundException, PersistenceException {
         dao.deleteBook(book1);
@@ -207,103 +206,6 @@ public class BookDAOTest {
 
         assertThat(books, not(contains(book1)));
     }
-
-
-
-
-    @Test
-    public void testCreateBorrowing() throws AlreadyExistingBorrowingException, PersistenceException, NotExistingBorrowingException {
-        Borrowing expected = this.testBorrowing;
-        dao.createBorrowing(this.testBorrowing);
-
-        Borrowing actual = dao.getBorrowingById(this.testBorrowing.getBorrowID());
-
-        assertEquals(expected, actual);
-    }
-
-    @Test(expected = AlreadyExistingBorrowingException.class)
-    public void testCreateBorrowingWithAlreadyExistingBorrowing() throws AlreadyExistingBorrowingException, PersistenceException {
-        dao.createBorrowing(testBorrowing);
-        dao.createBorrowing(testBorrowing);
-    }
-
-
-    @Test
-    public void testGetAllBorrowings() throws NoBorrowingsFoundException {
-        assertThat(dao.getAllBorrowings(), not(empty()));
-    }
-
-    @Test(expected = NoBorrowingsFoundException.class)
-    public void testGetAllBorrowingsWithNotExistingBookinstance() throws NoBorrowingsFoundException, BookInstanceNotFoundException {
-        dao.deleteBookInstance(dbInstance1);
-        dao.deleteBookInstance(dbInstance2);
-        dao.deleteBookInstance(dbInstance3);
-        dao.getAllBorrowings();
-    }
-
-    @Test(expected = NoBorrowingsFoundException.class)
-    public void testGetAllBorrowingsWithNotExistingBook() throws NoBorrowingsFoundException, BookNotFoundException, PersistenceException {
-        dao.deleteBook(book1);
-        dao.deleteBook(book2);
-        dao.getAllBorrowings();
-    }
-
-    @Test
-    public void testGetBorrowingsByStatus() throws NotExistingBorrowingException {
-        Borrowing expected = this.dbBorrowing3;
-        Collection<Borrowing> actual = dao.getBorrowingsByStatus(BorrowStatus.REQUESTED);
-
-        assertThat(actual, contains(expected));
-    }
-
-
-    @Test
-    public void testBorrowingsOfReader() throws NotExistingReaderException, NotExistingBorrowingException {
-        Collection<Borrowing> expected = new ArrayList<>();
-        expected.add(this.dbBorrowing1);
-        expected.add(this.dbBorrowing2);
-        expected.add(this.dbBorrowing3);
-        assertEquals(dao.getBorrowingsOfReader(dbReader), expected);
-    }
-
-    @Test(expected = NotExistingReaderException.class)
-    public void testBorrowingsOfReaderWithNotExistingReader() throws NotExistingReaderException, NotExistingBorrowingException {
-        dao.getBorrowingsOfReader(testReader);
-    }
-
-    @Test
-    public void testGetBorrowingByID() throws NotExistingBorrowingException {
-        Borrowing expected = this.dbBorrowing2;
-        Borrowing actual = dao.getBorrowingById(dbBorrowing2.getBorrowID());
-        assertEquals(actual, expected);
-    }
-
-    @Test(expected = NotExistingBorrowingException.class)
-    public void testGetBorrowingByIDWithInvalidID() throws NotExistingBorrowingException {
-        dao.getBorrowingById(53453453);
-    }
-
-    @Test
-    public void testUpdateBorrowing() throws NotExistingBorrowingException, PersistenceException {
-        this.dbBorrowing1.setStatus(testBorrowing.getStatus());
-        this.dbBorrowing1.setReader(testBorrowing.getReader());
-
-        Borrowing expected = this.testBorrowing;
-
-        dao.updateBorrowing(this.dbBorrowing1);
-        Borrowing actual = dao.getBorrowingById(dbBorrowing1.getBorrowID());
-
-        assertEquals(actual.getReader(), expected.getReader());
-        assertEquals(actual.getStatus(), expected.getStatus());
-
-    }
-
-    @Test
-    public void testDeleteBorrowing() throws NotExistingBorrowingException, NoBorrowingsFoundException {
-        dao.deleteBorrowing(dbBorrowing2);
-        assertThat(dao.getAllBorrowings(), not(contains(dbBorrowing2)));
-    }
-
 
     @Test
     public void testGetBookByGenre() throws BookNotFoundException {
@@ -325,11 +227,6 @@ public class BookDAOTest {
     public void testGetBooksByYearWithWrongYear() throws BookNotFoundException {
         dao.getBooksByYear(2030);
     }
-
-
-
-
-
     private void copyFile(String from, String to, Boolean overwrite) {
 
         try {
