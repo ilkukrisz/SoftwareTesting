@@ -1,6 +1,8 @@
 package hu.uni.miskolc.iit.softwaretesting;
 
 import hu.uni.miskolc.iit.softwaretesting.dao.BookDAO;
+import hu.uni.miskolc.iit.softwaretesting.dao.BookInstanceDAO;
+import hu.uni.miskolc.iit.softwaretesting.dao.BorrowingDAO;
 import hu.uni.miskolc.iit.softwaretesting.exceptions.*;
 import hu.uni.miskolc.iit.softwaretesting.model.*;
 import hu.uni.miskolc.iit.softwaretesting.service.impl.LibrarianBookServiceImpl;
@@ -21,6 +23,8 @@ import static org.mockito.Mockito.doThrow;
 public class LibrarianBookServiceImplTest  {
     @Mock
     private BookDAO daoMock;
+    private BookInstanceDAO IdaoMock;
+    private BorrowingDAO BdaoMock;
 
     @InjectMocks
     private LibrarianBookServiceImpl service;
@@ -101,7 +105,7 @@ public class LibrarianBookServiceImplTest  {
 
     @Test
     public void testAddBookInstance () throws PersistenceException, AlreadyExistingBookInstanceException {
-        doNothing().when(daoMock).createBookInstance(testBookInstance);
+        doNothing().when(IdaoMock).createBookInstance(testBookInstance);
         service.addBookInstances(testBookInstance);
     }
 
@@ -110,20 +114,20 @@ public class LibrarianBookServiceImplTest  {
         Book book = new Book ( "Elon Musk", "The first human on Mars", (long)111222, 2017, Genre.Scifi);
         BookInstance bookInstance = new BookInstance(262626, book, false);
 
-        doThrow(AlreadyExistingBookInstanceException.class).when(daoMock).createBookInstance(bookInstance);
+        doThrow(AlreadyExistingBookInstanceException.class).when(IdaoMock).createBookInstance(bookInstance);
 
         service.addBookInstances(bookInstance);
     }
 
     @Test
     public void testDeleteBookInstance () throws BookInstanceNotFoundException {
-        doNothing().when(daoMock).deleteBookInstance(testBookInstance);
+        doNothing().when(IdaoMock).deleteBookInstance(testBookInstance);
         service.deleteBookInstances(testBookInstance);
     }
 
     @Test(expected = BookInstanceNotFoundException.class)
     public void testDeleteBookInstanceWithNullInventoryNumber () throws BookInstanceNotFoundException {
-        doThrow(BookInstanceNotFoundException.class).when(daoMock).deleteBookInstance(null);
+        doThrow(BookInstanceNotFoundException.class).when(IdaoMock).deleteBookInstance(null);
         service.deleteBookInstances(null);
     }
 
@@ -137,7 +141,7 @@ public class LibrarianBookServiceImplTest  {
     @Test(expected = NotExistingBorrowingException.class)
     public void testLendBookWithNotExistingRequest () throws NotExistingBorrowingException, PersistenceException {
         Borrowing borrowing = getExampleBorrowing(BorrowStatus.REQUESTED);
-        doThrow(NotExistingBorrowingException.class).when(daoMock).updateBorrowing(borrowing);
+        doThrow(NotExistingBorrowingException.class).when(BdaoMock).updateBorrowing(borrowing);
         service.lendBook(borrowing);
     }
 
@@ -147,7 +151,7 @@ public class LibrarianBookServiceImplTest  {
 
     @Test(expected = NoBorrowingsFoundException.class)
     public void testListBorrowingsWhenNoBorrowingExist () throws NoBorrowingsFoundException {
-        doThrow(NoBorrowingsFoundException.class).when(daoMock).getAllBorrowings();
+        doThrow(NoBorrowingsFoundException.class).when(BdaoMock).getAllBorrowings();
         service.listBorrowings();
     }
 
@@ -158,7 +162,7 @@ public class LibrarianBookServiceImplTest  {
         borrowings.add(getExampleBorrowing(BorrowStatus.BORROWED));
         borrowings.add(getExampleBorrowing(BorrowStatus.RETURNED));
 
-        doReturn(borrowings).when(daoMock).getAllBorrowings();
+        doReturn(borrowings).when(BdaoMock).getAllBorrowings();
 
         assertEquals(borrowings, service.listBorrowings());
     }
@@ -170,7 +174,7 @@ public class LibrarianBookServiceImplTest  {
         borrowings.add(getExampleBorrowing(BorrowStatus.REQUESTED));
         borrowings.add(getExampleBorrowing(BorrowStatus.REQUESTED));
 
-        doReturn(borrowings).when(daoMock).getBorrowingsByStatus(BorrowStatus.REQUESTED);
+        doReturn(borrowings).when(BdaoMock).getBorrowingsByStatus(BorrowStatus.REQUESTED);
 
         for (Borrowing borrowing : service.listRequests()) {
             if (borrowing.getStatus() != BorrowStatus.REQUESTED) {
