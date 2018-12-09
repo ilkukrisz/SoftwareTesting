@@ -39,11 +39,11 @@ public class LibrarianBookServiceImpl extends BookServiceImpl implements Librari
     }
 
     public void addBookInstances(BookInstance bookInstance) throws AlreadyExistingBookInstanceException, PersistenceException {
-        bookDAO.createBookInstance(bookInstance);
+        bookInstanceDAO.createBookInstance(bookInstance);
     }
 
     public void deleteBookInstances(BookInstance bookInstance) throws BookInstanceNotFoundException {
-        bookDAO.deleteBookInstance(bookInstance);
+        bookInstanceDAO.deleteBookInstance(bookInstance);
     }
 
     public void lendBook(Borrowing borrow) throws NotExistingBorrowingException, PersistenceException {
@@ -51,7 +51,7 @@ public class LibrarianBookServiceImpl extends BookServiceImpl implements Librari
 
         try {
             borrow.setStatus(BorrowStatus.BORROWED);
-            bookDAO.updateBorrowing(borrow);
+            borrowingDAO.updateBorrowing(borrow);
         } catch (NotExistingBorrowingException e) {
             borrow.setStatus(originalStatus);
             throw new NotExistingBorrowingException(e);
@@ -59,11 +59,11 @@ public class LibrarianBookServiceImpl extends BookServiceImpl implements Librari
     }
 
     public Collection<Borrowing> listBorrowings() throws NoBorrowingsFoundException {
-        return bookDAO.getAllBorrowings();
+        return borrowingDAO.getAllBorrowings();
     }
 
     public Collection<Borrowing> listRequests() throws NotExistingBorrowingException {
-        return bookDAO.getBorrowingsByStatus(BorrowStatus.REQUESTED);
+        return borrowingDAO.getBorrowingsByStatus(BorrowStatus.REQUESTED);
     }
 
     public Map<String, String> getLibrarianCredentials() {

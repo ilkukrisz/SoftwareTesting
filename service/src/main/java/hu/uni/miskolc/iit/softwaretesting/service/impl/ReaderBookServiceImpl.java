@@ -77,14 +77,14 @@ public class ReaderBookServiceImpl extends BookServiceImpl implements ReaderBook
             throw new InvalidArgumentException("The given value is null!");
 
         try {
-            Collection<BookInstance> bookInstances = bookDAO.getAvailableInstancesOfBook(book);
+            Collection<BookInstance> bookInstances = bookInstanceDAO.getAvailableInstancesOfBook(book);
             if (!bookInstances.isEmpty()) {
                 Calendar creationDate = Calendar.getInstance();
                 Calendar expirationDate = Calendar.getInstance();
                 expirationDate.setTime(creationDate.getTime());
                 expirationDate.add(Calendar.DATE, 30);
                 Borrowing borrowing = new Borrowing(bookDAO.getNewID(), reader, creationDate.getTime(), expirationDate.getTime(), BorrowStatus.REQUESTED, ((List<BookInstance>) bookInstances).get(0));
-                bookDAO.createBorrowing(borrowing);
+                borrowingDAO.createBorrowing(borrowing);
             }
             else
                 throw new NoAvailableInstanceException();
@@ -100,10 +100,10 @@ public class ReaderBookServiceImpl extends BookServiceImpl implements ReaderBook
     @Override
     public Collection<Borrowing> showBorrowings(Reader reader) throws NotExistingBorrowingException, NotExistingReaderException {
 
-        if (bookDAO.getBorrowingsOfReader(reader) == null || bookDAO.getBorrowingsOfReader(reader).size() == 0)
+        if (borrowingDAO.getBorrowingsOfReader(reader) == null || borrowingDAO.getBorrowingsOfReader(reader).size() == 0)
             throw new NotExistingBorrowingException("There is no borrowings for this user!");
 
-        return bookDAO.getBorrowingsOfReader(reader);
+        return borrowingDAO.getBorrowingsOfReader(reader);
     }
 
     @Override
