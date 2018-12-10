@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
@@ -34,21 +35,11 @@ import java.util.Collection;
 @Repository
 public class BorrowingDaoXMLImpl implements BorrowingDAO {
 
-    /*----------------------------------------------------------------------------------------------------------*/
+    @Autowired
+    private BookDaoXMLImpl bookDaoXML;
 
-    //Creating a private static instance of our class to make it a Singleton class
-    private static BorrowingDaoXMLImpl instance = new BorrowingDaoXMLImpl();
-
-    //Making the constructor private to make it used only by this claas to make it a Singleton class
-    private BorrowingDaoXMLImpl() {
-    }
-
-    //A getter of the one and only instance of this class (Singleton class)
-    public static BorrowingDaoXMLImpl getInstance() {
-        return instance;
-    }
-
-    /*----------------------------------------------------------------------------------------------------------*/
+    @Autowired
+    private BookInstanceDaoXMLImpl bookInstanceDaoXML;
 
     /**
      * The document to manipulate.
@@ -133,13 +124,13 @@ public class BorrowingDaoXMLImpl implements BorrowingDAO {
 
                 results.add(
                         new Borrowing(
-                                Long.valueOf(BookDaoXMLImpl.getInstance().getNodeValue(current, "borrowID")),
-                                BookDaoXMLImpl.getInstance().getReaderByUsername(BookDaoXMLImpl.getInstance().getNodeValue(current, "readerUsername")),
-                                format.parse(BookDaoXMLImpl.getInstance().getNodeValue(current, "creationDate")),
-                                format.parse(BookDaoXMLImpl.getInstance().getNodeValue(current, "expirationDate")),
-                                BorrowStatus.valueOf(BookDaoXMLImpl.getInstance().getNodeValue(current, "status")),
-                                BookInstanceDaoXMLImpl.getInstance().getBookInstanceByInventoryNumber(
-                                        Long.valueOf(BookDaoXMLImpl.getInstance().getNodeValue(current, "bookInstanceInventoryNumber"))
+                                Long.valueOf(getNodeValue(current, "borrowID")),
+                                bookDaoXML.getReaderByUsername(getNodeValue(current, "readerUsername")),
+                                format.parse(getNodeValue(current, "creationDate")),
+                                format.parse(getNodeValue(current, "expirationDate")),
+                                BorrowStatus.valueOf(getNodeValue(current, "status")),
+                                bookInstanceDaoXML.getBookInstanceByInventoryNumber(
+                                        Long.valueOf(getNodeValue(current, "bookInstanceInventoryNumber"))
                                 )
                         )
                 );
@@ -164,18 +155,18 @@ public class BorrowingDaoXMLImpl implements BorrowingDAO {
         try {
             for (int i=0; i < borrowings.getLength(); i++) {
                 Element current = (Element) borrowings.item(i);
-                if (BookDaoXMLImpl.getInstance().getNodeValue(current, "status").equals(searchedStatus)) {
+                if (getNodeValue(current, "status").equals(searchedStatus)) {
                     DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
                     results.add(
                             new Borrowing(
-                                    Long.valueOf(BookDaoXMLImpl.getInstance().getNodeValue(current, "borrowID")),
-                                    BookDaoXMLImpl.getInstance().getReaderByUsername(BookDaoXMLImpl.getInstance().getNodeValue(current, "readerUsername")),
-                                    format.parse(BookDaoXMLImpl.getInstance().getNodeValue(current, "creationDate")),
-                                    format.parse(BookDaoXMLImpl.getInstance().getNodeValue(current, "expirationDate")),
-                                    BorrowStatus.valueOf(BookDaoXMLImpl.getInstance().getNodeValue(current, "status")),
-                                    BookInstanceDaoXMLImpl.getInstance().getBookInstanceByInventoryNumber(
-                                            Long.valueOf(BookDaoXMLImpl.getInstance().getNodeValue(current, "bookInstanceInventoryNumber"))
+                                    Long.valueOf(getNodeValue(current, "borrowID")),
+                                    bookDaoXML.getReaderByUsername(getNodeValue(current, "readerUsername")),
+                                    format.parse(getNodeValue(current, "creationDate")),
+                                    format.parse(getNodeValue(current, "expirationDate")),
+                                    BorrowStatus.valueOf(getNodeValue(current, "status")),
+                                    bookInstanceDaoXML.getBookInstanceByInventoryNumber(
+                                            Long.valueOf(getNodeValue(current, "bookInstanceInventoryNumber"))
                                     )
                             )
                     );
@@ -197,23 +188,23 @@ public class BorrowingDaoXMLImpl implements BorrowingDAO {
         NodeList borrowings = document.getElementsByTagName("borrowing");
         ArrayList<Borrowing> results = new ArrayList<>();
         String searchedReaderUsername = reader.getUsername();
-        BookDaoXMLImpl.getInstance().getReaderByUsername(searchedReaderUsername);
+        bookDaoXML.getReaderByUsername(searchedReaderUsername);
 
         try {
             for (int i=0; i < borrowings.getLength(); i++) {
                 Element current = (Element) borrowings.item(i);
-                if (BookDaoXMLImpl.getInstance().getNodeValue(current, "readerUsername").equals(searchedReaderUsername)) {
+                if (getNodeValue(current, "readerUsername").equals(searchedReaderUsername)) {
                     DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
                     results.add(
                             new Borrowing(
-                                    Long.valueOf(BookDaoXMLImpl.getInstance().getNodeValue(current, "borrowID")),
-                                    BookDaoXMLImpl.getInstance().getReaderByUsername(BookDaoXMLImpl.getInstance().getNodeValue(current, "readerUsername")),
-                                    format.parse(BookDaoXMLImpl.getInstance().getNodeValue(current, "creationDate")),
-                                    format.parse(BookDaoXMLImpl.getInstance().getNodeValue(current, "expirationDate")),
-                                    BorrowStatus.valueOf(BookDaoXMLImpl.getInstance().getNodeValue(current, "status")),
-                                    BookInstanceDaoXMLImpl.getInstance().getBookInstanceByInventoryNumber(
-                                            Long.valueOf(BookDaoXMLImpl.getInstance().getNodeValue(current, "bookInstanceInventoryNumber"))
+                                    Long.valueOf(getNodeValue(current, "borrowID")),
+                                    bookDaoXML.getReaderByUsername(getNodeValue(current, "readerUsername")),
+                                    format.parse(getNodeValue(current, "creationDate")),
+                                    format.parse(getNodeValue(current, "expirationDate")),
+                                    BorrowStatus.valueOf(getNodeValue(current, "status")),
+                                    bookInstanceDaoXML.getBookInstanceByInventoryNumber(
+                                            Long.valueOf(getNodeValue(current, "bookInstanceInventoryNumber"))
                                     )
                             )
                     );
@@ -244,16 +235,16 @@ public class BorrowingDaoXMLImpl implements BorrowingDAO {
 
             for (int i=0; i < borrowings.getLength(); i++) {
                 Element current = (Element) borrowings.item(i);
-                if (BookDaoXMLImpl.getInstance().getNodeValue(current, "borrowID").equalsIgnoreCase(String.valueOf(id))) {
+                if (getNodeValue(current, "borrowID").equalsIgnoreCase(String.valueOf(id))) {
                     DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                     result = new Borrowing(
-                            Long.valueOf(BookDaoXMLImpl.getInstance().getNodeValue(current, "borrowID")),
-                            BookDaoXMLImpl.getInstance().getReaderByUsername(BookDaoXMLImpl.getInstance().getNodeValue(current, "readerUsername")),
-                            format.parse(BookDaoXMLImpl.getInstance().getNodeValue(current, "creationDate")),
-                            format.parse(BookDaoXMLImpl.getInstance().getNodeValue(current, "expirationDate")),
-                            BorrowStatus.valueOf(BookDaoXMLImpl.getInstance().getNodeValue(current, "status")),
-                            BookInstanceDaoXMLImpl.getInstance().getBookInstanceByInventoryNumber(
-                                    Long.valueOf(BookDaoXMLImpl.getInstance().getNodeValue(current, "bookInstanceInventoryNumber"))
+                            Long.valueOf(getNodeValue(current, "borrowID")),
+                            bookDaoXML.getReaderByUsername(getNodeValue(current, "readerUsername")),
+                            format.parse(getNodeValue(current, "creationDate")),
+                            format.parse(getNodeValue(current, "expirationDate")),
+                            BorrowStatus.valueOf(getNodeValue(current, "status")),
+                            bookInstanceDaoXML.getBookInstanceByInventoryNumber(
+                                    Long.valueOf(getNodeValue(current, "bookInstanceInventoryNumber"))
                             )
                     );
                 }
@@ -279,13 +270,13 @@ public class BorrowingDaoXMLImpl implements BorrowingDAO {
 
         for (int i=0; i < borrowings.getLength(); i++) {
             Element current = (Element) borrowings.item(i);
-            if (BookDaoXMLImpl.getInstance().getNodeValue(current, "borrowID").equals(String.valueOf(borrowing.getBorrowID()))) {
+            if (getNodeValue(current, "borrowID").equals(String.valueOf(borrowing.getBorrowID()))) {
                 DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
-                BookDaoXMLImpl.getInstance().getNode(current, "readerUsername").setTextContent(borrowing.getReader().getUsername());
-                BookDaoXMLImpl.getInstance().getNode(current, "creationDate").setTextContent(format.format(borrowing.getCreationDate()));
-                BookDaoXMLImpl.getInstance().getNode(current, "expirationDate").setTextContent(format.format(borrowing.getExpirationDate()));
-                BookDaoXMLImpl.getInstance().getNode(current, "status").setTextContent(borrowing.getStatus().toString());
+                getNode(current, "readerUsername").setTextContent(borrowing.getReader().getUsername());
+                getNode(current, "creationDate").setTextContent(format.format(borrowing.getCreationDate()));
+                getNode(current, "expirationDate").setTextContent(format.format(borrowing.getExpirationDate()));
+                getNode(current, "status").setTextContent(borrowing.getStatus().toString());
             }
         }
 
@@ -308,7 +299,7 @@ public class BorrowingDaoXMLImpl implements BorrowingDAO {
 
         for (int i=0; i < borrowings.getLength(); i++) {
             Element current = (Element) borrowings.item(i);
-            if (BookDaoXMLImpl.getInstance().getNodeValue(current, "borrowID").equals(borrowID)) {
+            if (getNodeValue(current, "borrowID").equals(borrowID)) {
                 current.getParentNode().removeChild(current);
                 return;
             }
@@ -343,4 +334,27 @@ public class BorrowingDaoXMLImpl implements BorrowingDAO {
         Transformer transformer = transformerFactory.newTransformer();
         transformer.transform(source, result);
     }
+    /**
+     * Returns subnode with the given name of the given node.
+     * @param node Root node.
+     * @param nodeName The searched node's name.
+     */
+    public Node getNode (Node node, String nodeName) {
+        NodeList nodes = node.getChildNodes();
+        for (int i=0; i < nodes.getLength(); i++) {
+            Node current = nodes.item(i);
+            if (current.getNodeName().equals(nodeName)) {
+                return current;
+            }
+        }
+
+        return null;
+    }
+    /**
+     * Returns subnode value with the given name of the given node.
+     * @param node Root node
+     * @param nodeName The searched node's name
+     */
+    public String getNodeValue (Node node, String nodeName) {
+        return getNode(node, nodeName).getTextContent();}
 }

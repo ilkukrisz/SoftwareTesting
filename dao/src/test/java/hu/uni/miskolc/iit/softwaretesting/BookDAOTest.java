@@ -27,29 +27,10 @@ public class BookDAOTest {
 
     private Book testBook;
 
-    private BookInstance testBookinstance;
-
     private Book book1;
 
     private Book book2;
 
-    private BookInstance dbInstance1;
-
-    private BookInstance dbInstance2;
-
-    private BookInstance dbInstance3;
-
-    private hu.uni.miskolc.iit.softwaretesting.model.Reader dbReader;
-
-    private hu.uni.miskolc.iit.softwaretesting.model.Reader testReader;
-
-    private Borrowing dbBorrowing1;
-
-    private Borrowing dbBorrowing2;
-
-    private Borrowing dbBorrowing3;
-
-    private Borrowing testBorrowing;
 
     @Before
     public void setUp () throws IOException, SAXException, ParserConfigurationException, InvalidPublishDateException {
@@ -58,35 +39,6 @@ public class BookDAOTest {
         this.testBook = new Book("Alma", "Barack", (long) 102410,2008, Genre.valueOf("Crimi"));
         this.book1 = new Book("Pasztor Lajos", "Utazas a Fold korul", 123456, 2010, Genre.Travel);
         this.book2 = new Book("Nagy Kalman", "Analizis III.", 1234567, 2013, Genre.Scifi);
-        this.dbInstance1 = new BookInstance(123456789, book1, false);
-        this.dbInstance2 = new BookInstance(123456790, book1, true);
-        this.dbInstance3 = new BookInstance(123456791, book2, false);
-        this.testBookinstance = new BookInstance(1111111111, book2, true);
-        this.dbReader = new hu.uni.miskolc.iit.softwaretesting.model.Reader("feri", new Password("feri"),
-                "Ferenc", "Kovacs", "kovfer@example.com", "0680123456");
-
-        this.testReader = new Reader("ilkukrisz", new Password("asd"), "Ilku", "Krisztian",
-                "alma@korte.szilva", "06304256194");
-        Calendar creationDate = Calendar.getInstance();
-        Calendar expirationDate = Calendar.getInstance();
-        creationDate.set(2017, Calendar.JANUARY, 10);
-        expirationDate.set(2017, Calendar.FEBRUARY, 26);
-        this.dbBorrowing1 = new Borrowing(1234567, dbReader, creationDate.getTime(), expirationDate.getTime(), BorrowStatus.EXPIRED, dbInstance2);
-
-        creationDate.set(2018, Calendar.NOVEMBER, 6);
-        expirationDate.set(2018, Calendar.NOVEMBER, 12);
-        this.dbBorrowing2 = new Borrowing(12345678, dbReader, creationDate.getTime(), expirationDate.getTime(), BorrowStatus.BORROWED, dbInstance2);
-
-        creationDate.set(2018, Calendar.NOVEMBER, 6);
-        expirationDate.set(2018, Calendar.NOVEMBER, 10);
-        this.dbBorrowing3 = new Borrowing(22223456, dbReader, creationDate.getTime(), expirationDate.getTime(), BorrowStatus.REQUESTED, dbInstance3);
-
-        creationDate.set(2018, Calendar.OCTOBER, 10);
-        expirationDate.set(2018, Calendar.OCTOBER, 20);
-        this.testBorrowing = new Borrowing(11111111, dbReader, creationDate.getTime(), expirationDate.getTime(), BorrowStatus.RETURNED, dbInstance1);
-
-
-
         //initialize unit with clean database
         String originalDatabasePath = "src/test/resources/originalDatabase.xml";
         this.copyFile(originalDatabasePath, this.databaseLocation, true);

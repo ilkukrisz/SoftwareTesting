@@ -26,14 +26,21 @@ public class ReaderBookServiceImplTest {
 
     @Mock
     private BookDAO daoMock;
+
+    @Mock
     private BookInstanceDAO IdaoMock;
+
+    @Mock
     private BorrowingDAO BdaoMock;
 
     @InjectMocks
     private ReaderBookServiceImpl service;
 
+    @Mock
     private Book book = new Book("Alma", "Barack", (long) 102410,
             2008, Genre.valueOf("Crimi"));
+
+    @Mock
     private Reader reader = new Reader("ilkukrisz", new Password("alma"),
             "Ilku", "Krisztian", "alma@alma.hu", "06705382835");
 

@@ -23,16 +23,23 @@ import static org.mockito.Mockito.doThrow;
 public class LibrarianBookServiceImplTest  {
     @Mock
     private BookDAO daoMock;
+
+    @Mock
     private BookInstanceDAO IdaoMock;
+
+    @Mock
     private BorrowingDAO BdaoMock;
 
     @InjectMocks
     private LibrarianBookServiceImpl service;
 
+    @Mock
     private Book testBook;
 
+    @Mock
     private BookInstance testBookInstance;
 
+    @Mock
     private Reader testReader;
 
     public LibrarianBookServiceImplTest() {

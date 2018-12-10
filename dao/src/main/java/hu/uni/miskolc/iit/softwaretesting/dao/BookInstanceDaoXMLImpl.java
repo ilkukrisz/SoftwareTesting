@@ -33,22 +33,8 @@ import java.util.ArrayList;
 @Repository
 public class BookInstanceDaoXMLImpl implements BookInstanceDAO {
 
-    /*----------------------------------------------------------------------------------------------------------*/
-
-    //Creating a private static instance of our class to make it a Singleton class
-    private static BookInstanceDaoXMLImpl instance = new BookInstanceDaoXMLImpl();
-
-    //Making the constructor private to make it used only by this claas to make it a Singleton class
-    private BookInstanceDaoXMLImpl() {
-    }
-
-    //A getter of the one and only instance of this class (Singleton class)
-    public static BookInstanceDaoXMLImpl getInstance() {
-        return instance;
-    }
-
-    /*----------------------------------------------------------------------------------------------------------*/
-
+    @Autowired
+    private BookDaoXMLImpl bookDaoXML;
     /**
      * The document to manipulate.
      */
@@ -137,7 +123,7 @@ public class BookInstanceDaoXMLImpl implements BookInstanceDAO {
                 results.add(
                         new BookInstance(
                                 Long.valueOf(this.getNodeValue(current, "inventoryNumber")),
-                                BookDaoXMLImpl.getInstance().getBookByISBN(Long.valueOf(this.getNodeValue(current, "bookISBN"))),
+                                bookDaoXML.getBookByISBN(Long.valueOf(this.getNodeValue(current, "bookISBN"))),
                                 Boolean.valueOf(this.getNodeValue(current, "isLoaned"))
                         )
                 );
@@ -145,6 +131,9 @@ public class BookInstanceDaoXMLImpl implements BookInstanceDAO {
         } catch (BookNotFoundException e) {
             throw new BookInstanceNotFoundException(e);
         }
+
+        if (results.size() == 0)
+            throw new BookInstanceNotFoundException();
 
         return results;
     }
@@ -165,7 +154,7 @@ public class BookInstanceDaoXMLImpl implements BookInstanceDAO {
                 results.add(
                         new BookInstance(
                                 Long.valueOf(this.getNodeValue(current, "inventoryNumber")),
-                                BookDaoXMLImpl.getInstance().getBookByISBN(Long.valueOf(this.getNodeValue(current, "bookISBN"))),
+                                bookDaoXML.getBookByISBN(Long.valueOf(this.getNodeValue(current, "bookISBN"))),
                                 Boolean.valueOf(this.getNodeValue(current, "isLoaned"))
                         )
                 );
@@ -197,7 +186,7 @@ public class BookInstanceDaoXMLImpl implements BookInstanceDAO {
                 results.add(
                         new BookInstance(
                                 Long.valueOf(this.getNodeValue(current, "inventoryNumber")),
-                                BookDaoXMLImpl.getInstance().getBookByISBN(Long.valueOf(this.getNodeValue(current, "bookISBN"))),
+                                bookDaoXML.getBookByISBN(Long.valueOf(this.getNodeValue(current, "bookISBN"))),
                                 Boolean.valueOf(this.getNodeValue(current, "isLoaned"))
                         )
                 );
@@ -224,7 +213,7 @@ public class BookInstanceDaoXMLImpl implements BookInstanceDAO {
             if (Long.valueOf(this.getNodeValue(current, "inventoryNumber")).equals(inventoryNumber)) {
                 return new BookInstance(
                         Long.valueOf(this.getNodeValue(current, "inventoryNumber")),
-                        BookDaoXMLImpl.getInstance().getBookByISBN(Long.valueOf(this.getNodeValue(current, "bookISBN"))),
+                        bookDaoXML.getBookByISBN(Long.valueOf(this.getNodeValue(current, "bookISBN"))),
                         Boolean.valueOf(this.getNodeValue(current, "isLoaned"))
                 );
             }
@@ -328,4 +317,5 @@ public class BookInstanceDaoXMLImpl implements BookInstanceDAO {
         Transformer transformer = transformerFactory.newTransformer();
         transformer.transform(source, result);
     }
+
 }
