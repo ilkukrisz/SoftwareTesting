@@ -25,17 +25,16 @@ import static org.junit.Assert.*;
 
 public class BookInstanceDaoTest {
 
-    @Mock
     private Book testBook;
 
-    @Mock
     private BookInstance testBookinstance;
+
+    @Mock
+    private BookDaoXMLImpl bookDaoXML;
 
     @InjectMocks
     private BookInstanceDaoXMLImpl bookInstanceDao;
-
-    private BookDaoXMLImpl bookDaoXML;
-
+    
     private String databaseLocation;
 
     private Book book1;
