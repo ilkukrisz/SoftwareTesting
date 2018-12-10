@@ -49,15 +49,6 @@ public class BookInstanceDaoTest {
 
     private hu.uni.miskolc.iit.softwaretesting.model.Reader dbReader;
 
-    private hu.uni.miskolc.iit.softwaretesting.model.Reader testReader;
-
-    private Borrowing dbBorrowing1;
-
-    private Borrowing dbBorrowing2;
-
-    private Borrowing dbBorrowing3;
-
-    private Borrowing testBorrowing;
 
     @Before
     public void setUp () throws IOException, SAXException, ParserConfigurationException, InvalidPublishDateException {
@@ -72,28 +63,6 @@ public class BookInstanceDaoTest {
         this.testBookinstance = new BookInstance(1111111111, book2, true);
         this.dbReader = new hu.uni.miskolc.iit.softwaretesting.model.Reader("feri", new Password("feri"),
                 "Ferenc", "Kovacs", "kovfer@example.com", "0680123456");
-
-        this.testReader = new Reader("ilkukrisz", new Password("asd"), "Ilku", "Krisztian",
-                "alma@korte.szilva", "06304256194");
-        Calendar creationDate = Calendar.getInstance();
-        Calendar expirationDate = Calendar.getInstance();
-        creationDate.set(2017, Calendar.JANUARY, 10);
-        expirationDate.set(2017, Calendar.FEBRUARY, 26);
-        this.dbBorrowing1 = new Borrowing(1234567, dbReader, creationDate.getTime(), expirationDate.getTime(), BorrowStatus.EXPIRED, dbInstance2);
-
-        creationDate.set(2018, Calendar.NOVEMBER, 6);
-        expirationDate.set(2018, Calendar.NOVEMBER, 12);
-        this.dbBorrowing2 = new Borrowing(12345678, dbReader, creationDate.getTime(), expirationDate.getTime(), BorrowStatus.BORROWED, dbInstance2);
-
-        creationDate.set(2018, Calendar.NOVEMBER, 6);
-        expirationDate.set(2018, Calendar.NOVEMBER, 10);
-        this.dbBorrowing3 = new Borrowing(22223456, dbReader, creationDate.getTime(), expirationDate.getTime(), BorrowStatus.REQUESTED, dbInstance3);
-
-        creationDate.set(2018, Calendar.OCTOBER, 10);
-        expirationDate.set(2018, Calendar.OCTOBER, 20);
-        this.testBorrowing = new Borrowing(11111111, dbReader, creationDate.getTime(), expirationDate.getTime(), BorrowStatus.RETURNED, dbInstance1);
-
-
 
         //initialize unit with clean database
         String originalDatabasePath = "src/test/resources/originalDatabase.xml";
@@ -143,6 +112,7 @@ public class BookInstanceDaoTest {
 
     @Test
     public void testGetAllInstancesOfBook() throws BookNotFoundException, PersistenceException, AlreadyExistingBookInstanceException, BookInstanceNotFoundException {
+        Mockito.doReturn(this.book1).when(bookDaoXML).getBookByISBN(book1.getIsbn());
         Collection<BookInstance> actual = bookInstanceDao.getAllInstancesOfBook(book1);
         Collection<BookInstance> expected = new ArrayList<>();
         expected.add(this.dbInstance1);
@@ -174,6 +144,7 @@ public class BookInstanceDaoTest {
 
     @Test
     public void testAvailableInstancesOfBook() throws BookNotFoundException, BookInstanceNotFoundException {
+        Mockito.doReturn(this.book1).when(bookDaoXML).getBookByISBN(book1.getIsbn());
         Collection<BookInstance> actual = bookInstanceDao.getAvailableInstancesOfBook(book1);
         Collection<BookInstance> expected = new ArrayList<>();
         expected.add(this.dbInstance1);
@@ -190,6 +161,8 @@ public class BookInstanceDaoTest {
 
     @Test
     public void testupdateBookInstance() throws PersistenceException, BookInstanceNotFoundException, BookNotFoundException {
+        Mockito.doReturn(this.book1).when(bookDaoXML).getBookByISBN(book1.getIsbn());
+        Mockito.doReturn(this.book2).when(bookDaoXML).getBookByISBN(book2.getIsbn());
         this.dbInstance1.setBook(testBookinstance.getBook());
         this.dbInstance1.setLoaned(testBookinstance.isLoaned());
 
@@ -203,7 +176,8 @@ public class BookInstanceDaoTest {
     }
 
     @Test
-    public void testDeleteBookinstance() throws BookInstanceNotFoundException {
+    public void testDeleteBookinstance() throws BookInstanceNotFoundException, BookNotFoundException {
+        Mockito.doReturn(this.book1).when(bookDaoXML).getBookByISBN(book1.getIsbn());
         bookInstanceDao.deleteBookInstance(dbInstance1);
         List<BookInstance> bookInstances = bookInstanceDao.getAllBookInstances();
 
