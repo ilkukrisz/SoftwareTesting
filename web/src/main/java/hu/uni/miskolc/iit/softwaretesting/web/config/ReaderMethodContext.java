@@ -2,15 +2,19 @@ package hu.uni.miskolc.iit.softwaretesting.web.config;
 
 import hu.uni.miskolc.iit.softwaretesting.dao.BookDAO;
 import hu.uni.miskolc.iit.softwaretesting.dao.BookDaoXMLImpl;
+import hu.uni.miskolc.iit.softwaretesting.dao.BookInstanceDaoXMLImpl;
+import hu.uni.miskolc.iit.softwaretesting.dao.BorrowingDaoXMLImpl;
 import hu.uni.miskolc.iit.softwaretesting.service.ReaderBookService;
 import hu.uni.miskolc.iit.softwaretesting.service.impl.ReaderBookServiceImpl;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 
+@ComponentScan("hu.uni.miskolc.iit.softwaretesting.dao.config")
 @Configuration
 public class ReaderMethodContext {
 
@@ -22,6 +26,7 @@ public class ReaderMethodContext {
         String dbPath = System.getenv("hu_uni_miskolc_iit_softwaretesting_libraryDatabase");
         return new BookDaoXMLImpl(dbPath, dbPath);
     }
+
 }
 
 

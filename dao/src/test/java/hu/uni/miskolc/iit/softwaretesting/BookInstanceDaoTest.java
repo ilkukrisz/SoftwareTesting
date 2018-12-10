@@ -1,4 +1,5 @@
 package hu.uni.miskolc.iit.softwaretesting;
+import hu.uni.miskolc.iit.softwaretesting.dao.BookDaoXMLImpl;
 import hu.uni.miskolc.iit.softwaretesting.dao.BookInstanceDaoXMLImpl;
 
 import hu.uni.miskolc.iit.softwaretesting.exceptions.*;
@@ -6,6 +7,10 @@ import hu.uni.miskolc.iit.softwaretesting.model.*;
 import hu.uni.miskolc.iit.softwaretesting.model.Reader;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -19,13 +24,19 @@ import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
 public class BookInstanceDaoTest {
-    private BookInstanceDaoXMLImpl dao;
 
-    private String databaseLocation;
-
+    @Mock
     private Book testBook;
 
+    @Mock
     private BookInstance testBookinstance;
+
+    @InjectMocks
+    private BookInstanceDaoXMLImpl bookInstanceDao;
+
+    private BookDaoXMLImpl bookDaoXML;
+
+    private String databaseLocation;
 
     private Book book1;
 
@@ -88,43 +99,52 @@ public class BookInstanceDaoTest {
         //initialize unit with clean database
         String originalDatabasePath = "src/test/resources/originalDatabase.xml";
         this.copyFile(originalDatabasePath, this.databaseLocation, true);
-        this.dao = new BookInstanceDaoXMLImpl(this.databaseLocation, this.databaseLocation);
+        this.bookInstanceDao = new BookInstanceDaoXMLImpl(this.databaseLocation, this.databaseLocation);
+
+        MockitoAnnotations.initMocks(this);
     }
 
 
 
     @Test
     public void testCreateBookInstance() throws BookNotFoundException, PersistenceException, AlreadyExistingBookInstanceException, BookInstanceNotFoundException {
+        Mockito.doReturn(this.book2).when(bookDaoXML).getBookByISBN(1234567);
+
         BookInstance expected = this.testBookinstance;
-        dao.createBookInstance(this.testBookinstance);
-        BookInstance actual = dao.getBookInstanceByInventoryNumber(1111111111);
+        bookInstanceDao.createBookInstance(this.testBookinstance);
+        BookInstance actual = bookInstanceDao.getBookInstanceByInventoryNumber(this.testBookinstance.getInventoryNumber());
         assertEquals(expected, actual);
     }
 
     @Test(expected = AlreadyExistingBookInstanceException.class)
     public void testCreateBookInstanceWithExistingBookInstance() throws BookNotFoundException, PersistenceException, AlreadyExistingBookInstanceException, BookInstanceNotFoundException {
 
-        dao.createBookInstance(this.testBookinstance);
-        dao.createBookInstance(this.testBookinstance);
+        bookInstanceDao.createBookInstance(this.testBookinstance);
+        bookInstanceDao.createBookInstance(this.testBookinstance);
 
     }
 
     @Test
     public void testGetAllBookinstances() throws BookInstanceNotFoundException {
-        Collection<BookInstance> bookInstances = dao.getAllBookInstances();
+        Collection<BookInstance> bookInstances = bookInstanceDao.getAllBookInstances();
         assertThat(bookInstances, not(empty()));
     }
 
     @Test(expected = BookInstanceNotFoundException.class)
     public void testGetAllBookinstancesWithEmptyDatabase() throws BookInstanceNotFoundException, BookNotFoundException, PersistenceException {
-        dao.deleteBook(book1);
-        dao.deleteBook(book2);
-        dao.getAllBookInstances();
+        bookInstanceDao.deleteBookInstance(this.dbInstance1);
+        bookInstanceDao.deleteBookInstance(this.dbInstance2);
+        bookInstanceDao.deleteBookInstance(this.dbInstance3);
+
+        Mockito.doReturn(this.book1).when(bookDaoXML).getBookByISBN(book1.getIsbn());
+        Mockito.doReturn(this.book2).when(bookDaoXML).getBookByISBN(book2.getIsbn());
+
+        bookInstanceDao.getAllBookInstances();
     }
 
     @Test
     public void testGetAllInstancesOfBook() throws BookNotFoundException, PersistenceException, AlreadyExistingBookInstanceException, BookInstanceNotFoundException {
-        Collection<BookInstance> actual = dao.getAllInstancesOfBook(book1);
+        Collection<BookInstance> actual = bookInstanceDao.getAllInstancesOfBook(book1);
         Collection<BookInstance> expected = new ArrayList<>();
         expected.add(this.dbInstance1);
         expected.add(this.dbInstance2);
@@ -135,27 +155,27 @@ public class BookInstanceDaoTest {
 
     @Test(expected = BookInstanceNotFoundException.class)
     public void testGetAllInstancesOfBookWithNotExistingBook() throws BookNotFoundException, BookInstanceNotFoundException {
-        dao.getAllInstancesOfBook(testBook);
+        bookInstanceDao.getAllInstancesOfBook(testBook);
     }
 
 
     @Test(expected = BookInstanceNotFoundException.class)
     public void testGetAllInstancesOfBookWithNoInstances() throws BookNotFoundException, BookInstanceNotFoundException {
-        dao.deleteBookInstance(dbInstance1);
-        dao.deleteBookInstance(dbInstance2);
-        dao.deleteBookInstance(dbInstance3);
-        dao.getAllInstancesOfBook(book1);
+        bookInstanceDao.deleteBookInstance(dbInstance1);
+        bookInstanceDao.deleteBookInstance(dbInstance2);
+        bookInstanceDao.deleteBookInstance(dbInstance3);
+        bookInstanceDao.getAllInstancesOfBook(book1);
     }
 
     @Test(expected = BookInstanceNotFoundException.class)
     public void testAllInstancesOfBookForNotFound() throws BookNotFoundException, BookInstanceNotFoundException {
-        dao.getAllInstancesOfBook(testBook);
+        bookInstanceDao.getAllInstancesOfBook(testBook);
     }
 
 
     @Test
     public void testAvailableInstancesOfBook() throws BookNotFoundException, BookInstanceNotFoundException {
-        Collection<BookInstance> actual = dao.getAvailableInstancesOfBook(book1);
+        Collection<BookInstance> actual = bookInstanceDao.getAvailableInstancesOfBook(book1);
         Collection<BookInstance> expected = new ArrayList<>();
         expected.add(this.dbInstance1);
 
@@ -165,7 +185,7 @@ public class BookInstanceDaoTest {
 
     @Test(expected = BookInstanceNotFoundException.class)
     public void testAvailableInstancesOfBookForNotFound() throws BookNotFoundException, BookInstanceNotFoundException {
-        dao.getAvailableInstancesOfBook(testBook);
+        bookInstanceDao.getAvailableInstancesOfBook(testBook);
     }
 
 
@@ -174,9 +194,9 @@ public class BookInstanceDaoTest {
         this.dbInstance1.setBook(testBookinstance.getBook());
         this.dbInstance1.setLoaned(testBookinstance.isLoaned());
 
-        dao.updateBookInstance(dbInstance1);
+        bookInstanceDao.updateBookInstance(dbInstance1);
 
-        BookInstance actual = dao.getBookInstanceByInventoryNumber(dbInstance1.getInventoryNumber());
+        BookInstance actual = bookInstanceDao.getBookInstanceByInventoryNumber(dbInstance1.getInventoryNumber());
         BookInstance expected = this.testBookinstance;
 
         assertEquals(actual.getBook(), expected.getBook());
@@ -185,8 +205,8 @@ public class BookInstanceDaoTest {
 
     @Test
     public void testDeleteBookinstance() throws BookInstanceNotFoundException {
-        dao.deleteBookInstance(dbInstance1);
-        List<BookInstance> bookInstances = dao.getAllBookInstances();
+        bookInstanceDao.deleteBookInstance(dbInstance1);
+        List<BookInstance> bookInstances = bookInstanceDao.getAllBookInstances();
 
         assertThat(bookInstances, not(contains(dbInstance1)));
     }
