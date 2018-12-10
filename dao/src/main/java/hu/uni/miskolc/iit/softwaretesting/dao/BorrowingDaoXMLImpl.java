@@ -273,10 +273,10 @@ public class BorrowingDaoXMLImpl implements BorrowingDAO {
             if (getNodeValue(current, "borrowID").equals(String.valueOf(borrowing.getBorrowID()))) {
                 DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
-                bookDaoXML.getNode(current, "readerUsername").setTextContent(borrowing.getReader().getUsername());
-                bookDaoXML.getNode(current, "creationDate").setTextContent(format.format(borrowing.getCreationDate()));
-                bookDaoXML.getNode(current, "expirationDate").setTextContent(format.format(borrowing.getExpirationDate()));
-                bookDaoXML.getNode(current, "status").setTextContent(borrowing.getStatus().toString());
+                getNode(current, "readerUsername").setTextContent(borrowing.getReader().getUsername());
+                getNode(current, "creationDate").setTextContent(format.format(borrowing.getCreationDate()));
+                getNode(current, "expirationDate").setTextContent(format.format(borrowing.getExpirationDate()));
+                getNode(current, "status").setTextContent(borrowing.getStatus().toString());
             }
         }
 

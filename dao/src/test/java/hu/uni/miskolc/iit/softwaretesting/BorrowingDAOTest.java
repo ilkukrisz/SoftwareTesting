@@ -1,10 +1,16 @@
 package hu.uni.miskolc.iit.softwaretesting;
 
+import hu.uni.miskolc.iit.softwaretesting.dao.BookDaoXMLImpl;
+import hu.uni.miskolc.iit.softwaretesting.dao.BookInstanceDaoXMLImpl;
 import hu.uni.miskolc.iit.softwaretesting.dao.BorrowingDaoXMLImpl;
 import hu.uni.miskolc.iit.softwaretesting.exceptions.*;
 import hu.uni.miskolc.iit.softwaretesting.model.*;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -23,13 +29,23 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 public class BorrowingDAOTest {
-    private BorrowingDaoXMLImpl dao;
+    @Mock
+    private BookDaoXMLImpl bookDaoXML;
 
-    private String databaseLocation;
-
+    @Mock
+    private BookInstanceDaoXMLImpl bookInstanceDaoXML;
     private Book testBook;
 
+
+    private Borrowing testBorrowing;
+
+
     private BookInstance testBookinstance;
+
+    @InjectMocks
+    private BorrowingDaoXMLImpl borrowingDao;
+
+    private String databaseLocation;
 
     private Book book1;
 
@@ -51,7 +67,7 @@ public class BorrowingDAOTest {
 
     private Borrowing dbBorrowing3;
 
-    private Borrowing testBorrowing;
+
 
     @Before
     public void setUp () throws IOException, SAXException, ParserConfigurationException, InvalidPublishDateException {
@@ -92,85 +108,115 @@ public class BorrowingDAOTest {
         //initialize unit with clean database
         String originalDatabasePath = "src/test/resources/originalDatabase.xml";
         this.copyFile(originalDatabasePath, this.databaseLocation, true);
-        this.dao = new BorrowingDaoXMLImpl(this.databaseLocation, this.databaseLocation);
+        this.borrowingDao = new BorrowingDaoXMLImpl(this.databaseLocation, this.databaseLocation);
+
+        MockitoAnnotations.initMocks(this);
     }
 
     @Test
-    public void testCreateBorrowing() throws AlreadyExistingBorrowingException, PersistenceException, NotExistingBorrowingException {
+    public void testCreateBorrowing() throws AlreadyExistingBorrowingException, PersistenceException, NotExistingBorrowingException, BookNotFoundException, BookInstanceNotFoundException, NotExistingReaderException {
+        Mockito.doReturn(dbReader).when(bookDaoXML).getReaderByUsername(dbReader.getUsername());
+        Mockito.doReturn(book1).when(bookDaoXML).getBookByISBN(book1.getIsbn());
+        Mockito.doReturn(dbInstance1).when(bookInstanceDaoXML).getBookInstanceByInventoryNumber(dbInstance1.getInventoryNumber());
         Borrowing expected = this.testBorrowing;
-        dao.createBorrowing(this.testBorrowing);
+        borrowingDao.createBorrowing(expected);
 
-        Borrowing actual = dao.getBorrowingById(this.testBorrowing.getBorrowID());
+        Borrowing actual = borrowingDao.getBorrowingById(11111111);
 
         assertEquals(expected, actual);
     }
 
     @Test(expected = AlreadyExistingBorrowingException.class)
     public void testCreateBorrowingWithAlreadyExistingBorrowing() throws AlreadyExistingBorrowingException, PersistenceException {
-        dao.createBorrowing(testBorrowing);
-        dao.createBorrowing(testBorrowing);
+        borrowingDao.createBorrowing(this.testBorrowing);
+        borrowingDao.createBorrowing(this.testBorrowing);
     }
 
 
     @Test
     public void testGetAllBorrowings() throws NoBorrowingsFoundException {
-        assertThat(dao.getAllBorrowings(), not(empty()));
+
+        assertThat(borrowingDao.getAllBorrowings(), not(empty()));
     }
 
     @Test
-    public void testGetBorrowingsByStatus() throws NotExistingBorrowingException {
+    public void testGetBorrowingsByStatus() throws NotExistingBorrowingException, NotExistingReaderException, BookNotFoundException, BookInstanceNotFoundException {
+        Mockito.doReturn(dbReader).when(bookDaoXML).getReaderByUsername(dbReader.getUsername());
+        Mockito.doReturn(book2).when(bookDaoXML).getBookByISBN(book2.getIsbn());
+        Mockito.doReturn(dbInstance3).when(bookInstanceDaoXML).getBookInstanceByInventoryNumber(dbInstance3.getInventoryNumber());
         Borrowing expected = this.dbBorrowing3;
-        Collection<Borrowing> actual = dao.getBorrowingsByStatus(BorrowStatus.REQUESTED);
+        Collection<Borrowing> actual = borrowingDao.getBorrowingsByStatus(BorrowStatus.REQUESTED);
 
         assertThat(actual, contains(expected));
     }
 
 
     @Test
-    public void testBorrowingsOfReader() throws NotExistingReaderException, NotExistingBorrowingException {
+    public void testBorrowingsOfReader() throws NotExistingReaderException, NotExistingBorrowingException, BookNotFoundException, BookInstanceNotFoundException {
+        Mockito.doReturn(this.dbReader).when(bookDaoXML).getReaderByUsername(dbReader.getUsername());
+        Mockito.doReturn(this.book1).when(bookDaoXML).getBookByISBN(book1.getIsbn());
+        Mockito.doReturn(this.book2).when(bookDaoXML).getBookByISBN(book2.getIsbn());
+        Mockito.doReturn(this.dbInstance1).when(bookInstanceDaoXML).getBookInstanceByInventoryNumber(dbInstance1.getInventoryNumber());
+        Mockito.doReturn(this.dbInstance2).when(bookInstanceDaoXML).getBookInstanceByInventoryNumber(dbInstance2.getInventoryNumber());
+        Mockito.doReturn(this.dbInstance3).when(bookInstanceDaoXML).getBookInstanceByInventoryNumber(dbInstance3.getInventoryNumber());
+
         Collection<Borrowing> expected = new ArrayList<>();
         expected.add(this.dbBorrowing1);
         expected.add(this.dbBorrowing2);
         expected.add(this.dbBorrowing3);
-        assertEquals(dao.getBorrowingsOfReader(dbReader), expected);
+        assertEquals(borrowingDao.getBorrowingsOfReader(dbReader), expected);
     }
 
     @Test(expected = NotExistingReaderException.class)
-    public void testBorrowingsOfReaderWithNotExistingReader() throws NotExistingReaderException, NotExistingBorrowingException {
-        dao.getBorrowingsOfReader(testReader);
+    public void testBorrowingsOfReaderWithNotExistingReader() throws NotExistingReaderException, NotExistingBorrowingException, BookNotFoundException, BookInstanceNotFoundException {
+        Mockito.doThrow(NotExistingReaderException.class).when(bookDaoXML).getReaderByUsername(testReader.getUsername());
+        borrowingDao.getBorrowingsOfReader(testReader);
     }
 
     @Test
-    public void testGetBorrowingByID() throws NotExistingBorrowingException {
+    public void testGetBorrowingByID() throws NotExistingBorrowingException, NotExistingReaderException, BookNotFoundException, BookInstanceNotFoundException {
+        Mockito.doReturn(dbReader).when(bookDaoXML).getReaderByUsername(dbReader.getUsername());
+        Mockito.doReturn(this.dbInstance2).when(bookInstanceDaoXML).getBookInstanceByInventoryNumber(dbInstance2.getInventoryNumber());
+        Mockito.doReturn(this.book1).when(bookDaoXML).getBookByISBN(book1.getIsbn());
         Borrowing expected = this.dbBorrowing2;
-        Borrowing actual = dao.getBorrowingById(dbBorrowing2.getBorrowID());
+        Borrowing actual = borrowingDao.getBorrowingById(dbBorrowing2.getBorrowID());
+
         assertEquals(actual, expected);
     }
 
     @Test(expected = NotExistingBorrowingException.class)
     public void testGetBorrowingByIDWithInvalidID() throws NotExistingBorrowingException {
-        dao.getBorrowingById(53453453);
+        borrowingDao.getBorrowingById(53453453);
     }
 
     @Test
-    public void testUpdateBorrowing() throws NotExistingBorrowingException, PersistenceException {
+    public void testUpdateBorrowing() throws NotExistingBorrowingException, PersistenceException, NotExistingReaderException, BookNotFoundException, BookInstanceNotFoundException {
+        Mockito.doReturn(dbReader).when(bookDaoXML).getReaderByUsername(dbReader.getUsername());
+        Mockito.doReturn(this.dbInstance1).when(bookInstanceDaoXML).getBookInstanceByInventoryNumber(dbInstance1.getInventoryNumber());
+        Mockito.doReturn(this.book1).when(bookDaoXML).getBookByISBN(book1.getIsbn());
         this.dbBorrowing1.setStatus(testBorrowing.getStatus());
         this.dbBorrowing1.setReader(testBorrowing.getReader());
 
         Borrowing expected = this.testBorrowing;
 
-        dao.updateBorrowing(this.dbBorrowing1);
-        Borrowing actual = dao.getBorrowingById(dbBorrowing1.getBorrowID());
+        borrowingDao.updateBorrowing(this.dbBorrowing1);
+        Borrowing actual = borrowingDao.getBorrowingById(dbBorrowing1.getBorrowID());
 
-        assertEquals(actual.getReader(), expected.getReader());
-        assertEquals(actual.getStatus(), expected.getStatus());
+        assertEquals(expected.getReader(), actual.getReader());
+        assertEquals(expected.getStatus(), actual.getStatus());
 
     }
 
     @Test
-    public void testDeleteBorrowing() throws NotExistingBorrowingException, NoBorrowingsFoundException {
-        dao.deleteBorrowing(dbBorrowing2);
-        assertThat(dao.getAllBorrowings(), not(contains(dbBorrowing2)));
+    public void testDeleteBorrowing() throws NotExistingBorrowingException, NoBorrowingsFoundException, BookNotFoundException, BookInstanceNotFoundException, NotExistingReaderException {
+        Mockito.doReturn(this.dbReader).when(bookDaoXML).getReaderByUsername(dbReader.getUsername());
+        Mockito.doReturn(this.book1).when(bookDaoXML).getBookByISBN(book1.getIsbn());
+        Mockito.doReturn(this.book2).when(bookDaoXML).getBookByISBN(book2.getIsbn());
+        Mockito.doReturn(this.dbInstance1).when(bookInstanceDaoXML).getBookInstanceByInventoryNumber(dbInstance1.getInventoryNumber());
+        Mockito.doReturn(this.dbInstance2).when(bookInstanceDaoXML).getBookInstanceByInventoryNumber(dbInstance2.getInventoryNumber());
+        Mockito.doReturn(this.dbInstance3).when(bookInstanceDaoXML).getBookInstanceByInventoryNumber(dbInstance3.getInventoryNumber());
+        borrowingDao.deleteBorrowing(dbBorrowing2);
+        assertThat(borrowingDao.getAllBorrowings(), not(contains(dbBorrowing2)));
     }
     private void copyFile(String from, String to, Boolean overwrite) {
 
